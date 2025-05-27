@@ -3,16 +3,16 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "@/shared/utils/login";
 
-export const AdminLogin = () => {
+export const ManagerLogin = () => {
   const [loginEmail, setEmail] = useState("");
   const [loginPassword, setPassword] = useState("");
   const navigate = useNavigate();
 
-  // 관리자 로그인
+  // 매니저 로그인
   const handleLogin = async () => {
     try {
-      await login("ADMIN", loginEmail, loginPassword);
-      navigate("/admins");
+      await login("MANAGER", loginEmail, loginPassword);
+      navigate("/managers");
     } catch (err: any) {
       alert(err.message || "로그인 실패");
     }
@@ -30,7 +30,7 @@ export const AdminLogin = () => {
               </div>
               <div className="justify-start text-gray-900 text-2xl font-bold font-['Inter'] leading-7">HaloCare</div>
             </div>
-            <div className="justify-start text-gray-500 text-base font-medium font-['Inter'] leading-tight">관리자 포털</div>
+            <div className="justify-start text-gray-500 text-base font-medium font-['Inter'] leading-tight">매니저 포털</div>
           </div>
           <div className="self-stretch flex flex-col justify-start items-start gap-6">
             <div className="self-stretch flex flex-col justify-start items-start gap-2">

@@ -1,15 +1,26 @@
+import { useAuthStore } from "@/store/useAuthStore";
 import { Fragment } from "react";
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useUserStore } from "@/store/useUserStore";
+import { logout } from "@/shared/utils/logout";
+
 
 export const CustomerHeader = () => {
-  // const isLoggedIn = useCustomerAuthStore((state) => state.isLoggedIn);
-  const isLoggedIn = false; // 임시
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn());
+  const { username } = useUserStore();
+  const navigate = useNavigate();
 
   const menuItems = [
     { name: "서비스 소개", path: "/customers/services" },
     { name: "후기", path: "/customers/reviews" },
     { name: "고객센터", path: "/customers/support" },
   ];
+
+  // 수요자 로그아웃 
+  const handleLogout = async () => {
+    await logout();
+    navigate("/customers"); 
+  };
 
   return (
     <Fragment>
@@ -40,16 +51,16 @@ export const CustomerHeader = () => {
         {isLoggedIn ? (
           <div className="inline-flex justify-end items-center gap-4">
             <div className="flex justify-end items-center gap-2">
-              <div className="w-9 h-9 bg-indigo-600 rounded-2xl inline-flex flex-col justify-center items-center">
-                <div className="justify-start text-white text-sm font-semibold font-['Inter'] leading-none">홍</div>
-              </div>
-              <div className="justify-start text-zinc-800 text-base font-medium font-['Inter'] leading-tight">홍길동님</div>
+              <div className="justify-start text-zinc-800 text-base font-medium font-['Inter'] leading-tight">{username}님</div>
             </div>
-            <div className="w-24 h-10 bg-white rounded-lg outline outline-1 outline-offset-[-1px] outline-gray-200 inline-flex flex-col justify-center items-center">
-              <div className="justify-start text-stone-500 text-sm font-medium font-['Inter'] leading-none">로그아웃</div>
-            </div>
+            <button
+              className="w-24 h-10 bg-white rounded-lg outline outline-1 outline-offset-[-1px] outline-gray-200 inline-flex flex-col justify-center items-center"
+              onClick={handleLogout}
+            >
+              <div className="justify-start text-stone-500 text-sm font-medium font-['Inter'] leading-none cursor-pointer">로그아웃</div>
+            </button>
           </div>
-        ): (
+        ) : (
           <div className="flex justify-end items-center gap-4">
             <NavLink 
               to={"/customers/login"}
@@ -72,7 +83,6 @@ export const CustomerHeader = () => {
             </div>
           </div>
         )}
-
       </div>
     </Fragment>
   );
