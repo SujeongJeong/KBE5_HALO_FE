@@ -1,17 +1,25 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import CustomerLayout from '@/features/customer/layouts/CustomerLayout';
-import CustomerMain from '@/features/customer/pages/CustomerMain';
-import ManagerLayout from '@/features/manager/layouts/ManagerLayout';
-import ManagerMain from '@/features/manager/pages/ManagerMain';
-import ManagerReservations from '@/features/manager/pages/ManagerReservations';
-import AdminLogin from '@/features/admin/pages/AdminLogin';
-import AdminLayout from '@/features/admin/layouts/AdminLayout';
-import AdminMain from '@/features/admin/pages/AdminMain';
-import AdminAccount from '@/features/admin/pages/AdminAccount';
+import { CustomerLogin } from '@/features/customer/pages/CustomerLogin';
+import { CustomerLayout } from '@/features/customer/layouts/CustomerLayout';
+import { CustomerMain } from '@/features/customer/pages/CustomerMain';
+import { ManagerLayout } from '@/features/manager/layouts/ManagerLayout';
+import { ManagerMain } from '@/features/manager/pages/ManagerMain';
+import { ManagerReservations } from '@/features/manager/pages/ManagerReservations';
+import { AdminLogin } from '@/features/admin/pages/AdminLogin';
+import { AdminLayout } from '@/features/admin/layouts/AdminLayout';
+import { AdminMain } from '@/features/admin/pages/AdminMain';
+import { AdminAccount } from '@/features/admin/pages/AdminAccount';
 
 export const router = createBrowserRouter([
   /** 수요자 *************************************************************/
+  {
+    path: '/customers/login',
+    children: [
+      // 수요자 로그인
+      { index: true, element: <CustomerLogin /> },
+    ],
+  },
   {
     path: '/customers',
     element: <CustomerLayout />,

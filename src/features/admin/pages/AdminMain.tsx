@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 
-const AdminMain = () => {
+export const AdminMain = () => {
   return (
     <Fragment>
       <div className="flex-1 self-stretch inline-flex flex-col justify-start items-start">
@@ -210,5 +210,3 @@ const AdminMain = () => {
     </Fragment>
   );
 };
-
-export default AdminMain;

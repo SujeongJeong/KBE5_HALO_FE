@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { NavLink } from "react-router-dom";
 
 
-const AdminSidebar = () => {
+export const AdminSidebar = () => {
   const menuItems = [
     { name: "대시보드", path: "/admins" },
     { name: "관리자 계정", path: "/admins/accounts" },
@@ -44,5 +44,3 @@ const AdminSidebar = () => {
     </Fragment>
   );
 };
-
-export default AdminSidebar;

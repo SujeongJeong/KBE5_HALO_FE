@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 
-const CustomerFooter = () => {
+export const CustomerFooter = () => {
   return (
     <Fragment>
       <div className="self-stretch px-28 py-14 bg-zinc-800 inline-flex flex-col justify-start items-start gap-10">
@@ -28,5 +28,3 @@ const CustomerFooter = () => {
     </Fragment>
   );
 };
-
-export default CustomerFooter;

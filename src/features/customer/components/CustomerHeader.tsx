@@ -1,8 +1,7 @@
 import { Fragment } from "react";
 import { NavLink } from 'react-router-dom';
-import { useCustomerAuthStore } from "@/features/admin/store/useCustomerAuthStore";
 
-const CustomerHeader = () => {
+export const CustomerHeader = () => {
   // const isLoggedIn = useCustomerAuthStore((state) => state.isLoggedIn);
   const isLoggedIn = false; // 임시
 
@@ -78,5 +77,3 @@ const CustomerHeader = () => {
     </Fragment>
   );
 };
-
-export default CustomerHeader;

@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 
-const AdminAccount = () => {
+export const AdminAccount = () => {
   return (
     <Fragment>
       <div className="flex-1 self-stretch inline-flex flex-col justify-start items-start">
@@ -210,5 +210,3 @@ const AdminAccount = () => {
     </Fragment>
   );
 };
-
-export default AdminAccount;
