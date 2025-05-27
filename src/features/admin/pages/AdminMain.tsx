@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 
 export const AdminMain = () => {
+
   return (
     <Fragment>
       <div className="flex-1 self-stretch inline-flex flex-col justify-start items-start">

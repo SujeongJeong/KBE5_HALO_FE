@@ -1,8 +1,13 @@
+import { useUserStore } from "@/store/useUserStore";
 import { Fragment } from "react";
 import { NavLink } from "react-router-dom";
-
+import { logout } from "@/shared/utils/logout";
+import { useNavigate } from "react-router-dom";
 
 export const AdminSidebar = () => {
+  const navigate = useNavigate();
+  const { username } = useUserStore();
+
   const menuItems = [
     { name: "대시보드", path: "/admins" },
     { name: "관리자 계정", path: "/admins/accounts" },
@@ -12,6 +17,13 @@ export const AdminSidebar = () => {
     { name: "공지/이벤트", path: "/admins/notices" },
     { name: "배너 관리", path: "/admins/banners" },
   ];
+
+  // 관리자 로그아웃 
+  // TODO: 관리자 로그아웃 연결하기, 현재 버튼 없음
+  const handleLogout = async () => {
+    await logout();
+    navigate("/admins/login"); 
+  };
 
   return (
     <Fragment>
@@ -24,7 +36,7 @@ export const AdminSidebar = () => {
         </div>
         <div className="self-stretch px-6 py-4 border-b border-gray-200 inline-flex justify-start items-center gap-3">
           <div className="inline-flex flex-col justify-start items-start gap-0.5">
-            <div className="justify-start text-gray-900 text-sm font-semibold font-['Inter'] leading-none">정기현</div>
+            <div className="justify-start text-gray-900 text-sm font-semibold font-['Inter'] leading-none">{username}</div>
             <div className="justify-start text-gray-500 text-xs font-normal font-['Inter'] leading-none">관리자</div>
           </div>
         </div>

@@ -1,8 +1,11 @@
 import { Fragment } from "react";
 import { NavLink } from "react-router-dom";
-
+import { logout } from "@/shared/utils/logout";
+import { useNavigate } from "react-router-dom";
 
 export const ManagerSidebar = () => {
+  const navigate = useNavigate();
+
   const menuItems = [
     { name: "대시보드", path: "/managers" },
     { name: "마이페이지", path: "/managers/my" },
@@ -11,6 +14,13 @@ export const ManagerSidebar = () => {
     { name: "문의 내역", path: "/managers/inquiries" },
     { name: "급여 관리", path: "/managers/payments" },
   ];
+
+  // 매니저 로그아웃 
+  // TODO: 매니저 로그아웃 연결하기, 현재 버튼 없음
+  const handleLogout = async () => {
+    await logout();
+    navigate("/managers/login"); 
+  };
 
   return (
     <Fragment>

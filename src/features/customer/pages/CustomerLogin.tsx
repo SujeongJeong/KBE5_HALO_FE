@@ -1,31 +1,19 @@
-import { loginCustomer } from "@/features/customer/api/customerAuth";
 import { useState, Fragment } from "react";
+import { useNavigate } from "react-router-dom";
+import { login } from "@/shared/utils/login";
 
 export const CustomerLogin = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [loginEmail, setEmail] = useState("");
+  const [loginPassword, setPassword] = useState("");
+  const navigate = useNavigate();
 
+  // 수요자 로그인
   const handleLogin = async () => {
-    console.log("이메일:", email);
-    console.log("비밀번호:", password);
-
     try {
-      const data = await loginCustomer(email, password);
-      console.log("로그인 성공:", data);
-      // 예: 토큰 저장, 리다이렉트 등
+      await login("CUSTOMER", loginEmail, loginPassword);
+      navigate("/customers");
     } catch (err: any) {
-      //  여기서 axios 에러 처리 (404, 500 포함)
-      if (err.response) {
-        // 서버에서 응답은 왔는데 오류 상태
-        const msg = err.response.data?.message || '서버 오류가 발생했습니다.';
-        alert(msg);
-      } else if (err.request) {
-        // 요청은 갔는데 응답이 없음
-        alert('서버가 응답하지 않습니다.');
-      } else {
-        // axios 외 다른 코드 오류 등
-        alert(err.message || '알 수 없는 오류가 발생했습니다.');
-      }
+      alert(err.message || "로그인 실패");
     }
   };
 
@@ -51,7 +39,7 @@ export const CustomerLogin = () => {
                 <input 
                   className="w-full justify-start text-gray-400 text-base font-normal font-['Inter'] leading-tight"
                   placeholder="이메일을 입력하세요"
-                  value={email}
+                  value={loginEmail}
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
@@ -61,7 +49,7 @@ export const CustomerLogin = () => {
               <div className="self-stretch h-12 px-4 bg-gray-50 rounded-lg outline outline-1 outline-offset-[-1px] outline-gray-200 inline-flex justify-between items-center">
                 <input 
                   className="w-full justify-start text-gray-400 text-base font-normal font-['Inter'] leading-tight" placeholder="비밀번호를 입력하세요"
-                  value={password}
+                  value={loginPassword}
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
