@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { useAuthStore } from '@/store/useAuthStore';
-import { reissueToken } from '@/shared/utils/reissueToken';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL, // Vite 프록시 적용 전제
@@ -32,6 +31,7 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
+        /* TODO: reissueToken 로직 작성 필요
         const { accessToken } = await reissueToken();
 
         // 상태 업데이트
@@ -41,6 +41,7 @@ api.interceptors.response.use(
         // 헤더 갱신 후 재요청
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return api(originalRequest);
+        */
       } catch (err) {
         // 재발급 실패 → 로그아웃
         const { clearTokens, role } = useAuthStore.getState();
