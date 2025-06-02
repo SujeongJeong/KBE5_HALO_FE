@@ -11,15 +11,15 @@ export const CustomerHeader = () => {
   const navigate = useNavigate();
 
   const menuItems = [
-    { name: "서비스 소개", path: "/customers/services" },
-    { name: "후기", path: "/customers/reviews" },
-    { name: "고객센터", path: "/customers/support" },
+    { name: "서비스 소개", path: "/services" },
+    { name: "후기", path: "/reviews" },
+    { name: "고객센터", path: "/support" },
   ];
 
   // 수요자 로그아웃 
   const handleLogout = async () => {
     await logout();
-    navigate("/customers"); 
+    navigate("/"); 
   };
 
   return (
@@ -63,20 +63,20 @@ export const CustomerHeader = () => {
         ) : (
           <div className="flex justify-end items-center gap-4">
             <NavLink 
-              to={"/customers/login"}
+              to={"/login"}
               end
               className={"justify-start text-indigo-600 text-base font-medium font-['Inter'] leading-tight"}
             >로그인</NavLink>
             <div className="w-28 h-10 bg-indigo-600 rounded-lg inline-flex flex-col justify-center items-center">
               <NavLink 
-                to={"/customers/login"}
+                to={"/login"}
                 end
                 className={"justify-start text-white text-sm font-semibold font-['Inter'] leading-none"}
               >회원가입</NavLink>
             </div>
             <div className="w-36 h-10 bg-white rounded-lg outline outline-1 outline-offset-[-1px] outline-indigo-600 inline-flex flex-col justify-center items-center">
               <NavLink 
-                to={"/customers/login"}
+                to={"/login"}
                 end
                 className={"justify-start text-indigo-600 text-sm font-semibold font-['Inter'] leading-none"}
               >매니저 모집</NavLink>
