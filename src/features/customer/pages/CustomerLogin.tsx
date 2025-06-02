@@ -11,7 +11,7 @@ export const CustomerLogin = () => {
   const handleLogin = async () => {
     try {
       await login("CUSTOMER", loginEmail, loginPassword);
-      navigate("/customers");
+      navigate("/");
     } catch (err: any) {
       alert(err.message || "로그인 실패");
     }

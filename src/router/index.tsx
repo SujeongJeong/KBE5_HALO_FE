@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 
 import { CustomerLogin } from '@/features/customer/pages/CustomerLogin';
 import { CustomerLayout } from '@/features/customer/layouts/CustomerLayout';
@@ -12,33 +12,26 @@ import { AdminMain } from '@/features/admin/pages/AdminMain';
 import { AdminAccount } from '@/features/admin/pages/AdminAccount';
 
 export const router = createBrowserRouter([
-  /** 루트 접근 시 /customers로 이동 */
-  {
-    path: '/',
-    element: <Navigate to="/customers" replace />,
-  },
-
   /** 수요자 *************************************************************/
   {
-    path: '/customers/login',
-    children: [
-      // 수요자 로그인
-      { index: true, element: <CustomerLogin /> },
-    ],
-  },
-  {
-    path: '/customers',
+    path: '/',
     element: <CustomerLayout />,
     children: [
       // 메인페이지
-      { index: true, element: <CustomerMain /> }, 
+      { index: true, element: <CustomerMain /> },
       // 서비스 소개
       // { path: 'services', element: <CustomerService /> },
-      // 후기
+      // // 후기
       // { path: 'reviews', element: <CustomerReviews /> },
-      // 고객센터
-      // { path: 'support', element: <CustomerSuppoert /> },
+      // // 고객센터
+      // { path: 'support', element: <CustomerSupport /> },
     ],
+  },
+
+  /** 수요자 로그인 */
+  {
+    path: '/login',
+    element: <CustomerLogin />,
   },
 
   /** 매니저 *************************************************************/
