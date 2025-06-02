@@ -5,11 +5,14 @@ import { CustomerLayout } from '@/features/customer/layouts/CustomerLayout';
 import { CustomerMain } from '@/features/customer/pages/CustomerMain';
 import { ManagerLayout } from '@/features/manager/layouts/ManagerLayout';
 import { ManagerMain } from '@/features/manager/pages/ManagerMain';
+import { ManagerSignup } from '@/features/manager/pages/ManagerSignup';
 import { ManagerReservations } from '@/features/manager/pages/ManagerReservations';
+import { ManagerInquiries } from '@/features/manager/pages/ManagerInquiries';
 import { AdminLogin } from '@/features/admin/pages/AdminLogin';
 import { AdminLayout } from '@/features/admin/layouts/AdminLayout';
 import { AdminMain } from '@/features/admin/pages/AdminMain';
 import { AdminAccount } from '@/features/admin/pages/AdminAccount';
+import AddressSearch from '@/shared/components/AddressSearch';
 
 export const router = createBrowserRouter([
   /** 수요자 *************************************************************/
@@ -36,10 +39,12 @@ export const router = createBrowserRouter([
 
   /** 매니저 *************************************************************/
   {
-    path: '/managers/login',
+    path: '/managers',
     children: [
       // 매니저 로그인
       // { index: true, element: <ManagerLogin /> },
+      // {path: 'login', element: <ManagerLogin /> },
+      {path: 'signup', element: <ManagerSignup /> },
     ],
   },
   {
@@ -54,8 +59,8 @@ export const router = createBrowserRouter([
       { path: 'reservations', element: <ManagerReservations /> },
       // // 리뷰 관리 목록
       // { path: 'reviews', element: <ManagerReviews /> },
-      // // 문의 내역 목록
-      // { path: 'inquiries', element: <ManagerInquiries /> },
+      // 문의 내역 목록
+      { path: 'inquiries', element: <ManagerInquiries /> },
       // // 급여 관리 목록
       // { path: 'payments', element: <ManagerPayments /> },
     ],
@@ -89,4 +94,12 @@ export const router = createBrowserRouter([
       // { path: 'banners', element: <AdminBanners /> },
     ],
   },
+
+  /** 구글맵 테스트 *************************************************************/
+  {
+    path: '/googleMap',
+    children: [
+      { index: true, element: <AddressSearch /> },
+    ],
+  }
 ]);

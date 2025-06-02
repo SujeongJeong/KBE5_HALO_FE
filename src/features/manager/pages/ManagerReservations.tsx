@@ -1,8 +1,8 @@
-import { ManagerLayout } from "@/features/manager/layouts/ManagerLayout";
+import { Fragment } from "react/jsx-runtime";
 
 export const ManagerReservations = () => {
   return (
-    <ManagerLayout>
+    <Fragment>
       <div className="flex-1 self-stretch inline-flex flex-col justify-start items-start">
         <div className="self-stretch h-16 px-6 bg-white border-b border-gray-200 inline-flex justify-start items-center">
           <div className="justify-start text-gray-900 text-xl font-bold font-['Inter'] leading-normal">예약 관리</div>
@@ -169,6 +169,6 @@ export const ManagerReservations = () => {
           </div>
         </div>
       </div>
-    </ManagerLayout>
+    </Fragment>
   );
 };
