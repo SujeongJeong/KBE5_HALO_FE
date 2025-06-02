@@ -17,10 +17,10 @@ export const ManagerSidebar = () => {
 
   // 매니저 로그아웃 
   // TODO: 매니저 로그아웃 연결하기, 현재 버튼 없음
-  const handleLogout = async () => {
-    await logout();
-    navigate("/managers/login"); 
-  };
+  // const handleLogout = async () => {
+  //   await logout();
+  //   navigate("/managers/login"); 
+  // };
 
   return (
     <Fragment>
