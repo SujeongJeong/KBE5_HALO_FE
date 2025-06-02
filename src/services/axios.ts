@@ -3,8 +3,8 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { reissueToken } from '@/shared/utils/reissueToken';
 
 const api = axios.create({
-  baseURL: '/api',               // Vite 프록시 적용 전제
-  withCredentials: true,         // 필요 시 쿠키 전송 허용
+  baseURL: import.meta.env.VITE_API_BASE_URL, // Vite 프록시 적용 전제
+  withCredentials: true,                      // 필요 시 쿠키 전송 허용
   headers: {
     'Content-Type': 'application/json',
   },
