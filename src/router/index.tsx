@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 import { CustomerLogin } from '@/features/customer/pages/CustomerLogin';
 import { CustomerLayout } from '@/features/customer/layouts/CustomerLayout';
@@ -12,6 +12,12 @@ import { AdminMain } from '@/features/admin/pages/AdminMain';
 import { AdminAccount } from '@/features/admin/pages/AdminAccount';
 
 export const router = createBrowserRouter([
+  /** 루트 접근 시 /customers로 이동 */
+  {
+    path: '/',
+    element: <Navigate to="/customers" replace />,
+  },
+
   /** 수요자 *************************************************************/
   {
     path: '/customers/login',
