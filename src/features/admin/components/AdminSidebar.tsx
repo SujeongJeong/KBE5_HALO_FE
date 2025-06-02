@@ -1,11 +1,11 @@
 import { useUserStore } from "@/store/useUserStore";
 import { Fragment } from "react";
 import { NavLink } from "react-router-dom";
-import { logout } from "@/shared/utils/logout";
+// import { logout } from "@/shared/utils/logout";
 import { useNavigate } from "react-router-dom";
 
 export const AdminSidebar = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { username } = useUserStore();
 
   const menuItems = [
