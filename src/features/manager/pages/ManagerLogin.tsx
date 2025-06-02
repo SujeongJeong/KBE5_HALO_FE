@@ -4,14 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { login } from "@/shared/utils/login";
 
 export const ManagerLogin = () => {
-  const [loginEmail, setEmail] = useState("");
+  const [loginPhone, setPhone] = useState("");
   const [loginPassword, setPassword] = useState("");
   const navigate = useNavigate();
 
   // 매니저 로그인
   const handleLogin = async () => {
     try {
-      await login("MANAGER", loginEmail, loginPassword);
+      await login("MANAGER", loginPhone, loginPassword);
       navigate("/managers");
     } catch (err: any) {
       alert(err.message || "로그인 실패");
@@ -39,8 +39,8 @@ export const ManagerLogin = () => {
                 <input 
                   className="w-full justify-start text-gray-400 text-sm font-normal font-['Inter'] leading-none"
                   placeholder="이메일을 입력하세요"
-                  value={loginEmail}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={loginPhone}
+                  onChange={(e) => setPhone(e.target.value)}
                 />
               </div>
             </div>

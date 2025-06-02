@@ -7,7 +7,7 @@ import { logout } from "@/shared/utils/logout";
 
 export const CustomerHeader = () => {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn());
-  const { username } = useUserStore();
+  const { userName } = useUserStore();
   const navigate = useNavigate();
 
   const menuItems = [
@@ -51,7 +51,7 @@ export const CustomerHeader = () => {
         {isLoggedIn ? (
           <div className="inline-flex justify-end items-center gap-4">
             <div className="flex justify-end items-center gap-2">
-              <div className="justify-start text-zinc-800 text-base font-medium font-['Inter'] leading-tight">{username}님</div>
+              <div className="justify-start text-zinc-800 text-base font-medium font-['Inter'] leading-tight">{userName}님</div>
             </div>
             <button
               className="w-24 h-10 bg-white rounded-lg outline outline-1 outline-offset-[-1px] outline-gray-200 inline-flex flex-col justify-center items-center"

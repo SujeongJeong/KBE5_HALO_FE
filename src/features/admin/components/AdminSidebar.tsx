@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 
 export const AdminSidebar = () => {
   // const navigate = useNavigate();
-  const { username } = useUserStore();
+  const { userName } = useUserStore();
 
   const menuItems = [
     { name: "대시보드", path: "/admins" },
@@ -36,7 +36,7 @@ export const AdminSidebar = () => {
         </div>
         <div className="self-stretch px-6 py-4 border-b border-gray-200 inline-flex justify-start items-center gap-3">
           <div className="inline-flex flex-col justify-start items-start gap-0.5">
-            <div className="justify-start text-gray-900 text-sm font-semibold font-['Inter'] leading-none">{username}</div>
+            <div className="justify-start text-gray-900 text-sm font-semibold font-['Inter'] leading-none">{userName}</div>
             <div className="justify-start text-gray-500 text-xs font-normal font-['Inter'] leading-none">관리자</div>
           </div>
         </div>
