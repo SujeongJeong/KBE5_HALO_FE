@@ -1,10 +1,10 @@
 import { Fragment } from "react";
 import { NavLink } from "react-router-dom";
-import { logout } from "@/shared/utils/logout";
-import { useNavigate } from "react-router-dom";
+// import { logout } from "@/shared/utils/logout";
+// import { useNavigate } from "react-router-dom";
 
 export const ManagerSidebar = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const menuItems = [
     { name: "대시보드", path: "/managers" },
