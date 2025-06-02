@@ -5,9 +5,8 @@ type Role = "CUSTOMER" | "MANAGER" | "ADMIN" | null;
 
 interface AuthState {
   accessToken: string | null;
-  refreshToken: string | null;
   role: Role;
-  setTokens: (access: string, refresh: string, role: Role) => void;
+  setTokens: (access: string, role: Role) => void;
   clearTokens: () => void;
   isLoggedIn: () => boolean;
 }
@@ -18,10 +17,10 @@ export const useAuthStore = create<AuthState>()(
       accessToken: null,
       refreshToken: null,
       role: null,
-      setTokens: (access, refresh, role) =>
-        set({ accessToken: access, refreshToken: refresh, role }),
+      setTokens: (access, role) =>
+        set({ accessToken: access, role }),
       clearTokens: () =>
-        set({ accessToken: null, refreshToken: null, role: null }),
+        set({ accessToken: null, role: null }),
       isLoggedIn: () => !!get().accessToken,
     }),
     { name: "auth-storage" }

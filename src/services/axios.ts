@@ -36,7 +36,7 @@ api.interceptors.response.use(
 
         // 상태 업데이트
         const store = useAuthStore.getState();
-        store.setTokens(accessToken, store.refreshToken!, store.role!);
+        store.setTokens(accessToken, store.role!);
 
         // 헤더 갱신 후 재요청
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;

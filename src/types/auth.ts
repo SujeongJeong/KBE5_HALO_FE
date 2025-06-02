@@ -9,19 +9,18 @@ export interface AuthState {
 export interface UserInfo {
   id: number;
   name: string;
-  email: string;
+  phone: string;
   role: 'CUSTOMER' | 'MANAGER' | 'ADMIN';
 }
 
 // JWT 토큰
 export interface AuthToken {
   accessToken: string;
-  // refreshToken?: string;
 }
 
 // 로그인 요청 DTO
 export interface LoginRequest {
-  email: string;
+  phone: string;
   password: string;
 }
 

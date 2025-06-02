@@ -9,28 +9,39 @@ type Role = "CUSTOMER" | "MANAGER" | "ADMIN";
 
 export const login = async (
   role: Role,
-  email: string,
+  phone: string,
   password: string
 ) => {
-  let data;
+  let res;
+
+  console.log(res);
+
   switch (role) {
     case "CUSTOMER":
-      data = await loginCustomer(email, password);
+      res = await loginCustomer(phone, password);
       break;
     case "MANAGER":
-      data = await loginManager(email, password);
+      res = await loginManager(phone, password);
       break;
     case "ADMIN":
-      data = await loginAdmin(email, password);
+      res = await loginAdmin(phone, password);
       break;
     default:
       throw new Error("알 수 없는 사용자 역할");
   }
 
-  const { accessToken, refreshToken, username } = data;
+  // 응답 헤더에서 값 추출 (헤더 이름은 소문자로)
+  const accessToken = res.headers["authorization"];
+  const userName = res.data.body.userName;
 
-  useAuthStore.getState().setTokens(accessToken, refreshToken, role);
-  useUserStore.getState().setUser(email, username);
+  // userName 넘겨주는거 하고나서 해제 예정
+  // if (!accessToken || !userName) {
+  //   throw new Error("로그인 응답이 올바르지 않습니다.");
+  // }
 
-  return data;
+  // 상태 저장
+  useAuthStore.getState().setTokens(accessToken, role);
+  useUserStore.getState().setUser(phone, userName);
+
+  return { accessToken, userName };
 };
