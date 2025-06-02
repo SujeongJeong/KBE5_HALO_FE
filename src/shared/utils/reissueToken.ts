@@ -11,7 +11,7 @@ export const reissueToken = async () => {
 
   const userType = role.toLowerCase();
 
-  const res = await api.post(`/api/${userType}/auth/refresh-access-token`, {
+  const res = await api.post(`/${userType}/auth/refresh-access-token`, {
     refresh_token: refreshToken,
   });
 
