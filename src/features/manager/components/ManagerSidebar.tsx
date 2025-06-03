@@ -16,7 +16,7 @@ export const ManagerSidebar = () => {
 
   // 매니저 로그아웃 
   const handleLogout = async () => {
-    await logout(navigate);
+    await logout();
     navigate("/managers/auth/login"); 
   };
 

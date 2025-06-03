@@ -4,7 +4,7 @@ import { logoutCustomer } from "@/features/customer/api/customerAuth";
 import { logoutManager } from "@/features/manager/api/managerAuth";
 import { logoutAdmin } from "@/features/admin/api/adminAuth";
 
-export const logout = async (navigate: (path: string) => void) => {
+export const logout = async () => {
   const role = useAuthStore.getState().role;
 
   try {

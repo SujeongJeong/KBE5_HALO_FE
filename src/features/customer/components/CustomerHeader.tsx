@@ -18,7 +18,7 @@ export const CustomerHeader = () => {
 
   // 수요자 로그아웃 
   const handleLogout = async () => {
-    await logout(navigate);
+    await logout();
     navigate("/"); 
   };
 
