@@ -5,6 +5,7 @@ export const loginManager = async (phone: string, password: string) => {
   const res = await api.post('/managers/auth/login', { phone, password });
 
   if (!res.data.success) {
+    alert(res.data.message);
     // 성공 여부 수동 체크 후 에러 던지기
     throw new Error(res.data.message || '로그인에 실패했습니다.');
   }
@@ -15,7 +16,8 @@ export const loginManager = async (phone: string, password: string) => {
 
 // 매니저 로그아웃
 export const logoutManager = async () => {
-  const res = await api.post("/managers/auth/logout");
+  // const res = await api.post("/managers/auth/logout");
+  const res = await api.post("/logout");
 
   if (!res.data.success) {
     // 명시적으로 실패 처리

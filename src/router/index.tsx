@@ -5,6 +5,7 @@ import { CustomerLayout } from '@/features/customer/layouts/CustomerLayout';
 import { CustomerMain } from '@/features/customer/pages/CustomerMain';
 import { ManagerLayout } from '@/features/manager/layouts/ManagerLayout';
 import { ManagerMain } from '@/features/manager/pages/ManagerMain';
+import { ManagerLogin } from '@/features/manager/pages/ManagerLogin';
 import { ManagerSignup } from '@/features/manager/pages/ManagerSignup';
 import { ManagerReservations } from '@/features/manager/pages/ManagerReservations';
 import { ManagerInquiries } from '@/features/manager/pages/ManagerInquiries';
@@ -33,7 +34,7 @@ export const router = createBrowserRouter([
 
   /** 수요자 로그인 */
   {
-    path: '/login',
+    path: 'auth/login',
     element: <CustomerLogin />,
   },
 
@@ -42,9 +43,9 @@ export const router = createBrowserRouter([
     path: '/managers',
     children: [
       // 매니저 로그인
-      // { index: true, element: <ManagerLogin /> },
-      // {path: 'login', element: <ManagerLogin /> },
-      {path: 'signup', element: <ManagerSignup /> },
+      {path: 'auth/login', element: <ManagerLogin /> },
+      // 매니저 회원가입
+      {path: 'auth/signup', element: <ManagerSignup /> },
     ],
   },
   {
@@ -68,14 +69,14 @@ export const router = createBrowserRouter([
 
   /** 관리자 *************************************************************/
   {
-    path: '/admins/login',
+    path: '/admin/auth/login',
     children: [
       // 관리자 로그인
       { index: true, element: <AdminLogin /> },
     ],
   },
   {
-    path: '/admins',
+    path: '/admin',
     element: <AdminLayout />,
     children: [
       // 메인페이지 (= 대시보드)

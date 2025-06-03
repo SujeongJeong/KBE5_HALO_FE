@@ -14,8 +14,6 @@ export const login = async (
 ) => {
   let res;
 
-  console.log(res);
-
   switch (role) {
     case "CUSTOMER":
       res = await loginCustomer(phone, password);
@@ -31,7 +29,8 @@ export const login = async (
   }
 
   // 응답 헤더에서 값 추출 (헤더 이름은 소문자로)
-  const accessToken = res.headers["authorization"];
+  const rawHeader = res.headers["authorization"];
+  const accessToken = rawHeader?.replace("Bearer ", "").trim();
   const userName = res.data.body.userName;
 
   // userName 넘겨주는거 하고나서 해제 예정
