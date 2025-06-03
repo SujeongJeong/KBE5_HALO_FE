@@ -2,9 +2,10 @@ import api from '@/services/axios';
 
 // 관리자 로그인
 export const loginAdmin = async (phone: string, password: string) => {
-  const res = await api.post('/admins/auth/login', { phone, password });
+  const res = await api.post('/admin/auth/login', { phone, password });
 
   if (!res.data.success) {
+    alert(res.data.message);
     // 성공 여부 수동 체크 후 에러 던지기
     throw new Error(res.data.message || '로그인에 실패했습니다.');
   }
@@ -15,7 +16,8 @@ export const loginAdmin = async (phone: string, password: string) => {
 
 // 관리자 로그아웃
 export const logoutAdmin = async () => {
-  const res = await api.post("/admins/auth/logout");
+  // const res = await api.post("/admin/auth/logout");
+  const res = await api.post("/logout");
 
   if (!res.data.success) {
     // 명시적으로 실패 처리

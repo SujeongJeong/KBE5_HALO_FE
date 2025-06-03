@@ -50,13 +50,13 @@ api.interceptors.response.use(
         // 역할에 따라 로그인 페이지 분기
         switch (role) {
           case "CUSTOMER":
-            window.location.href = "/customers";
+            window.location.href = "/";
             break;
           case "MANAGER":
             window.location.href = "/managers/login";
             break;
           case "ADMIN":
-            window.location.href = "/admins/login";
+            window.location.href = "/admin/login";
             break;
           default:
             window.location.href = "/";
