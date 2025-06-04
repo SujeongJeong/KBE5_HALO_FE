@@ -19,84 +19,71 @@ export const ManagerInquiries = () => {
   const [contentKeyword, setContentKeyword] = useState("");
   const fromDateRef = useRef<HTMLInputElement>(null);
 
-  const fetchInquiries = () => {
-    if (!isValidDateRange(fromCreatedAt, toCreatedAt)) {
+  const fetchInquiries = (paramsOverride?: Partial<ReturnType<typeof getCurrentParams>>) => {
+    const params = getCurrentParams();
+    const finalParams = { ...params, ...paramsOverride };
+
+    if (!isValidDateRange(finalParams.fromCreatedAt, finalParams.toCreatedAt)) {
       alert("시작일은 종료일보다 늦을 수 없습니다.");
       fromDateRef.current?.focus();
       return;
     }
 
     setLoading(true);
-    searchManagerInquiries({
-      fromCreatedAt,
-      toCreatedAt,
-      replyStatus,
-      titleKeyword,
-      contentKeyword,
-      page,
-      size: PAGE_SIZE,
-    })
-    .then((res) => {
-      setInquiries(res.content);
-      setTotal(res.page.totalElements);
-      setFadeKey(prev => prev + 1);
-    })
-    .catch((err) => {
-      console.error("문의사항 목록 조회 실패:", err);
-    })
-    .finally(() => {
-      setLoading(false);
-    });
+    searchManagerInquiries(finalParams)
+      .then((res) => {
+        setInquiries(res.content);
+        setTotal(res.page.totalElements);
+        setFadeKey((prev) => prev + 1);
+      })
+      .catch((err) => {
+        console.error("문의사항 목록 조회 실패:", err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
+
+  const getCurrentParams = () => ({
+    fromCreatedAt,
+    toCreatedAt,
+    replyStatus,
+    titleKeyword,
+    contentKeyword,
+    page,
+    size: PAGE_SIZE,
+  });
 
   useEffect(() => {
     fetchInquiries();
   }, [page]);
 
-  // 총 페이지
-  const totalPages = Math.max(Math.ceil(total / PAGE_SIZE), 1);
-
-  // 검색
   const handleSearch = () => {
     setPage(0);
-    fetchInquiries();
+    fetchInquiries({ page: 0 });
   };
 
-  // 검색조건 초기화 후, 검색
   const handleReset = () => {
-    setLoading(true);
-
-    // React의 setState() 함수들 (setFromCreatedAt 등)은 비동기로 동작해. 그래서 바로 아래 fetchInquiries()가 실행되면, 아직 초기화되지 않은 이전 값들이 전달됨
-    // 그래서 fetch에 resetValues(초기화된 값을) 직접 넘겨 해결
-    const resetValues = {
+    const resetState = {
       fromCreatedAt: "",
       toCreatedAt: "",
       replyStatus: "",
       titleKeyword: "",
       contentKeyword: "",
+      page: 0,
     };
 
-    setFromCreatedAt(resetValues.fromCreatedAt);
-    setToCreatedAt(resetValues.toCreatedAt);
-    setReplyStatus(resetValues.replyStatus);
-    setTitleKeyword(resetValues.titleKeyword);
-    setContentKeyword(resetValues.contentKeyword);
+    setFromCreatedAt(resetState.fromCreatedAt);
+    setToCreatedAt(resetState.toCreatedAt);
+    setReplyStatus(resetState.replyStatus);
+    setTitleKeyword(resetState.titleKeyword);
+    setContentKeyword(resetState.contentKeyword);
     setPage(0);
 
-    // 이 값들을 그대로 fetch에 넘김
-    searchManagerInquiries({
-      ...resetValues,
-      page: 0,
-      size: PAGE_SIZE,
-    }).then((res) => {
-      setInquiries(res.content);
-      setTotal(res.page.totalElements);
-      setFadeKey(prev => prev + 1);
-    })
-    .finally(() => {
-      setLoading(false);
-    });
+    fetchInquiries(resetState);
   };
+
+  const totalPages = Math.max(Math.ceil(total / PAGE_SIZE), 1);
 
   return (
     <Fragment>
@@ -116,8 +103,7 @@ export const ManagerInquiries = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              setPage(0);
-              fetchInquiries();
+              handleSearch();
             }}
             className="self-stretch p-6 bg-white rounded-xl shadow-[0px_2px_12px_0px_rgba(0,0,0,0.04)] flex flex-col justify-start items-start gap-4"
           >
