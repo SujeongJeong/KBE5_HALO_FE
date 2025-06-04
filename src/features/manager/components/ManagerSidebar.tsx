@@ -1,9 +1,10 @@
 import { Fragment } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { logout } from "@/shared/utils/logout";
 
 export const ManagerSidebar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const menuItems = [
     { name: "대시보드", path: "/managers" },
@@ -14,10 +15,9 @@ export const ManagerSidebar = () => {
     { name: "급여 관리", path: "/managers/payments" },
   ];
 
-  // 매니저 로그아웃 
   const handleLogout = async () => {
     await logout();
-    navigate("/managers/auth/login"); 
+    navigate("/managers/auth/login");
   };
 
   return (
@@ -37,26 +37,29 @@ export const ManagerSidebar = () => {
             </div>
           </div>
           <div className="flex flex-col gap-1">
-            {menuItems.map(({ name, path }) => (
-              <NavLink
-                key={path}
-                to={path}
-                end
-                className={({ isActive }) =>
-                  `h-11 px-6 inline-flex items-center gap-3 w-full ${
+            {menuItems.map(({ name, path }) => {
+              const isActive =
+                path === "/managers"
+                  ? location.pathname === path // 대시보드는 정확히 일치할 때만 활성화
+                  : location.pathname.startsWith(path); // 나머지는 하위경로 포함 허용
+
+              return (
+                <NavLink
+                  key={path}
+                  to={path}
+                  className={`h-11 px-6 inline-flex items-center gap-3 w-full ${
                     isActive
                       ? "bg-violet-50 border-l-[3px] border-indigo-600 text-indigo-600 font-semibold"
                       : "text-gray-500 font-medium"
-                  }`
-                }
-              >
-                {name}
-              </NavLink>
-            ))}
+                  }`}
+                >
+                  {name}
+                </NavLink>
+              );
+            })}
           </div>
         </div>
 
-        {/* 로그아웃 버튼 아래쪽에 배치 */}
         <div className="px-6 pt-4 flex justify-center">
           <button
             className="w-24 h-10 bg-white rounded-lg outline outline-1 outline-offset-[-1px] outline-gray-200 flex justify-center items-center cursor-pointer"
