@@ -14,6 +14,8 @@ import { AdminLayout } from '@/features/admin/layouts/AdminLayout';
 import { AdminMain } from '@/features/admin/pages/AdminMain';
 import { AdminAccount } from '@/features/admin/pages/AdminAccount';
 import AddressSearch from '@/shared/components/AddressSearch';
+import { ManagerInquiryDetail } from '@/features/manager/pages/ManagerInquiryDetail';
+import { ManagerInquiryForm } from '@/features/manager/pages/ManagerInquiryForm';
 
 export const router = createBrowserRouter([
   /** 수요자 *************************************************************/
@@ -60,8 +62,20 @@ export const router = createBrowserRouter([
       { path: 'reservations', element: <ManagerReservations /> },
       // // 리뷰 관리 목록
       // { path: 'reviews', element: <ManagerReviews /> },
-      // 문의 내역 목록
-      { path: 'inquiries', element: <ManagerInquiries /> },
+      // 문의 내역
+      { 
+        path: 'inquiries',
+        children: [
+          // 목록
+          { index: true, element: <ManagerInquiries /> },
+          // 상세
+          { path: ':inquiryId', element: <ManagerInquiryDetail /> },
+          // 등록
+          { path: 'new', element: <ManagerInquiryForm /> },
+          // 수정
+          { path: ':inquiryId/edit', element: <ManagerInquiryForm /> },
+        ]
+      },
       // // 급여 관리 목록
       // { path: 'payments', element: <ManagerPayments /> },
     ],
