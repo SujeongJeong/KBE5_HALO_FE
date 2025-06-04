@@ -72,7 +72,9 @@ const AddressSearch = () => {
       </div>
     </div>
   ) : (
-    <div className="text-sm text-gray-500">지도 API 로딩 중...</div>
+    <div className="w-full h-screen flex justify-center items-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-indigo-500"></div>
+    </div>
   );
 };
 
