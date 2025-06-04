@@ -15,7 +15,13 @@ export const ManagerInquiryDetail = () => {
     if (!inquiryId) return;
     getManagerInquiry(Number(inquiryId)).then(setInquiry);
   }, [inquiryId]);
-  if (!inquiry) return <div className="p-6">로딩 중...</div>;
+  if (!inquiry) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-indigo-500"></div>
+      </div>
+    );
+  }
 
 
   // 문의사항 수정

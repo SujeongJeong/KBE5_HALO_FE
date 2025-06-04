@@ -7,7 +7,6 @@ import { isValidDateRange } from "@/shared/utils/validation";
 const PAGE_SIZE = 10;
 
 export const ManagerInquiries = () => {
-  const [loading, setLoading] = useState(false);
   const [fadeKey, setFadeKey] = useState(0);
   const [inquiries, setInquiries] = useState<ManagerInquiryType[]>([]);
   const [total, setTotal] = useState(0);
@@ -29,7 +28,6 @@ export const ManagerInquiries = () => {
       return;
     }
 
-    setLoading(true);
     searchManagerInquiries(finalParams)
       .then((res) => {
         setInquiries(res.content);
@@ -38,9 +36,6 @@ export const ManagerInquiries = () => {
       })
       .catch((err) => {
         console.error("문의사항 목록 조회 실패:", err);
-      })
-      .finally(() => {
-        setLoading(false);
       });
   };
 
@@ -205,17 +200,16 @@ export const ManagerInquiries = () => {
 
 
             <div key={fadeKey} className="w-full fade-in">
-              {loading ? (
-                <div className="self-stretch h-16 px-4 border-b border-slate-200 flex items-center justify-center text-slate-500">
-                  로딩 중입니다...
-                </div>
-              ) : inquiries.length === 0 ? (
+              { inquiries.length === 0 ? (
                 <div className="self-stretch h-16 px-4 border-b border-slate-200 flex items-center text-center">
                   <div className="w-full text-sm text-slate-500">조회된 문의사항이 없습니다.</div>
                 </div>
               ) : (
                 inquiries.map((inquiry) => (
-                  <div key={inquiry.inquiryId} className="self-stretch h-16 px-4 border-b border-slate-200 flex items-center text-center gap-4">
+                  <Link 
+                    key={inquiry.inquiryId}
+                    to={`/managers/inquiries/${inquiry.inquiryId}`}
+                    className="self-stretch h-16 px-4 border-b border-slate-200 flex items-center text-center gap-4">
                     <div className="w-45 text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">{inquiry.inquiryId}</div>
                     <div className="flex-1 flex items-center text-sm text-slate-700 text-left font-medium font-['Inter'] leading-none">{inquiry.title}</div>
                     <div className="w-60 text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">{inquiry.createdAt}</div>
@@ -226,7 +220,7 @@ export const ManagerInquiries = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 ))
               )}
             </div>
