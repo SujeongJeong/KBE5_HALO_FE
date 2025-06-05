@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 
-const CustomerMain = () => {
+export const CustomerMain = () => {
+
   return (
     <Fragment>    
       <div className="self-stretch h-[600px] p-28 bg-gradient-to-l from-indigo-600 to-violet-600 flex flex-col justify-center items-start">
@@ -274,5 +275,3 @@ const CustomerMain = () => {
     </Fragment>
   );
 };
-
-export default CustomerMain;

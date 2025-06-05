@@ -173,6 +173,7 @@ const AdminAccount: React.FC = () => {
     resetToFirstPage();
   };
 
+export const AdminAccount = () => {
   return (
     <div className="w-full max-w-full flex flex-col justify-start items-start px-0">
       <div className="self-stretch h-16 px-6 bg-white border-b border-gray-200 inline-flex justify-between items-center">
@@ -493,5 +494,3 @@ const AdminAccount: React.FC = () => {
     </div>
   );
 };
-
-export default AdminAccount;

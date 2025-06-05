@@ -1,6 +1,6 @@
-import { Fragment } from "react";
+import { Fragment } from "react/jsx-runtime";
 
-const ManagerReservations = () => {
+export const ManagerReservations = () => {
   return (
     <Fragment>
       <div className="flex-1 self-stretch inline-flex flex-col justify-start items-start">
@@ -172,5 +172,3 @@ const ManagerReservations = () => {
     </Fragment>
   );
 };
-
-export default ManagerReservations;

@@ -1,11 +1,10 @@
-import { Fragment } from "react/jsx-runtime";
-import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRef, useState, Fragment } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { login } from "@/shared/utils/login";
 import { isValidPhone, isValidPassword } from "@/shared/utils/validation";
 import { formatPhoneNumber } from "@/shared/utils/format";
 
-export const AdminLogin = () => {
+export const CustomerLogin = () => {
   const phoneRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [loginPhone, setPhone] = useState("");
@@ -17,7 +16,7 @@ export const AdminLogin = () => {
     setPhone(formatPhoneNumber(e.target.value));
   };
 
-  // 관리자 로그인
+  // 수요자 로그인
   const handleLogin = async () => {
     try {
       // 연락처 유효성 검사 (010-1234-5678 형식)
@@ -32,8 +31,8 @@ export const AdminLogin = () => {
         passwordRef.current?.focus(); // alert 닫힌 후 포커싱
         return;
       }
-      await login("ADMIN", loginPhone, loginPassword);
-      navigate("/admin");
+      await login("CUSTOMER", loginPhone, loginPassword);
+      navigate("/");
     } catch (err: any) {
       alert(err.message || "로그인 실패");
     }
@@ -41,19 +40,20 @@ export const AdminLogin = () => {
 
   return (
     <Fragment>
-      <div className="w-full min-h-screen bg-gray-50 inline-flex justify-center items-center">
-        <div
-          className="w-[480px] p-12 bg-white rounded-2xl shadow-[0px_4px_24px_0px_rgba(0,0,0,0.04)] inline-flex flex-col justify-start items-start gap-8">
-          <div className="self-stretch flex flex-col justify-center items-center gap-4">
-            <div className="inline-flex justify-center items-center gap-3">
-              <div className="w-10 h-10 bg-indigo-600 rounded-lg inline-flex flex-col justify-center items-center">
-                <div className="justify-start text-white text-xl font-bold font-['Inter'] leading-normal">H</div>
-              </div>
-              <div className="justify-start text-gray-900 text-2xl font-bold font-['Inter'] leading-7">HaloCare</div>
-            </div>
-            <div className="justify-start text-gray-500 text-base font-medium font-['Inter'] leading-tight">관리자 포털</div>
+      <div className="w-full h-screen bg-slate-100 flex justify-center items-center">
+        <div className="w-[480px] p-10 bg-white rounded-2xl shadow-[0px_4px_20px_0px_rgba(0,0,0,0.04)] outline outline-1 outline-offset-[-1px] outline-zinc-100 flex flex-col justify-start items-start gap-8">
+          <div className="self-stretch flex flex-col justify-center items-center gap-2">
+            <div className="justify-start text-zinc-800 text-3xl font-bold font-['Inter'] leading-loose">로그인</div>
+            <div className="justify-start text-stone-500 text-base font-normal font-['Inter'] leading-tight">HaloCare 서비스를 이용하려면 로그인해주세요</div>
           </div>
           <div className="self-stretch flex flex-col justify-start items-start gap-6">
+            {/* <div className="self-stretch p-3 bg-red-50 rounded-lg inline-flex justify-start items-center gap-3">
+              <div className="w-5 h-5 relative overflow-hidden">
+                <div className="w-5 h-5 left-0 top-0 absolute bg-red-100" />
+                <div className="w-0 h-2 left-[10px] top-[6px] absolute bg-black outline outline-2 outline-offset-[-1px] outline-red-500" />
+              </div>
+              <div className="flex-1 justify-start text-red-500 text-sm font-normal font-['Inter'] leading-none">이메일 또는 비밀번호가 올바르지 않습니다.</div>
+            </div> */}
             {/* 연락처 입력 */}
             <div className="self-stretch flex flex-col justify-start items-start gap-2">
               <div className="flex justify-between w-full text-sm font-medium font-['Inter'] leading-none">
@@ -90,14 +90,45 @@ export const AdminLogin = () => {
               </div>
             </div>
 
+            {/* 아이디 찾기, 비밀번호 찾기 */}
+            <div className="w-full flex justify-center gap-2 text-sm font-medium">
+              <Link to="/auth/recovery-id" className="text-indigo-600 hover:underline">
+                아이디 찾기
+              </Link>
+              <span className="text-gray-300">|</span>
+              <Link to="/auth/recovery-pwd" className="text-indigo-600 hover:underline">
+                비밀번호 찾기
+              </Link>
+            </div>
+
             {/* 로그인 */}
             <button
-              className="self-stretch h-12 bg-indigo-600 rounded-lg inline-flex justify-center items-center cursor-pointer"
+              className="self-stretch h-12 bg-indigo-600 rounded-lg flex flex-col justify-center items-center cursor-pointer"
               onClick={handleLogin}
             >
               <div className="justify-start text-white text-base font-semibold font-['Inter'] leading-tight">로그인</div>
             </button>
-
+            <div className="self-stretch inline-flex justify-center items-center gap-4">
+              <div className="flex-1 h-px bg-gray-200" />
+              <div className="justify-start text-gray-400 text-sm font-normal font-['Inter'] leading-none">또는</div>
+              <div className="flex-1 h-px bg-gray-200" />
+            </div>
+            <div className="self-stretch flex flex-col justify-start items-start gap-4">
+              <div className="self-stretch h-12 px-4 bg-white rounded-lg outline outline-1 outline-offset-[-1px] outline-gray-200 inline-flex justify-center items-center gap-3">
+                <img
+                  src="https://developers.google.com/identity/images/g-logo.png"
+                  alt="Google Logo"
+                  className="w-5 h-5 mr-2"
+                />
+                <div className="justify-start text-zinc-800 text-base font-medium font-['Inter'] leading-tight">Google로 로그인</div>
+              </div>
+            </div>
+          </div>
+          <div className="self-stretch inline-flex justify-center items-center gap-2">
+            <div className="justify-start text-stone-500 text-base font-normal font-['Inter'] leading-tight">아직 계정이 없으신가요?</div>
+            <Link to="/auth/signup" className="justify-start text-indigo-600 text-base font-semibold font-['Inter'] leading-tight">
+              회원가입
+            </Link>
           </div>
         </div>
       </div>

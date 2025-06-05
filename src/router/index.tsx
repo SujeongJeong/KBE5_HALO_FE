@@ -1,44 +1,55 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import CustomerLayout from '@/features/customer/layouts/CustomerLayout';
-import CustomerMain from '@/features/customer/pages/CustomerMain';
-import ManagerLayout from '@/features/manager/layouts/ManagerLayout';
-import ManagerMain from '@/features/manager/pages/ManagerMain';
-import ManagerReservations from '@/features/manager/pages/ManagerReservations';
-import AdminLogin from '@/features/admin/pages/AdminLogin';
-import AdminLayout from '@/features/admin/layouts/AdminLayout';
-import AdminMain from '@/features/admin/pages/AdminMain';
-import AdminAccount from '@/features/admin/pages/AdminAccount';
-import AdminNotices from '@/features/admin/pages/AdminNotices';
-import AdminCustomers from '@/features/admin/pages/AdminCustomers';
-import AdminInquiries from '@/features/admin/pages/AdminInquiries';
-import AdminManagers from '@/features/admin/pages/AdminManagers';
-import AdminBanners from '@/features/admin/pages/AdminBanners';
-import AdminManagerDetail from '@/features/admin/pages/AdminManagerDetail';
+import { CustomerLogin } from '@/features/customer/pages/CustomerLogin';
+import { CustomerLayout } from '@/features/customer/layouts/CustomerLayout';
+import { CustomerMain } from '@/features/customer/pages/CustomerMain';
+import { ManagerLayout } from '@/features/manager/layouts/ManagerLayout';
+import { ManagerMain } from '@/features/manager/pages/ManagerMain';
+import { ManagerLogin } from '@/features/manager/pages/ManagerLogin';
+import { ManagerSignup } from '@/features/manager/pages/ManagerSignup';
+import { ManagerReservations } from '@/features/manager/pages/ManagerReservations';
+import { ManagerInquiries } from '@/features/manager/pages/Inquiry/ManagerInquiries';
+import { AdminLogin } from '@/features/admin/pages/AdminLogin';
+import { AdminLayout } from '@/features/admin/layouts/AdminLayout';
+import { AdminMain } from '@/features/admin/pages/AdminMain';
+import { AdminAccount } from '@/features/admin/pages/AdminAccount';
+import AddressSearch from '@/shared/components/AddressSearch';
+import { ManagerInquiryDetail } from '@/features/manager/pages/Inquiry/ManagerInquiryDetail';
+import { ManagerInquiryForm } from '@/features/manager/pages/Inquiry/ManagerInquiryForm';
+import { ManagerReviews } from '@/features/manager/pages/review/ManagerReviews';
 
 export const router = createBrowserRouter([
   /** 수요자 *************************************************************/
   {
-    path: '/customers',
+    path: '/',
     element: <CustomerLayout />,
     children: [
       // 메인페이지
-      { index: true, element: <CustomerMain /> }, 
+      { index: true, element: <CustomerMain /> },
       // 서비스 소개
       // { path: 'services', element: <CustomerService /> },
-      // 후기
+      // // 후기
       // { path: 'reviews', element: <CustomerReviews /> },
-      // 고객센터
-      // { path: 'support', element: <CustomerSuppoert /> },
+      // // 고객센터
+      // { path: 'support', element: <CustomerSupport /> },
     ],
+  },
+
+  /** 수요자 로그인 */
+  {
+    path: 'auth/login',
+    element: <CustomerLogin />,
   },
 
   /** 매니저 *************************************************************/
   {
-    path: '/managers/login',
+    path: '/managers/auth/login',
     children: [
       // 매니저 로그인
-      // { index: true, element: <ManagerLogin /> },
+      { index: true, element: <ManagerLogin /> },
+      // {path: 'auth/login', element: <ManagerLogin /> },
+      // 매니저 회원가입
+      { path: 'auth/signup', element: <ManagerSignup /> },
     ],
   },
   {
@@ -52,9 +63,21 @@ export const router = createBrowserRouter([
       // // 예약 관리 목록
       { path: 'reservations', element: <ManagerReservations /> },
       // // 리뷰 관리 목록
-      // { path: 'reviews', element: <ManagerReviews /> },
-      // // 문의 내역 목록
-      // { path: 'inquiries', element: <ManagerInquiries /> },
+      { path: 'reviews', element: <ManagerReviews /> },
+      // 문의 내역
+      { 
+        path: 'inquiries',
+        children: [
+          // 목록
+          { index: true, element: <ManagerInquiries /> },
+          // 상세
+          { path: ':inquiryId', element: <ManagerInquiryDetail /> },
+          // 등록
+          { path: 'new', element: <ManagerInquiryForm /> },
+          // 수정
+          { path: ':inquiryId/edit', element: <ManagerInquiryForm /> },
+        ]
+      },
       // // 급여 관리 목록
       // { path: 'payments', element: <ManagerPayments /> },
     ],
@@ -62,14 +85,14 @@ export const router = createBrowserRouter([
 
   /** 관리자 *************************************************************/
   {
-    path: '/admins/login',
+    path: '/admin/auth/login',
     children: [
       // 관리자 로그인
       { index: true, element: <AdminLogin /> },
     ],
   },
   {
-    path: '/admins',
+    path: '/admin',
     element: <AdminLayout />,
     children: [
       // 메인페이지 (= 대시보드)
@@ -90,4 +113,12 @@ export const router = createBrowserRouter([
       { path: 'banners', element: <AdminBanners /> },
     ],
   },
+
+  /** 구글맵 테스트 *************************************************************/
+  {
+    path: '/googleMap',
+    children: [
+      { index: true, element: <AddressSearch /> },
+    ],
+  }
 ]);
