@@ -164,13 +164,13 @@ export const ManagerInquiries = () => {
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="w-28 h-12 bg-slate-100 rounded-lg flex justify-center items-center text-slate-500 text-sm font-medium font-['Inter'] leading-none hover:bg-slate-200 transition"
+                  className="w-28 h-12 bg-slate-100 rounded-lg flex justify-center items-center text-slate-500 text-sm font-medium font-['Inter'] leading-none hover:bg-slate-200 transition cursor-pointer"
                 >
                   초기화
                 </button>
                 <button
                   type="submit"
-                  className="w-28 h-12 bg-indigo-600 rounded-lg flex justify-center items-center text-white text-sm font-medium font-['Inter'] leading-none hover:bg-indigo-700 transition"
+                  className="w-28 h-12 bg-indigo-600 rounded-lg flex justify-center items-center text-white text-sm font-medium font-['Inter'] leading-none hover:bg-indigo-700 transition cursor-pointer"
                 >
                   검색
                 </button>
@@ -188,10 +188,10 @@ export const ManagerInquiries = () => {
               <div className="flex-1 flex justify-center items-center">
                 <div className="flex-1 flex justify-center items-center">
                   <div className="flex-1 flex justify-center items-center gap-4">
-                    <div className="w-45 text-center text-sm font-semibold text-slate-700 font-semibold font-['Inter'] leading-none">번호</div>
-                    <div className="flex-1 text-center text-sm font-semibold text-slate-700 font-semibold font-['Inter'] leading-none">제목</div>
-                    <div className="w-60 text-center text-sm font-semibold text-slate-700 font-semibold font-['Inter'] leading-none">작성일시</div>
-                    <div className="w-60 text-center text-sm font-semibold text-slate-700 font-semibold font-['Inter'] leading-none">답변 상태</div>
+                    <div className="w-[5%] text-center text-sm font-semibold text-slate-700 font-semibold font-['Inter'] leading-none">번호</div>
+                    <div className="w-[35%] text-center text-sm font-semibold text-slate-700 font-semibold font-['Inter'] leading-none">제목</div>
+                    <div className="w-[30%] text-center text-sm font-semibold text-slate-700 font-semibold font-['Inter'] leading-none">작성일시</div>
+                    <div className="w-[30%] text-center text-sm font-semibold text-slate-700 font-semibold font-['Inter'] leading-none">답변 상태</div>
                   </div>
                 </div>
               </div>
@@ -209,10 +209,10 @@ export const ManagerInquiries = () => {
                     key={inquiry.inquiryId}
                     to={`/managers/inquiries/${inquiry.inquiryId}`}
                     className="self-stretch h-16 px-4 border-b border-slate-200 flex items-center text-center gap-4">
-                    <div className="w-45 text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">{inquiry.inquiryId}</div>
-                    <div className="flex-1 flex items-center text-sm text-slate-700 text-left font-medium font-['Inter'] leading-none">{inquiry.title}</div>
-                    <div className="w-60 text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">{inquiry.createdAt}</div>
-                    <div className="w-60 text-center flex justify-center">
+                    <div className="w-[5%] text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">{inquiry.inquiryId}</div>
+                    <div className="w-[35%] flex items-center text-sm text-slate-700 text-left font-medium font-['Inter'] leading-none">{inquiry.title}</div>
+                    <div className="w-[30%] text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">{inquiry.createdAt}</div>
+                    <div className="w-[30%] text-center flex justify-center">
                       <div className={`h-7 px-3 rounded-2xl flex items-center font-medium font-['Inter'] leading-none ${inquiry.isReplied ? 'bg-green-100' : 'bg-yellow-100'}`}>
                         <div className={`text-sm font-medium ${inquiry.isReplied ? 'text-green-800' : 'text-yellow-800'}`}>
                           {inquiry.isReplied ? '답변 완료' : '답변 대기'}
