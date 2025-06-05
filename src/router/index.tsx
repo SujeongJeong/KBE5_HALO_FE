@@ -8,15 +8,21 @@ import { ManagerMain } from '@/features/manager/pages/ManagerMain';
 import { ManagerLogin } from '@/features/manager/pages/ManagerLogin';
 import { ManagerSignup } from '@/features/manager/pages/ManagerSignup';
 import { ManagerReservations } from '@/features/manager/pages/ManagerReservations';
-import { ManagerInquiries } from '@/features/manager/pages/Inquiry/ManagerInquiries';
+import { ManagerInquiries } from '@/features/manager/pages/ManagerInquiry/ManagerInquiries';
 import { AdminLogin } from '@/features/admin/pages/AdminLogin';
 import { AdminLayout } from '@/features/admin/layouts/AdminLayout';
 import { AdminMain } from '@/features/admin/pages/AdminMain';
-import { AdminAccount } from '@/features/admin/pages/AdminAccount';
 import AddressSearch from '@/shared/components/AddressSearch';
-import { ManagerInquiryDetail } from '@/features/manager/pages/Inquiry/ManagerInquiryDetail';
-import { ManagerInquiryForm } from '@/features/manager/pages/Inquiry/ManagerInquiryForm';
-import { ManagerReviews } from '@/features/manager/pages/review/ManagerReviews';
+import { ManagerInquiryDetail } from '@/features/manager/pages/ManagerInquiry/ManagerInquiryDetail';
+import { ManagerInquiryForm } from '@/features/manager/pages/ManagerInquiry/ManagerInquiryForm';
+import { ManagerReviews } from '@/features/manager/pages/ManagerReview/ManagerReviews';
+import { AdminAccounts } from '@/features/admin/pages/AdminAccount/AdminAccounts';
+import { AdminAccountForm } from '@/features/admin/pages/AdminAccount/AdminAccountForm';
+import { AdminManagers } from '@/features/admin/pages/AdminManager/AdminManagers';
+import { AdminCustomers } from '@/features/admin/pages/AdminCustomer/AdminCustomers';
+import { AdminBoards } from '@/features/admin/pages/AdminBoard/AdminBoards';
+import { AdminBanners } from '@/features/admin/pages/AdminBanner/AdminBanners';
+
 
 export const router = createBrowserRouter([
   /** 수요자 *************************************************************/
@@ -98,17 +104,70 @@ export const router = createBrowserRouter([
       // 메인페이지 (= 대시보드)
       { index: true, element: <AdminMain /> }, 
       // 관리자 계정 목록
-      { path: 'accounts', element: <AdminAccount /> },
+      { path: 'accounts',
+        children: [
+          // 목록
+          { index: true, element: <AdminAccounts /> },
+          // 등록
+          { path: 'new', element: <AdminAccountForm /> },
+          // 수정
+          { path: ':adminId/edit', element: <AdminAccountForm /> },
+        ]
+      },
       // 고객 정보 목록
-      // { path: 'customers', element: <AdminCustomers /> },
-      // // 매니저 정보 목록
-      // { path: 'managers', element: <AdminManagers /> },
+      { path: 'customers',
+        children: [
+          // 목록
+          { index: true, element: <AdminCustomers /> },
+          // 수정
+          // { path: ':customerId/edit', element: <AdminCustomerForm /> },
+        ]
+      },
+      // 매니저 정보 목록
+      { path: 'managers',
+        children: [
+          // 목록
+          { index: true, element: <AdminManagers /> },
+          // 수정
+          // { path: ':managerId/edit', element: <AdminManagerForm /> },
+        ]
+      },
       // // 문의 내역 목록
       // { path: 'inquiries', element: <AdminInquiries /> },
       // // 공지/이벤트 목록
-      // { path: 'notices', element: <AdminNotices /> },
-      // // 배너 관리 목록
-      // { path: 'banners', element: <AdminBanners /> },
+      { path: 'boards',
+        children: [
+          // 목록
+          { index: true, element: <AdminBoards /> },
+          // { path: 'notices',
+          //   children: [
+          //     // 등록
+          //     { path: 'new', element: <AdminNoticeForm /> },
+          //     // 수정
+          //     { path: ':noticeId/edit', element: <AdminNoticeForm /> },
+          //   ]
+          // },
+          // { path: 'events',
+          //   children: [
+          //     // 등록
+          //     { path: 'new', element: <AdminEventForm /> },
+          //     // 수정
+          //     { path: ':eventId/edit', element: <AdminEventForm /> },
+          //   ]
+          // },
+        ]
+      },
+      // 배너 관리 목록
+      { path: 'banners',
+        children: [
+          // 목록
+          { index: true, element: <AdminBanners /> },
+          // 등록
+          // { path: 'new', element: <AdminBannerForm /> },
+          // 수정
+          // { path: ':bannerId/edit', element: <AdminBannerForm /> },
+        ]
+      },
     ],
   },
 

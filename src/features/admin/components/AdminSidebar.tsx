@@ -13,7 +13,7 @@ export const AdminSidebar = () => {
     { name: "고객 정보", path: "/admin/customers" },
     { name: "매니저 정보", path: "/admin/managers" },
     { name: "문의 내역", path: "/admin/inquiries" },
-    { name: "공지/이벤트", path: "/admin/notices" },
+    { name: "공지/이벤트", path: "/admin/boards" },
     { name: "배너 관리", path: "/admin/banners" },
   ];
 
