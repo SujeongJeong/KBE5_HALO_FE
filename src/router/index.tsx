@@ -9,6 +9,12 @@ import AdminLogin from '@/features/admin/pages/AdminLogin';
 import AdminLayout from '@/features/admin/layouts/AdminLayout';
 import AdminMain from '@/features/admin/pages/AdminMain';
 import AdminAccount from '@/features/admin/pages/AdminAccount';
+import AdminNotices from '@/features/admin/pages/AdminNotices';
+import AdminCustomers from '@/features/admin/pages/AdminCustomers';
+import AdminInquiries from '@/features/admin/pages/AdminInquiries';
+import AdminManagers from '@/features/admin/pages/AdminManagers';
+import AdminBanners from '@/features/admin/pages/AdminBanners';
+import AdminManagerDetail from '@/features/admin/pages/AdminManagerDetail';
 
 export const router = createBrowserRouter([
   /** 수요자 *************************************************************/
@@ -71,15 +77,17 @@ export const router = createBrowserRouter([
       // 관리자 계정 목록
       { path: 'accounts', element: <AdminAccount /> },
       // 고객 정보 목록
-      // { path: 'customers', element: <AdminCustomers /> },
-      // // 매니저 정보 목록
-      // { path: 'managers', element: <AdminManagers /> },
-      // // 문의 내역 목록
-      // { path: 'inquiries', element: <AdminInquiries /> },
-      // // 공지/이벤트 목록
-      // { path: 'notices', element: <AdminNotices /> },
-      // // 배너 관리 목록
-      // { path: 'banners', element: <AdminBanners /> },
+      { path: 'customers', element: <AdminCustomers /> },
+      // 매니저 정보 목록
+      { path: 'managers', element: <AdminManagers /> },
+      // 매니저 상세 정보
+      { path: 'managers/:id', element: <AdminManagerDetail /> },
+      // 문의 내역 목록
+      { path: 'inquiries', element: <AdminInquiries /> },
+      // 공지/이벤트 목록
+      { path: 'notices', element: <AdminNotices /> },
+      // 배너 관리 목록
+      { path: 'banners', element: <AdminBanners /> },
     ],
   },
 ]);
