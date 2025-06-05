@@ -8,15 +8,14 @@ import { ManagerMain } from '@/features/manager/pages/ManagerMain';
 import { ManagerLogin } from '@/features/manager/pages/ManagerLogin';
 import { ManagerSignup } from '@/features/manager/pages/ManagerSignup';
 import { ManagerReservations } from '@/features/manager/pages/ManagerReservations';
-import { ManagerInquiries } from '@/features/manager/pages/Inquiry/ManagerInquiries';
+import { ManagerInquiries } from '@/features/manager/pages/ManagerInquiries';
 import { AdminLogin } from '@/features/admin/pages/AdminLogin';
 import { AdminLayout } from '@/features/admin/layouts/AdminLayout';
 import { AdminMain } from '@/features/admin/pages/AdminMain';
 import { AdminAccount } from '@/features/admin/pages/AdminAccount';
 import AddressSearch from '@/shared/components/AddressSearch';
-import { ManagerInquiryDetail } from '@/features/manager/pages/Inquiry/ManagerInquiryDetail';
-import { ManagerInquiryForm } from '@/features/manager/pages/Inquiry/ManagerInquiryForm';
-import { ManagerReviews } from '@/features/manager/pages/review/ManagerReviews';
+import { ManagerInquiryDetail } from '@/features/manager/pages/ManagerInquiryDetail';
+import { ManagerInquiryForm } from '@/features/manager/pages/ManagerInquiryForm';
 
 export const router = createBrowserRouter([
   /** 수요자 *************************************************************/
@@ -43,13 +42,12 @@ export const router = createBrowserRouter([
 
   /** 매니저 *************************************************************/
   {
-    path: '/managers/auth/login',
+    path: '/managers',
     children: [
       // 매니저 로그인
-      { index: true, element: <ManagerLogin /> },
-      // {path: 'auth/login', element: <ManagerLogin /> },
+      {path: 'auth/login', element: <ManagerLogin /> },
       // 매니저 회원가입
-      { path: 'auth/signup', element: <ManagerSignup /> },
+      {path: 'auth/signup', element: <ManagerSignup /> },
     ],
   },
   {
@@ -63,7 +61,7 @@ export const router = createBrowserRouter([
       // // 예약 관리 목록
       { path: 'reservations', element: <ManagerReservations /> },
       // // 리뷰 관리 목록
-      { path: 'reviews', element: <ManagerReviews /> },
+      // { path: 'reviews', element: <ManagerReviews /> },
       // 문의 내역
       { 
         path: 'inquiries',
