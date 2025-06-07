@@ -6,14 +6,6 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { useUserStore } from "@/store/useUserStore";
 
 type Role = "CUSTOMER" | "MANAGER" | "ADMIN";
-type UserStatus = "ACTIVE"              // 활성
-                | "SUSPENDED"           // 정지
-                | "DELETED"             // 탈퇴
-                | "PENDING"             // 매니저 승인대기
-                | "REJECTED"            // 매니저 승인거절
-                | "TERMINATION_PENDING" // 매니저 계약해지대기
-                | "TERMINATED"          // 매니저 계약해지
-                ;
 
 export const login = async (
   role: Role,

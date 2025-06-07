@@ -1,5 +1,4 @@
 import { createBrowserRouter } from 'react-router-dom';
-
 import { CustomerLogin } from '@/features/customer/pages/CustomerLogin';
 import { CustomerLayout } from '@/features/customer/layouts/CustomerLayout';
 import { CustomerMain } from '@/features/customer/pages/CustomerMain';
@@ -12,7 +11,6 @@ import { ManagerInquiries } from '@/features/manager/pages/ManagerInquiry/Manage
 import { AdminLogin } from '@/features/admin/pages/AdminLogin';
 import { AdminLayout } from '@/features/admin/layouts/AdminLayout';
 import { AdminMain } from '@/features/admin/pages/AdminMain';
-import AddressSearch from '@/shared/components/AddressSearch';
 import { ManagerInquiryDetail } from '@/features/manager/pages/ManagerInquiry/ManagerInquiryDetail';
 import { ManagerInquiryForm } from '@/features/manager/pages/ManagerInquiry/ManagerInquiryForm';
 import { ManagerReviews } from '@/features/manager/pages/ManagerReview/ManagerReviews';
