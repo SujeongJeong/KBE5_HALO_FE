@@ -106,7 +106,7 @@ export const ManagerInquiryForm = () => {
             </div>
 
             {/* 첨부파일 */}
-            <FileUploadSection files={files} setFiles={setFiles} multiple={true} />
+            <FileUploadSection files={files} setFiles={setFiles} multiple={true} isRequired={false}/>
 
             {/* 기존 첨부파일명 보여주기 (선택사항) */}
             {/* {isEditMode && existingData.fileName && (

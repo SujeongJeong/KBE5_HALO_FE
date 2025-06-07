@@ -10,7 +10,7 @@ export const isValidPhone = (phone: string): boolean => {
 
 /**
  * 비밀번호 유효성 검사 (8~20자, 대/소문자/숫자/특수문자 중 3가지 이상 포함)
- * @param password 비밀번호호
+ * @param password 비밀번호
  * @returns 유효하면 true, 아니면 false
  */
 export const isValidPassword = (password: string): boolean => {
@@ -24,6 +24,16 @@ export const isValidPassword = (password: string): boolean => {
   const fulfilledTypes = [hasUppercase, hasLowercase, hasDigit, hasSpecialChar].filter(Boolean).length;
 
   return lengthValid && fulfilledTypes >= 3;
+};
+
+/**
+ * 이메일 유효성 검사
+ * @param email 이메일
+ * @returns 유효하면 true, 아니면 false
+ */
+export const isValidEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
 };
 
 /**

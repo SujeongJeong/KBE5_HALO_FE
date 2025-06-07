@@ -22,6 +22,9 @@ import { AdminManagers } from '@/features/admin/pages/AdminManager/AdminManagers
 import { AdminCustomers } from '@/features/admin/pages/AdminCustomer/AdminCustomers';
 import { AdminBoards } from '@/features/admin/pages/AdminBoard/AdminBoards';
 import { AdminBanners } from '@/features/admin/pages/AdminBanner/AdminBanners';
+import { ManagerMy } from '@/features/manager/pages/ManagerMy/ManagerMy';
+import { ManagerContractCancel } from '@/features/manager/pages/ManagerMy/ManagerContractCancel';
+import { ManagerMyForm } from '@/features/manager/pages/ManagerMy/ManagerMyForm';
 
 
 export const router = createBrowserRouter([
@@ -49,13 +52,12 @@ export const router = createBrowserRouter([
 
   /** 매니저 *************************************************************/
   {
-    path: '/managers/auth/login',
+    path: '/managers/auth',
     children: [
       // 매니저 로그인
-      { index: true, element: <ManagerLogin /> },
-      // {path: 'auth/login', element: <ManagerLogin /> },
+      { path: 'login', element: <ManagerLogin /> },
       // 매니저 회원가입
-      { path: 'auth/signup', element: <ManagerSignup /> },
+      { path: 'signup', element: <ManagerSignup /> },
     ],
   },
   {
@@ -65,7 +67,17 @@ export const router = createBrowserRouter([
       // 메인페이지 (= 대시보드)
       { index: true, element: <ManagerMain /> }, 
       // 마이페이지
-      // { path: 'my', element: <ManagerMy /> },
+      { 
+        path: 'my',
+        children: [
+          // 목록
+          { index: true, element: <ManagerMy /> },
+          // 상세
+          { path: 'edit', element: <ManagerMyForm /> },
+          // 계약해지
+          { path: 'contract-cancel', element: <ManagerContractCancel /> },
+        ]
+      },
       // // 예약 관리 목록
       { path: 'reservations', element: <ManagerReservations /> },
       // // 리뷰 관리 목록
@@ -170,12 +182,4 @@ export const router = createBrowserRouter([
       },
     ],
   },
-
-  /** 구글맵 테스트 *************************************************************/
-  {
-    path: '/googleMap',
-    children: [
-      { index: true, element: <AddressSearch /> },
-    ],
-  }
 ]);

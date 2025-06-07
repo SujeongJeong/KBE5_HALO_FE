@@ -1,18 +1,24 @@
 import { create } from 'zustand';
 
+
 interface AddressState {
-  address: string;
+  roadAddress: string;
   latitude: number | null;
   longitude: number | null;
   detailAddress: string;
-  setAddress: (address: string, lat: number, lng: number, detail: string) => void;
+  setAddress: (roadAddress: string, lat: number, lng: number, detailAddressParam: string) => void;
 }
 
 export const useAddressStore = create<AddressState>((set) => ({
-  address: '',
+  roadAddress: '',
   latitude: null,
   longitude: null,
   detailAddress: '',
-  setAddress: (address, lat, lng, detail) =>
-    set({ address, latitude: lat, longitude: lng, detailAddress: detail }),
+  setAddress: (roadAddress, lat, lng, detailAddressParam) =>
+    set({
+      roadAddress,
+      latitude: lat,
+      longitude: lng,
+      detailAddress: detailAddressParam,
+    }),
 }));

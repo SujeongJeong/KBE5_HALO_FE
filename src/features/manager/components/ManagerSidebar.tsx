@@ -1,10 +1,12 @@
 import { Fragment } from "react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { logout } from "@/shared/utils/logout";
+import { useUserStore } from "@/store/useUserStore";
 
 export const ManagerSidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { userName, status } = useUserStore();
 
   const menuItems = [
     { name: "대시보드", path: "/managers" },
@@ -14,6 +16,17 @@ export const ManagerSidebar = () => {
     { name: "문의 내역", path: "/managers/inquiries" },
     { name: "급여 관리", path: "/managers/payments" },
   ];
+
+  const allowedMenusByStatus: Record<string, string[]> = {
+    ACTIVE: ["대시보드", "마이페이지", "예약 관리", "리뷰 관리", "문의 내역", "급여 관리"],
+    PENDING: ["마이페이지", "문의 내역"],
+    REJECTED: ["마이페이지", "문의 내역"],
+    TERMINATION_PENDING: ["대시보드", "마이페이지", "예약 관리", "리뷰 관리", "문의 내역", "급여 관리"]
+  };
+
+  const filteredMenuItems = menuItems.filter((item) =>
+    (allowedMenusByStatus[status ?? ""] ?? []).includes(item.name)
+  );
 
   const handleLogout = async () => {
     await logout();
@@ -30,19 +43,18 @@ export const ManagerSidebar = () => {
             </div>
             <div className="text-gray-900 text-lg font-bold leading-snug">HaloCare</div>
           </div>
-          <div className="px-6 py-4 border-b border-gray-200 inline-flex gap-3">
+          <div className="px-6 py-4 border-b border-gray-200 flex gap-3 w-full">
             <div className="flex flex-col gap-0.5">
-              <div className="text-gray-900 text-sm font-semibold">정기현</div>
+              <div className="text-gray-900 text-sm font-semibold">{userName}</div>
               <div className="text-gray-500 text-xs">매니저</div>
             </div>
           </div>
           <div className="flex flex-col gap-1">
-            {menuItems.map(({ name, path }) => {
+            {filteredMenuItems.map(({ name, path }) => {
               const isActive =
                 path === "/managers"
-                  ? location.pathname === path // 대시보드는 정확히 일치할 때만 활성화
-                  : location.pathname.startsWith(path); // 나머지는 하위경로 포함 허용
-
+                  ? location.pathname === path
+                  : location.pathname.startsWith(path);
               return (
                 <NavLink
                   key={path}
