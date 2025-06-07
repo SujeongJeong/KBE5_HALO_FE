@@ -4,13 +4,14 @@ interface FileUploadSectionProps {
   files: File[];
   setFiles: React.Dispatch<React.SetStateAction<File[]>>;
   multiple?: boolean;
+  isRequired?: boolean;
 }
 
 const MAX_FILE_SIZE_MB = 10;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 const MAX_FILE_COUNT = 5;
 
-export const FileUploadSection = ({ files, setFiles, multiple = true }: FileUploadSectionProps) => {
+export const FileUploadSection = ({ files, setFiles, multiple = true, isRequired = true }: FileUploadSectionProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleFileButtonClick = () => {
@@ -47,8 +48,11 @@ export const FileUploadSection = ({ files, setFiles, multiple = true }: FileUplo
   const getFileURL = (file: File) => URL.createObjectURL(file);
 
   return (
-    <div className="self-stretch flex flex-col gap-2">
-      <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-none">첨부파일</label>
+    <div className="self-stretch flex flex-col gap-2 cuser-pointer">
+      <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-none">
+        첨부파일
+        {isRequired && <span> *</span>}
+      </label>
       <div className="self-stretch p-4 bg-slate-50 rounded-lg outline outline-1 outline-offset-[-1px] outline-slate-200 flex flex-col gap-3">
         <input
           ref={fileInputRef}

@@ -32,15 +32,15 @@ export const login = async (
   const rawHeader = res.headers["authorization"];
   const accessToken = rawHeader?.replace("Bearer ", "").trim();
   const userName = res.data.body.userName;
+  const status = res.data.body.status;
 
-  // userName 넘겨주는거 하고나서 해제 예정
-  // if (!accessToken || !userName) {
-  //   throw new Error("로그인 응답이 올바르지 않습니다.");
-  // }
+  if (!accessToken || !userName) {
+    throw new Error("로그인 응답이 올바르지 않습니다.");
+  }
 
   // 상태 저장
   useAuthStore.getState().setTokens(accessToken, role);
-  useUserStore.getState().setUser(phone, userName);
+  useUserStore.getState().setUser(phone, userName, status);
 
   return { accessToken, userName };
 };

@@ -22,6 +22,7 @@ export const searchManagerInquiries = async (params: {
 
   if (!res.data.success) {
     // 명시적으로 실패 처리
+    if (res.data.message?.trim()) alert(res.data.message);
     throw new Error(res.data.message || "문의사항 목록 조회에 실패했습니다.");
   }
 
@@ -34,6 +35,7 @@ export const getManagerInquiry = async (inquiryId: number): Promise<ManagerInqui
 
   if (!res.data.success) {
     // 명시적으로 실패 처리
+    if (res.data.message?.trim()) alert(res.data.message);
     throw new Error(res.data.message || "문의사항 상세 조회에 실패했습니다.");
   }
 
@@ -47,6 +49,7 @@ export const createManagerInquiry = async (data: CreateManagerInquiryRequest) =>
 
   if (!res.data.success) {
     // 명시적으로 실패 처리
+    if (res.data.message?.trim()) alert(res.data.message);
     throw new Error(res.data.message || "문의사항 등록에 실패했습니다.");
   }
 
@@ -61,6 +64,7 @@ export const updateManagerInquiry = async (
   const res = await api.patch(`/managers/inquiries/${inquiryId}`, data);
 
   if (!res.data.success) {
+    if (res.data.message?.trim()) alert(res.data.message);
     throw new Error(res.data.message || "문의사항 수정에 실패했습니다.");
   }
 
@@ -73,6 +77,7 @@ export const deleteManagerInquiry = async(inquiryId: number) => {
 
   if (!res.data.success) {
     // 명시적으로 실패 처리
+    if (res.data.message?.trim()) alert(res.data.message);
     throw new Error(res.data.message || "문의사항 삭제에 실패했습니다.");
   }
 

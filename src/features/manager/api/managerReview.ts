@@ -17,12 +17,11 @@ export const searchManagerReviews = async (params: {
     )
   );
 
-  console.log("API 호출 시작");
   const res = await api.get("/managers/reviews", { params: cleanedParams });
-  console.log("응답 받음:", res);
 
   if (!res.data.success) {
     // 명시적으로 실패 처리
+    if (res.data.message?.trim()) alert(res.data.message);
     throw new Error(res.data.message || "문의사항 목록 조회에 실패했습니다.");
   }
 
