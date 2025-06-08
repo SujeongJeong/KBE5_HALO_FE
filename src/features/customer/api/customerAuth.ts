@@ -1,4 +1,17 @@
 import api from '@/services/axios';
+import type { CustomerSignupReq } from '../types/CustomerSignupType';
+
+// 수요자 회원가입
+export const signupCustomer = async (signupData: CustomerSignupReq) => {
+  const res = await api.post('/customers/auth/signup', signupData);
+
+  if (!res.data.success) {
+    alert(res.data.message);
+    throw new Error(res.data.message || '회원가입에 실패했습니다.');
+  }
+
+  return res;
+};
 
 // 수요자 로그인
 export const loginCustomer = async (phone: string, password: string) => {
@@ -10,14 +23,12 @@ export const loginCustomer = async (phone: string, password: string) => {
     throw new Error(res.data.message || '로그인에 실패했습니다.');
   }
 
-  // 헤더에 있는 정보를 꺼내야해서 res 반환
   return res;
 };
 
 // 수요자 로그아웃
 export const logoutCustomer = async () => {
-  // const res = await api.post("/customers/auth/logout");
-  const res = await api.post("/logout");
+  const res = await api.post('/logout');
 
   if (!res.data.success) {
     // 명시적으로 실패 처리
@@ -25,5 +36,7 @@ export const logoutCustomer = async () => {
     throw new Error(res.data.message || "로그아웃에 실패했습니다.");
   }
 
-  return res.data.message; // or 그냥 true 반환해도 OK
+  return res.data.message;
 };
+
+

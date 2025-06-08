@@ -113,6 +113,7 @@ export const CustomerLogin = () => {
               <div className="justify-start text-gray-400 text-sm font-normal font-['Inter'] leading-none">또는</div>
               <div className="flex-1 h-px bg-gray-200" />
             </div>
+            {/* 구글 로그인
             <div className="self-stretch flex flex-col justify-start items-start gap-4">
               <div className="self-stretch h-12 px-4 bg-white rounded-lg outline outline-1 outline-offset-[-1px] outline-gray-200 inline-flex justify-center items-center gap-3">
                 <img
@@ -123,6 +124,7 @@ export const CustomerLogin = () => {
                 <div className="justify-start text-zinc-800 text-base font-medium font-['Inter'] leading-tight">Google로 로그인</div>
               </div>
             </div>
+              */}
           </div>
           <div className="self-stretch inline-flex justify-center items-center gap-2">
             <div className="justify-start text-stone-500 text-base font-normal font-['Inter'] leading-tight">아직 계정이 없으신가요?</div>

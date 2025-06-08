@@ -12,7 +12,7 @@ export const CustomerHeader = () => {
 
   const menuItems = [
     { name: "서비스 소개", path: "/services" },
-    { name: "후기", path: "/reviews" },
+    //{ name: "후기", path: "/reviews" },
     { name: "고객센터", path: "/support" },
   ];
 

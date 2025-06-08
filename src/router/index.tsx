@@ -2,12 +2,19 @@ import { createBrowserRouter } from 'react-router-dom';
 import { CustomerLogin } from '@/features/customer/pages/CustomerLogin';
 import { CustomerLayout } from '@/features/customer/layouts/CustomerLayout';
 import { CustomerMain } from '@/features/customer/pages/CustomerMain';
+import { CustomerSignup } from '@/features/customer/pages/CustomerSignup';
+import { ReservationStepOne } from '@/features/customer/pages/reservation/ReservationStepOne';
+import  ReservationRouteGuard  from '@/features/customer/pages/reservation/ReservationRouteGuard';
+import ReservationStepFinalGuard from '@/features/customer/pages/reservation/ReservationStepFinalGuard';
+
+
 import { ManagerLayout } from '@/features/manager/layouts/ManagerLayout';
 import { ManagerMain } from '@/features/manager/pages/ManagerMain';
 import { ManagerLogin } from '@/features/manager/pages/ManagerLogin';
 import { ManagerSignup } from '@/features/manager/pages/ManagerSignup';
 import { ManagerReservations } from '@/features/manager/pages/ManagerReservation/ManagerReservations';
 import { ManagerInquiries } from '@/features/manager/pages/ManagerInquiry/ManagerInquiries';
+
 import { AdminLogin } from '@/features/admin/pages/AdminLogin';
 import { AdminLayout } from '@/features/admin/layouts/AdminLayout';
 import { AdminMain } from '@/features/admin/pages/AdminMain';
@@ -34,12 +41,23 @@ export const router = createBrowserRouter([
     children: [
       // 메인페이지
       { index: true, element: <CustomerMain /> },
+      // 회원가입
+      { path: 'auth/signup', element: <CustomerSignup /> },
       // 서비스 소개
       // { path: 'services', element: <CustomerService /> },
       // // 후기
       // { path: 'reviews', element: <CustomerReviews /> },
       // // 고객센터
       // { path: 'support', element: <CustomerSupport /> },
+      // 예약 
+      {
+        path: 'reservations',
+          children: [
+            { path: 'new', element: <ReservationStepOne /> },
+            { path: ':reservationId/step-2', element: <ReservationRouteGuard /> },
+            { path: ':reservationId/final', element: <ReservationStepFinalGuard /> } // Guard 적용
+          ] 
+      },
     ],
   },
 
