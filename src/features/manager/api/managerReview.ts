@@ -27,3 +27,16 @@ export const searchManagerReviews = async (params: {
 
   return res.data.body;
 };
+
+// 매니저 리뷰 등록
+export const createManagerReview = async (reservationId: number, rating: number, content: String) => {
+  const res = await api.post(`/managers/reviews/${reservationId}`, { rating: rating, content: content });
+
+  if (!res.data.success) {
+    // 명시적으로 실패 처리
+    if (res.data.message?.trim()) alert(res.data.message);
+    throw new Error(res.data.message || "매니저 리뷰 등록에 실패했습니다.");
+  }
+
+  return res.data.body;
+};

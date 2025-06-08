@@ -6,7 +6,7 @@ import { ManagerLayout } from '@/features/manager/layouts/ManagerLayout';
 import { ManagerMain } from '@/features/manager/pages/ManagerMain';
 import { ManagerLogin } from '@/features/manager/pages/ManagerLogin';
 import { ManagerSignup } from '@/features/manager/pages/ManagerSignup';
-import { ManagerReservations } from '@/features/manager/pages/ManagerReservations';
+import { ManagerReservations } from '@/features/manager/pages/ManagerReservation/ManagerReservations';
 import { ManagerInquiries } from '@/features/manager/pages/ManagerInquiry/ManagerInquiries';
 import { AdminLogin } from '@/features/admin/pages/AdminLogin';
 import { AdminLayout } from '@/features/admin/layouts/AdminLayout';
@@ -23,6 +23,7 @@ import { AdminBanners } from '@/features/admin/pages/AdminBanner/AdminBanners';
 import { ManagerMy } from '@/features/manager/pages/ManagerMy/ManagerMy';
 import { ManagerContractCancel } from '@/features/manager/pages/ManagerMy/ManagerContractCancel';
 import { ManagerMyForm } from '@/features/manager/pages/ManagerMy/ManagerMyForm';
+import { ManagerReservationDetail } from '@/features/manager/pages/ManagerReservation/ManagerReservationDetail';
 
 
 export const router = createBrowserRouter([
@@ -77,8 +78,16 @@ export const router = createBrowserRouter([
         ]
       },
       // // 예약 관리 목록
-      { path: 'reservations', element: <ManagerReservations /> },
-      // // 리뷰 관리 목록
+      { 
+        path: 'reservations',
+        children: [
+          // 목록
+          { index: true, element: <ManagerReservations /> },
+          // 상세
+          { path: ':reservationId', element: <ManagerReservationDetail /> },
+        ]
+      },
+      // 리뷰 관리 목록
       { path: 'reviews', element: <ManagerReviews /> },
       // 문의 내역
       { 

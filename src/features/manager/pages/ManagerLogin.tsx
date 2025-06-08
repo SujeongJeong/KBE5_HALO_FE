@@ -11,7 +11,6 @@ export const ManagerLogin = () => {
   const passwordRef = useRef<HTMLInputElement>(null);
   const [loginPhone, setPhone] = useState("");
   const [loginPassword, setPassword] = useState("");
-  const { status } = useUserStore.getState();
   const navigate = useNavigate();
 
   // 사용자의 전화번호 입력값을 하이픈 포함 형식으로 자동 포맷하는 핸들러
@@ -35,12 +34,13 @@ export const ManagerLogin = () => {
         return;
       }
       await login("MANAGER", loginPhone, loginPassword);
+      const status = useUserStore.getState().status;
       switch(status) {
         case "ACTIVE":               // 활성
         case "TERMINATION_PENDING":  // 계약해지요청
           navigate("/managers"); // 대시보드로 이동
           break;
-        default: 
+        default:
           navigate("/managers/my");  // 마이페이지로 이동
           break;
       }
