@@ -3,8 +3,10 @@ import { CustomerLogin } from '@/features/customer/pages/CustomerLogin';
 import { CustomerLayout } from '@/features/customer/layouts/CustomerLayout';
 import { CustomerMain } from '@/features/customer/pages/CustomerMain';
 import { CustomerSignup } from '@/features/customer/pages/CustomerSignup';
-import { ReservationRequest } from '@/features/customer/pages/reservation/ReservationRequest';
-import ReservationStepTwo from '@/features/customer/pages/reservation/ReservationStepTwo';
+import { ReservationStepOne } from '@/features/customer/pages/reservation/ReservationStepOne';
+import  ReservationRouteGuard  from '@/features/customer/pages/reservation/ReservationRouteGuard';
+import ReservationStepFinalGuard from '@/features/customer/pages/reservation/ReservationStepFinalGuard';
+
 
 import { ManagerLayout } from '@/features/manager/layouts/ManagerLayout';
 import { ManagerMain } from '@/features/manager/pages/ManagerMain';
@@ -49,12 +51,11 @@ export const router = createBrowserRouter([
       // 예약 
       {
         path: 'reservations',
-        children: [
-          // 예약 요청 (step 1)
-          { path: 'new', element: <ReservationRequest /> },
-          // 예약 매니저 선택 (step 2)
-          { path: ':reservationId/step-2', element: <ReservationStepTwo /> },
-        ]
+          children: [
+            { path: 'new', element: <ReservationStepOne /> },
+            { path: ':reservationId/step-2', element: <ReservationRouteGuard /> },
+            { path: ':reservationId/final', element: <ReservationStepFinalGuard /> } // Guard 적용
+          ] 
       },
     ],
   },
