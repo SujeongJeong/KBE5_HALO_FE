@@ -2,12 +2,17 @@ import { createBrowserRouter } from 'react-router-dom';
 import { CustomerLogin } from '@/features/customer/pages/CustomerLogin';
 import { CustomerLayout } from '@/features/customer/layouts/CustomerLayout';
 import { CustomerMain } from '@/features/customer/pages/CustomerMain';
+import { CustomerSignup } from '@/features/customer/pages/CustomerSignup';
+import { ReservationRequest } from '@/features/customer/pages/reservation/ReservationRequest';
+import ReservationStepTwo from '@/features/customer/pages/reservation/ReservationStepTwo';
+
 import { ManagerLayout } from '@/features/manager/layouts/ManagerLayout';
 import { ManagerMain } from '@/features/manager/pages/ManagerMain';
 import { ManagerLogin } from '@/features/manager/pages/ManagerLogin';
 import { ManagerSignup } from '@/features/manager/pages/ManagerSignup';
 import { ManagerReservations } from '@/features/manager/pages/ManagerReservations';
 import { ManagerInquiries } from '@/features/manager/pages/ManagerInquiry/ManagerInquiries';
+
 import { AdminLogin } from '@/features/admin/pages/AdminLogin';
 import { AdminLayout } from '@/features/admin/layouts/AdminLayout';
 import { AdminMain } from '@/features/admin/pages/AdminMain';
@@ -33,12 +38,24 @@ export const router = createBrowserRouter([
     children: [
       // 메인페이지
       { index: true, element: <CustomerMain /> },
+      // 회원가입
+      { path: 'auth/signup', element: <CustomerSignup /> },
       // 서비스 소개
       // { path: 'services', element: <CustomerService /> },
       // // 후기
       // { path: 'reviews', element: <CustomerReviews /> },
       // // 고객센터
       // { path: 'support', element: <CustomerSupport /> },
+      // 예약 
+      {
+        path: 'reservations',
+        children: [
+          // 예약 요청 (step 1)
+          { path: 'new', element: <ReservationRequest /> },
+          // 예약 매니저 선택 (step 2)
+          { path: ':reservationId/step-2', element: <ReservationStepTwo /> },
+        ]
+      },
     ],
   },
 
