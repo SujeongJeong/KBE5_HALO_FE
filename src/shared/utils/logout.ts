@@ -5,19 +5,33 @@ import { logoutManager } from "@/features/manager/api/managerAuth";
 import { logoutAdmin } from "@/features/admin/api/adminAuth";
 
 export const logout = async () => {
+  const handleLogoutResponse = (res: any) => {
+    if (!res.data.success) {
+      if (res.data.message?.trim()) alert(res.data.message);
+      throw new Error(res.data.message || "로그아웃에 실패했습니다.");
+    }
+    return res.data.message;
+  };
+
   const role = useAuthStore.getState().role;
 
   try {
     switch (role) {
-      case "CUSTOMER":
-        await logoutCustomer();
+      case "CUSTOMER": {
+        const res = await logoutCustomer();
+        handleLogoutResponse(res);
         break;
-      case "MANAGER":
-        await logoutManager();
+      }
+      case "MANAGER": {
+        const res = await logoutManager();
+        handleLogoutResponse(res);
         break;
-      case "ADMIN":
-        await logoutAdmin();
+      }
+      case "ADMIN": {
+        const res = await logoutAdmin();
+        handleLogoutResponse(res);
         break;
+      }
       default:
         throw new Error("알 수 없는 사용자 역할");
     }
