@@ -25,5 +25,5 @@ export const logoutAdmin = async () => {
     throw new Error(res.data.message || "로그아웃에 실패했습니다.");
   }
 
-  return res.data.message; // or 그냥 true 반환해도 OK
+  return res; // or 그냥 true 반환해도 OK
 };

@@ -36,7 +36,7 @@ export const logoutCustomer = async () => {
     throw new Error(res.data.message || "로그아웃에 실패했습니다.");
   }
 
-  return res.data.message;
+  return res;
 };
 
 

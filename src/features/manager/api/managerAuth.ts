@@ -28,7 +28,7 @@ export const logoutManager = async () => {
     throw new Error(res.data.message || "로그아웃에 실패했습니다.");
   }
 
-  return res.data.message; // or 그냥 true 반환해도 OK
+  return res;
 };
 
 
@@ -42,5 +42,5 @@ export const signupManager = async (requestBody: createManagerSignup) => {
     throw new Error(res.data.message || "회원가입에 실패했습니다.");
   }
 
-  return res.data.message; // or 그냥 true 반환해도 OK
+  return res.data.message;
 };
