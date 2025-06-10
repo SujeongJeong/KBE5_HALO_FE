@@ -10,27 +10,31 @@ import ReservationStepFinalGuard from '@/features/customer/pages/reservation/Res
 
 import { ManagerLayout } from '@/features/manager/layouts/ManagerLayout';
 import { ManagerMain } from '@/features/manager/pages/ManagerMain';
-import { ManagerLogin } from '@/features/manager/pages/ManagerLogin';
 import { ManagerSignup } from '@/features/manager/pages/ManagerSignup';
+import { ManagerLogin } from '@/features/manager/pages/ManagerLogin';
+import { ManagerMy } from '@/features/manager/pages/ManagerMy/ManagerMy';
+import { ManagerContractCancel } from '@/features/manager/pages/ManagerMy/ManagerContractCancel';
+import { ManagerMyForm } from '@/features/manager/pages/ManagerMy/ManagerMyForm';
 import { ManagerReservations } from '@/features/manager/pages/ManagerReservation/ManagerReservations';
+import { ManagerReservationDetail } from '@/features/manager/pages/ManagerReservation/ManagerReservationDetail';
 import { ManagerInquiries } from '@/features/manager/pages/ManagerInquiry/ManagerInquiries';
+import { ManagerInquiryDetail } from '@/features/manager/pages/ManagerInquiry/ManagerInquiryDetail';
+import { ManagerInquiryForm } from '@/features/manager/pages/ManagerInquiry/ManagerInquiryForm';
+import { ManagerReviews } from '@/features/manager/pages/ManagerReview/ManagerReviews';
+
 
 import { AdminLogin } from '@/features/admin/pages/AdminLogin';
 import { AdminLayout } from '@/features/admin/layouts/AdminLayout';
 import { AdminMain } from '@/features/admin/pages/AdminMain';
-import { ManagerInquiryDetail } from '@/features/manager/pages/ManagerInquiry/ManagerInquiryDetail';
-import { ManagerInquiryForm } from '@/features/manager/pages/ManagerInquiry/ManagerInquiryForm';
-import { ManagerReviews } from '@/features/manager/pages/ManagerReview/ManagerReviews';
 import { AdminAccounts } from '@/features/admin/pages/AdminAccount/AdminAccounts';
 import { AdminAccountForm } from '@/features/admin/pages/AdminAccount/AdminAccountForm';
 import { AdminManagers } from '@/features/admin/pages/AdminManager/AdminManagers';
 import { AdminCustomers } from '@/features/admin/pages/AdminCustomer/AdminCustomers';
 import { AdminBoards } from '@/features/admin/pages/AdminBoard/AdminBoards';
 import { AdminBanners } from '@/features/admin/pages/AdminBanner/AdminBanners';
-import { ManagerMy } from '@/features/manager/pages/ManagerMy/ManagerMy';
-import { ManagerContractCancel } from '@/features/manager/pages/ManagerMy/ManagerContractCancel';
-import { ManagerMyForm } from '@/features/manager/pages/ManagerMy/ManagerMyForm';
-import { ManagerReservationDetail } from '@/features/manager/pages/ManagerReservation/ManagerReservationDetail';
+import { AdminInquiries }from '@/features/admin/pages/AdminInquiry/AdminInquiries';
+import { AdminInquiryDetail } from '@/features/admin/pages/AdminInquiry/AdminInquiryDetail';
+
 
 
 export const router = createBrowserRouter([
@@ -170,7 +174,24 @@ export const router = createBrowserRouter([
         ]
       },
       // // 문의 내역 목록
-      // { path: 'inquiries', element: <AdminInquiries /> },
+      { path: 'inquiries', 
+        children: [
+          // 목록
+          { index: true, element: <AdminInquiries /> },
+
+          // 상세
+          { path: 'customer/:inquiryId', element: <AdminInquiryDetail activeTab="customer" /> },
+          { path: 'manager/:inquiryId', element: <AdminInquiryDetail activeTab="manager" /> },
+
+          // 삭제
+
+          // 답변 등록
+
+          // 답변 수정
+
+
+        ]
+      },
       // // 공지/이벤트 목록
       { path: 'boards',
         children: [

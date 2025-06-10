@@ -1,13 +1,14 @@
-// 문의사항 목록 조회
-export interface SearchManagerInquiries {
+// 고객 문의사항 목록 조회
+export interface SearchCustomerInquiries {
   inquiryId: number;
   title: string;
   createdAt: string;
   isReplied: boolean;
+  categoryName: string;
 }
 
-// 문의사항 상세 조회
-export interface ManagerInquiryDetail {
+// 고객 문의사항 상세 조회
+export interface CustomerInquiryDetail {
   inquiryId: number;
   authorId: number;
   title: string;
@@ -15,12 +16,12 @@ export interface ManagerInquiryDetail {
   fileId?: number | null;
   files?: File[];
   createdAt: string;
+  categoryName: string;
   author?: {
     userName?: string;
     phone?: string;
     email?: string;
   };
-
   // 답변 관련 필드
   answerId?: number | null;
   replyContent?: string;
@@ -29,24 +30,8 @@ export interface ManagerInquiryDetail {
   replyStatus?: boolean | false;
 }
 
-// 문의사항 등록
-export interface CreateManagerInquiryRequest {
-  title: string;
-  content: string;
-  fileId?: number;
-  fileUrls?: string[]; // S3에서 받은 URL 목록
-}
-
-// 문의사항 수정
-export interface UpdateManagerInquiryRequest {
-  title: string;
-  content: string;
-  fileId?: number;
-  fileUrls?: string[];
-}
-
-// 매니저 답변 조회
-export interface ManagerInquiryAnswer {
+// 고객 답변 조회
+export interface CustomerInquiryAnswer {
   answerId: number;
   inquiryId: number;
   replyContent: string;
@@ -54,16 +39,16 @@ export interface ManagerInquiryAnswer {
   replyCreatedAt: string;
 }
 
-// 매니저 답변 등록
-export interface CreateManagerInquiryAnswerRequest {
+// 고객 답변 등록
+export interface CreateCustomerInquiryAnswerRequest {
   inquiryId: number;
   replyContent: string;
   replyFileId?: number;
 }
 
-// 매니저 답변 수정
-export interface UpdateManagerInquiryAnswerRequest {
+// 고객 답변 수정
+export interface UpdateCustomerInquiryAnswerRequest {
   answerId: number;
   replyContent: string;
   replyFileId?: number;
-}
+} 
