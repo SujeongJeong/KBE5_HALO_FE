@@ -42,3 +42,35 @@ export const signupAdmin = async (signupData: createAdminSignup) => {
 
   return res;
 };
+
+// 관리자 계정 목록 조회
+export const fetchAdminAccounts = async (params?: {
+  name?: string;
+  phone?: string;
+  email?: string;
+  status?: string;
+  page?: number;
+  size?: number;
+}) => {
+  const cleanedParams = Object.fromEntries(
+    Object.entries(params || {}).filter(([, value]) => value !== undefined && value !== "")
+  );
+  const res = await api.get('/admin/accounts', { params: cleanedParams });
+  console.log(res);
+  if (!res.data.success) throw new Error(res.data.message || '관리자 계정 목록 조회에 실패했습니다.');
+  return res.data.body;
+};
+
+// 관리자 정보 수정
+export const updateAdminAccount = async (adminId: string | number, data: createAdminSignup) => {
+  const res = await api.patch(`/admin/auth/${adminId}`, data);
+  if (!res.data.success) throw new Error(res.data.message || '관리자 정보 수정 실패');
+  return res.data.body;
+};
+
+// 관리자 계정 삭제
+export const deleteAdminAccount = async (adminId: string | number) => {
+  const res = await api.delete(`/admin/auth/${adminId}`);
+  if (!res.data.success) throw new Error(res.data.message || '관리자 삭제 실패');
+  return res.data.body;
+};

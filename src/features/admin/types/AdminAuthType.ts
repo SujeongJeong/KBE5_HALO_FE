@@ -2,6 +2,6 @@
 export interface createAdminSignup {
   phone: string;
   email: string;
-  password: string;
+  password?: string;
   userName: string;
 }
