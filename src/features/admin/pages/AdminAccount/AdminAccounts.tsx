@@ -24,7 +24,7 @@ export const AdminAccounts = () => {
             className="h-10 px-4 bg-indigo-600 rounded-md flex justify-center items-center gap-2 cursor-pointer hover:bg-indigo-700 transition"
           >
             <span className="material-symbols-outlined text-white">add</span>
-            <span className="text-white text-sm font-semibold font-['Inter'] leading-none">문의사항 등록</span>
+            <span className="text-white text-sm font-semibold font-['Inter'] leading-none">관리자 계정 추가</span>
           </Link>
         </div>
 

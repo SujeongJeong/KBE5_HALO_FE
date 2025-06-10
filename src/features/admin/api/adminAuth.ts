@@ -1,4 +1,5 @@
 import api from '@/services/axios';
+import type { createAdminSignup } from '../types/AdminAuthType';
 
 // 관리자 로그인
 export const loginAdmin = async (phone: string, password: string) => {
@@ -26,4 +27,18 @@ export const logoutAdmin = async () => {
   }
 
   return res.data.message; // or 그냥 true 반환해도 OK
+};
+
+// 관리자 회원가입
+export const signupAdmin = async (signupData: createAdminSignup) => {
+  const { userName, ...rest } = signupData;
+  const res = await api.post('/admin/auth/signup', { ...rest, userName });
+  console.log(res);
+
+  if (!res.data.success) {
+    if (res.data.message?.trim()) alert(res.data.message);
+    throw new Error(res.data.message || '관리자 등록에 실패했습니다.');
+  }
+
+  return res;
 };
