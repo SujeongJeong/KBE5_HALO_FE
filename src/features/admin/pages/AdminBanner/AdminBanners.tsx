@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import type { SearchAdminBanners as AdminBannerType } from "@/features/admin/types/AdminBannerType"
 import { isValidDateRange } from "@/shared/utils/validation";
 import { DEFAULT_PAGE_SIZE } from "@/shared/constants/constants";
-import { searchAdminBanners, deleteAdminBanner } from "@/features/admin/api/adminBanners";
+import { searchAdminBanners } from "@/features/admin/api/adminBanners";
 
 export const AdminBanners = () => {
   const [fadeKey, setFadeKey] = useState(0);
@@ -30,9 +30,6 @@ export const AdminBanners = () => {
         setBanners(res.content);
         setTotal(res.page.totalElements);
         setFadeKey((prev) => prev + 1);
-      })
-      .catch((err) => {
-        alert("배너 목록 조회 중 오류가 발생했습니다.");
       });
   };
 
