@@ -68,7 +68,6 @@ export const CustomerInquiryPage: React.FC = () => {
 
     setLoading(true);
     try {
-      const today = new Date();
       const calculatedStartDate = getDateRangeStart(paramsToSearch.dateRange);
 
       const convertedParams = {
