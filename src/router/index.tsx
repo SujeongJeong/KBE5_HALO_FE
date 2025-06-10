@@ -6,6 +6,11 @@ import { CustomerSignup } from '@/features/customer/pages/CustomerSignup';
 import { ReservationStepOne } from '@/features/customer/pages/reservation/ReservationStepOne';
 import ReservationRouteGuard from '@/features/customer/pages/reservation/ReservationRouteGuard';
 import ReservationStepFinalGuard from '@/features/customer/pages/reservation/ReservationStepFinalGuard';
+import { CustomerInquiryPage } from '@/features/customer/pages/customerInquiry/CustomerInquiryPage';
+import { CustomerInquiryForm } from '@/features/customer/pages/customerInquiry/CustomerInquiryForm';
+import { CustomerReviews } from '@/features/customer/pages/customerReview/CustomerReviews';
+import { CustomerInquiryDetail } from '@/features/customer/pages/customerInquiry/CustomerInquiryDetail';
+
 
 import { ManagerLayout } from '@/features/manager/layouts/ManagerLayout';
 import { ManagerMain } from '@/features/manager/pages/ManagerMain';
@@ -31,11 +36,68 @@ import { AdminCustomers } from '@/features/admin/pages/AdminCustomer/AdminCustom
 import { AdminBoards } from '@/features/admin/pages/AdminBoard/AdminBoards';
 import { AdminBanners } from '@/features/admin/pages/AdminBanner/AdminBanners';
 
+
 import { GuardLayout } from '@/shared/components/GuardLayout';
 
 export const router = createBrowserRouter([
+
   /** 로그인 경로 (가드 제외) */
   { path: '/auth/login', element: <CustomerLogin /> },
+  /** 수요자 *************************************************************/
+  {
+    path: '/',
+    element: <CustomerLayout />,
+    children: [
+      // 메인페이지
+      { index: true, element: <CustomerMain /> },
+      // 회원가입
+      { path: 'auth/signup', element: <CustomerSignup /> },
+      // 마이페이지
+      {
+        path: 'my',
+        children: [
+          {
+            path: 'inquiries',
+            children: [
+              { index: true, element: <CustomerInquiryPage /> },
+              { path: ':inquiryId', element: <CustomerInquiryDetail /> },
+              { path: ':inquiryId/edit', element: <CustomerInquiryForm /> },
+              { path: 'new', element: <CustomerInquiryForm /> }
+            ]
+          },
+          {
+            path: 'reviews',
+            children: [
+              { index: true, element: <CustomerReviews /> }
+            ]
+          }
+        ]
+      },
+      // 서비스 소개
+      // { path: 'services', element: <CustomerService /> },
+      // // 후기
+      // { path: 'reviews', element: <CustomerReviews /> },
+      // // 고객센터
+      // { path: 'support', element: <CustomerSupport /> },
+      // 예약 
+      {
+        path: 'reservations',
+          children: [
+            { path: 'new', element: <ReservationStepOne /> },
+            { path: ':reservationId/step-2', element: <ReservationRouteGuard /> },
+            { path: ':reservationId/final', element: <ReservationStepFinalGuard /> } // Guard 적용
+          ] 
+      },
+    ],
+  },
+
+  /** 수요자 로그인 */
+  {
+    path: 'auth/login',
+    element: <CustomerLogin />,
+  },
+
+  /** 매니저 *************************************************************/
   {
     path: '/managers/auth',
     children: [
