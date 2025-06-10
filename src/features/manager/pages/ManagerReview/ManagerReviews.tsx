@@ -38,9 +38,6 @@ export const ManagerReviews = () => {
         setReviews(res.content);
         setTotal(res.page.totalElements);
         setFadeKey((prev) => prev + 1);
-      })
-      .catch((err) => {
-        console.error("매니저 리뷰 목록 조회 실패:", err);
       });
   };
 

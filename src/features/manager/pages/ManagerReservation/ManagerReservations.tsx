@@ -34,9 +34,6 @@ export const ManagerReservations = () => {
       setReservations(res.content);
       setTotal(res.page.totalElements);
       setFadeKey((prev) => prev + 1);
-    })
-    .catch((err) => {
-      console.error("문의사항 목록 조회 실패:", err);
     });
   };
 
