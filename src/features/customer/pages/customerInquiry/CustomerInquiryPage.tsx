@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { DEFAULT_PAGE_SIZE } from "@/shared/constants/constants";
 import { searchCustomerInquiries } from "@/features/customer/api/CustomerInquiries";
 import type { SearchCustomerInquiries as CustomerInquiryType } from "@/features/customer/types/CustomerInquiryType";
-import { Card } from '../../../../shared/components/Card';
 
 export const CustomerInquiryPage: React.FC = () => {
   const [fadeKey, setFadeKey] = useState(0);
@@ -205,7 +204,7 @@ export const CustomerInquiryPage: React.FC = () => {
       <div className="flex self-stretch">
         <div className="flex-1 self-stretch inline-flex flex-col">
           {/* Header Section */}
-          <Card className="self-stretch h-16 px-6 flex justify-between items-center">
+          <div className="self-stretch h-16 px-6 bg-white border-b border-gray-200 inline-flex justify-between items-center">
             <div className="justify-start text-gray-900 text-xl font-bold font-['Inter'] leading-normal">문의사항</div>
             <Link
               to="/my/inquiries/new"
@@ -214,11 +213,11 @@ export const CustomerInquiryPage: React.FC = () => {
               <span className="material-symbols-outlined text-white">add</span>
               <span className="text-white text-sm font-semibold font-['Inter'] leading-none">문의하기</span>
             </Link>
-          </Card>
+          </div>
 
           <div className="self-stretch p-6 flex flex-col gap-6">
             {/* Inquiry List Section */}
-            <div className="self-stretch p-6 bg-white rounded-xl shadow-[0px_2px_12px_0px_rgba(0,0,0,0.04)] flex flex-col gap-4">
+            <div className="self-stretch p-6 bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col gap-4">
               <div className="flex justify-end items-center">
                 <div className="flex items-center gap-4">
                   {/* Display selected date range */}
@@ -250,16 +249,15 @@ export const CustomerInquiryPage: React.FC = () => {
                       </svg>
                     </div>
                   </div>
-                  
                 </div>
               </div>
 
               {/* Table Header */}
               <div className="h-12 px-4 bg-slate-50 border-b border-slate-200 flex items-center">
-                <div className="w-[20%] text-center text-sm font-semibold text-slate-700"> {/* w-[15%] -> w-[20%] */}
+                <div className="w-[20%] text-center text-sm font-semibold text-slate-700"> 
                   문의 유형
                 </div>
-                <div className="w-[45%] text-center text-sm font-semibold text-slate-700"> {/* w-[50%] -> w-[45%] */}
+                <div className="w-[45%] text-center text-sm font-semibold text-slate-700">
                   제목
                 </div>
                 <div className="w-[20%] text-center text-sm font-semibold text-slate-700">
@@ -272,7 +270,7 @@ export const CustomerInquiryPage: React.FC = () => {
 
               <div key={fadeKey}>
                 {inquiries.length === 0 && !loading ? (
-                  <div className="h-12 px-4 border-b border-slate-200 flex items-center justify-center text-sm text-slate-500"> {/* h-16 -> h-12 */}
+                  <div className="h-12 px-4 border-b border-slate-200 flex items-center justify-center text-sm text-slate-500">
                     조회된 문의사항이 없습니다.
                   </div>
                 ) : (
@@ -280,12 +278,12 @@ export const CustomerInquiryPage: React.FC = () => {
                     <Link
                       key={inquiry.inquiryId}
                       to={`/my/inquiries/${inquiry.inquiryId}`}
-                      className="h-12 px-4 border-b border-slate-200 flex items-center hover:bg-slate-50 cursor-pointer transition" // h-16 -> h-12
+                      className="h-12 px-4 border-b border-slate-200 flex items-center hover:bg-slate-50 cursor-pointer transition"
                     >
                       <div className="w-[20%] text-center text-sm font-medium text-slate-700">
                         {inquiry.categoryName || "기타"}
                       </div>
-                      <div className="w-[45%] text-center text-sm font-medium text-indigo-600"> {/* w-[50%] -> w-[45%] */}
+                      <div className="w-[45%] text-center text-sm font-medium text-indigo-600">
                         {inquiry.title}
                       </div>
                       <div className="w-[20%] text-center text-sm font-medium text-slate-700">
