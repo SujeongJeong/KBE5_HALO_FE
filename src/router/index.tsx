@@ -32,6 +32,8 @@ import { AdminBoards } from '@/features/admin/pages/AdminBoard/AdminBoards';
 import { AdminBanners } from '@/features/admin/pages/AdminBanner/AdminBanners';
 
 import { GuardLayout } from '@/shared/components/GuardLayout';
+import { AdminBannerDetail } from '@/features/admin/pages/AdminBanner/AdminBannerDetail';
+import { AdminBannerForm } from '@/features/admin/pages/AdminBanner/AdminBanneerForm';
 
 export const router = createBrowserRouter([
   /** 로그인 경로 (가드 제외) */
@@ -143,6 +145,9 @@ export const router = createBrowserRouter([
             path: 'banners',
             children: [
               { index: true, element: <AdminBanners /> },
+              { path: ':bannerId', element: <AdminBannerDetail /> },
+              { path: 'new', element: <AdminBannerForm /> },
+              { path: ':bannerId/edit', element: <AdminBannerForm /> },
             ]
           },
         ]

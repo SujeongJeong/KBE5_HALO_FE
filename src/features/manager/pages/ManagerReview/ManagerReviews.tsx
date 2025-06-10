@@ -40,7 +40,7 @@ export const ManagerReviews = () => {
         setFadeKey((prev) => prev + 1);
       })
       .catch((err) => {
-        console.error("매니저 리뷰 목록 조회 실패:", err);
+        alert("매니저 리뷰 목록 조회 중 오류가 발생하였습니다.");
       });
   };
 

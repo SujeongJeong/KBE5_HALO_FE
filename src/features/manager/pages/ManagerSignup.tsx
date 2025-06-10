@@ -189,7 +189,6 @@ export const ManagerSignup = () => {
     //   return false;
     // }
     if (form.availableTimes.length === 0) {
-      console.log(form.availableTimes);
       alert("업무 가능 시간을 1개 이상 선택해주세요.");
       return false;
     }

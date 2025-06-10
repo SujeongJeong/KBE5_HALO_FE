@@ -30,7 +30,7 @@ export const ManagerMy = () => {
         const body = await getManager();
         setManager(body);
       } catch (err) {
-        console.error("매니저 정보 조회 실패", err);
+      alert("매니저 정보 조회 중 오류가 발생하였습니다.");
       }
     };
     fetchManager();

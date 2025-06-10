@@ -73,8 +73,7 @@ export const ManagerReservationDetail = () => {
         setOpenModal(false);
       }
     } catch (error) {
-      console.error(`${checkType === "IN" ? "체크인" : "체크아웃"} 실패`, error);
-      alert("요청에 실패했습니다. 다시 시도해주세요.");
+      alert(`${checkType === "IN" ? "체크인" : "체크아웃"} 요청 중 오류가 발생하였습니다.`);
     }
   };
 
@@ -103,8 +102,7 @@ export const ManagerReservationDetail = () => {
         : prev
     );
     } catch (error) {
-      console.error(`리뷰 등록에 실패하였습니다.`, error);
-      alert("리뷰 등록에 실패했습니다. 다시 시도해주세요.");
+      alert("리뷰 등록 중 오류가 발생하였습니다.");
     }
   };
 

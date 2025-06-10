@@ -43,7 +43,6 @@ export const ManagerInquiryDetail = () => {
       alert("삭제가 완료되었습니다.");
       navigate("/managers/inquiries");
     } catch (error) {
-      console.error(error);
       alert("삭제 중 오류가 발생했습니다.");
     }
   };

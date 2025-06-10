@@ -36,7 +36,7 @@ export const ManagerReservations = () => {
       setFadeKey((prev) => prev + 1);
     })
     .catch((err) => {
-      console.error("문의사항 목록 조회 실패:", err);
+      alert("문의사항 목록 조회 중 오류가 발생하였습니다.");
     });
   };
 
