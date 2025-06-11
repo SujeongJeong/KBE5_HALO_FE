@@ -1,7 +1,6 @@
 import { Fragment, useEffect, useState, useRef } from "react";
 import { useNavigate, useParams, Link, useLocation } from "react-router-dom";
 import { getAdminInquiry, deleteAdminInquiry, answerAdminInquiry, updateAdminInquiryAnswer } from "@/features/admin/api/adminInquiry";
-import type { ManagerInquiryDetail as ManagerInquiryType } from "@/features/manager/types/ManagerInquirylType";
 
 export const AdminInquiryDetail = ({ activeTab }: { activeTab: 'manager' | 'customer' }) => {
   const { inquiryId } = useParams();
@@ -196,9 +195,9 @@ export const AdminInquiryDetail = ({ activeTab }: { activeTab: 'manager' | 'cust
             <div className="h-2 md:h-4" />
             <div className="self-stretch flex flex-col justify-start items-start gap-3">
               <div className="self-stretch justify-start text-gray-900 text-base font-bold font-['Inter'] leading-tight">문의 제목</div>
-              <div className="self-stretch bg-gray-50 border border-gray-200 rounded-lg p-4 text-gray-900 text-lg font-bold font-['Inter'] leading-snug whitespace-pre-line">{inquiry.title}</div>
+              <div className="self-stretch  border border-gray-200 rounded-lg p-4 text-gray-900 text-lg font-['Inter'] leading-snug whitespace-pre-line">{inquiry.title}</div>
               <div className="self-stretch justify-start text-gray-900 text-base font-bold font-['Inter'] leading-tight">문의 내용</div>
-              <div className="self-stretch h-48 p-4 bg-gray-50 rounded-lg outline outline-1 outline-offset-[-1px] outline-gray-200 flex flex-col justify-start items-start">
+              <div className="self-stretch h-48 p-4  rounded-lg outline outline-1 outline-offset-[-1px] outline-gray-200 flex flex-col justify-start items-start">
                 <div className="self-stretch justify-start text-gray-700 text-sm font-normal font-['Inter'] leading-tight" style={{ whiteSpace: 'pre-line' }}>{inquiry.content}</div>
               </div>
             </div>
@@ -206,7 +205,7 @@ export const AdminInquiryDetail = ({ activeTab }: { activeTab: 'manager' | 'cust
               <div className="self-stretch justify-start text-gray-900 text-base font-bold font-['Inter'] leading-tight">첨부파일</div>
               <div className="self-stretch inline-flex justify-start items-start gap-2">
                 {inquiry.fileId ? (
-                  <div className="flex-1 h-11 p-3 bg-gray-50 rounded-lg outline outline-1 outline-offset-[-1px] outline-gray-200 flex justify-start items-center gap-3">
+                  <div className="flex-1 h-11 p-3 rounded-lg outline outline-1 outline-offset-[-1px] outline-gray-200 flex justify-start items-center gap-3">
                     <div className="w-5 h-5 relative border-gray-500 overflow-hidden">
                       <div className="w-3.5 h-4 left-[3.33px] top-[1.67px] absolute outline outline-[1.67px] outline-offset-[-0.83px] outline-gray-500" />
                       <div className="w-[5px] h-[5px] left-[11.67px] top-[1.67px] absolute outline outline-[1.67px] outline-offset-[-0.83px] outline-gray-500" />
@@ -219,7 +218,7 @@ export const AdminInquiryDetail = ({ activeTab }: { activeTab: 'manager' | 'cust
                     </div>
                   </div>
                 ) : (
-                  <div className="flex-1 h-11 p-3 bg-gray-50 rounded-lg outline outline-1 outline-offset-[-1px] outline-gray-200 flex justify-start items-center text-gray-400 text-sm">
+                  <div className="flex-1 h-11 p-3 rounded-lg outline outline-1 outline-offset-[-1px] outline-gray-200 flex justify-start items-center text-gray-400 text-sm">
                     첨부파일없음
                   </div>
                 )}

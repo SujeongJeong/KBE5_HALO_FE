@@ -295,11 +295,20 @@ export const AdminInquiries = () => {
                     <div className="w-[35%] flex items-center text-sm text-slate-700 text-left font-medium font-['Inter'] leading-none">{inquiry.title}</div>
                     <div className="w-[30%] text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">{inquiry.createdAt}</div>
                     <div className="w-[30%] text-center flex justify-center">
-                      <div className={`h-7 px-3 rounded-2xl flex items-center font-medium font-['Inter'] leading-none ${inquiry.isReplied ? 'bg-green-100' : 'bg-yellow-100'}`}>
-                        <div className={`text-sm font-medium ${inquiry.isReplied ? 'text-green-800' : 'text-yellow-800'}`}>
-                          {inquiry.isReplied ? '답변 완료' : '답변 대기'}
-                        </div>
-                      </div>
+                      {('replyStatus' in inquiry)
+                        ? (
+                          <div className={`h-7 px-3 rounded-2xl flex items-center font-medium font-['Inter'] leading-none ${inquiry.replyStatus ? 'bg-green-100' : 'bg-yellow-100'}`}>
+                            <div className={`text-sm font-medium ${inquiry.replyStatus ? 'text-green-800' : 'text-yellow-800'}`}>
+                              {inquiry.replyStatus ? '답변 완료' : '답변 대기'}
+                            </div>
+                          </div>
+                        ) : (
+                          <div className={`h-7 px-3 rounded-2xl flex items-center font-medium font-['Inter'] leading-none ${inquiry.isReplied ? 'bg-green-100' : 'bg-yellow-100'}`}>
+                            <div className={`text-sm font-medium ${inquiry.isReplied ? 'text-green-800' : 'text-yellow-800'}`}>
+                              {inquiry.isReplied ? '답변 완료' : '답변 대기'}
+                            </div>
+                          </div>
+                        )}
                     </div>
                   </Link>
                 ))

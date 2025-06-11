@@ -33,7 +33,6 @@ export const logoutAdmin = async () => {
 export const signupAdmin = async (signupData: createAdminSignup) => {
   const { userName, ...rest } = signupData;
   const res = await api.post('/admin/auth/signup', { ...rest, userName });
-  console.log(res);
 
   if (!res.data.success) {
     if (res.data.message?.trim()) alert(res.data.message);
@@ -56,7 +55,6 @@ export const fetchAdminAccounts = async (params?: {
     Object.entries(params || {}).filter(([, value]) => value !== undefined && value !== "")
   );
   const res = await api.get('/admin/accounts', { params: cleanedParams });
-  console.log(res);
   if (!res.data.success) throw new Error(res.data.message || '관리자 계정 목록 조회에 실패했습니다.');
   return res.data.body;
 };
