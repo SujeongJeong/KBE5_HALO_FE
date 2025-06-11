@@ -252,8 +252,10 @@ export const router = createBrowserRouter([
             children: [
               // 목록
               { index: true, element: <AdminBanners /> },
+              // 상세
+              { path: ':bannerId', element: <AdminBannerDetail /> },
               // 등록
-              // { path: 'new', element: <AdminBannerForm /> },
+              { path: 'new', element: <AdminBannerForm /> },
               // 수정
               // { path: ':bannerId/edit', element: <AdminBannerForm /> },
             ]
