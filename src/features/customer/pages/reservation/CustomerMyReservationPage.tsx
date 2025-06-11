@@ -2,11 +2,12 @@
 
 import React, { Fragment, useEffect, useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { DEFAULT_PAGE_SIZE } from "@/shared/constants/constants";
 import { getCustomerReservations} from "@/features/customer/api/CustomerReservation"; 
 import type { CustomerReservationListRspType, ReservationStatus} from "@/features/customer/types/CustomerReservationType"; 
-import ReservationCard from "@/features/customer/components/ReservationCard"; 
-import { getFormattedDate } from "@/shared/utils/dateUtils"; 
+import ReservationCard from "@/features/customer/components/ReservationCard"; // ReservationCard 컴포넌트 경로를 맞게 수정해주세요
+import { getFormattedDate } from "@/shared/utils/dateUtils"; // 날짜 유틸 함수를 사용한다고 가정
+import { REVIEW_PAGE_SIZE } from "@/shared/constants/constants";
+
 
 export const CustomerMyReservationPage: React.FC = () => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ export const CustomerMyReservationPage: React.FC = () => {
   const [searchParams, setSearchParams] = useState({
     reservationStatus: "" as ReservationStatus,
     page: 0,
-    size: DEFAULT_PAGE_SIZE,
+    size: REVIEW_PAGE_SIZE,
   });
 
 
@@ -40,8 +41,8 @@ export const CustomerMyReservationPage: React.FC = () => {
       setLoading(true);
       try {
         const res = await getCustomerReservations({
-          reservationStatus: searchParams.reservationStatus,
-          page: searchParams.page,
+          reservationStatus: searchParams.reservationStatus || undefined,
+          page: searchParams.page
         });
 
         if (res?.body) {
@@ -73,8 +74,8 @@ export const CustomerMyReservationPage: React.FC = () => {
     setLoading(true);
     try {
       const res = await getCustomerReservations({
-        reservationStatus: paramsToSearch.reservationStatus,
-        page: paramsToSearch.page,
+        reservationStatus: paramsToSearch.reservationStatus || undefined,
+        page: paramsToSearch.page
       });
 
       if (res?.body) {
@@ -113,7 +114,7 @@ export const CustomerMyReservationPage: React.FC = () => {
   };
 
   // Calculate total pages
-  const totalPages = Math.max(Math.ceil(total / searchParams.size), 1);
+  const totalPages = Math.max(Math.ceil(total / REVIEW_PAGE_SIZE), 1);
 
   // Helper to update specific search parameter
   const updateSearchParam = (key: string, value: any) => {
@@ -131,7 +132,8 @@ export const CustomerMyReservationPage: React.FC = () => {
     let startPage = Math.max(0, searchParams.page - Math.floor(pagesToShow / 2));
     let endPage = Math.min(totalPages - 1, startPage + pagesToShow - 1);
 
-    if (endPage - startPage + 1 < pagesToShow) {
+    // 페이지 범위 조정
+    if (endPage - startPage + 1 < pagesToShow && startPage > 0) {
       startPage = Math.max(0, endPage - pagesToShow + 1);
     }
 
@@ -230,7 +232,7 @@ export const CustomerMyReservationPage: React.FC = () => {
                     <button
                       key={p}
                       onClick={() => handlePageChange(p)}
-                      className={`w-9 h-9 rounded-lg flex justify-center items-center text-sm font-medium
+                      className={`w-9 h-9 rounded-lg flex justify-center items-center text-sm font-medium cursor-pointer
                         border ${searchParams.page === p
                           ? "border-indigo-500 bg-indigo-50 text-indigo-700"
                           : "border-gray-300 bg-white text-gray-700 hover:bg-gray-100"

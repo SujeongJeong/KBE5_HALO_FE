@@ -73,7 +73,7 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
     >
       {/* 상단 날짜/시간 및 상태 배지 */}
       <div className="flex justify-between items-center mb-4">
-        <span className="text-gray-800 text-sm m-0"> 
+        <span className="text-gray-800 text-semibold m-0"> 
           {reservation.requestDate.replace(/-/g, '. ')} ({dayOfWeek}) {displayStartTime}
         </span>
         <span className={getStatusBadgeClasses(reservation.reservationStatus as ReservationStatus)}>
