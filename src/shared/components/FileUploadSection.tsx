@@ -4,6 +4,7 @@ interface FileUploadSectionProps {
   files: File[];
   setFiles: React.Dispatch<React.SetStateAction<File[]>>;
   title?: string;
+  errors?: string;
   multiple?: boolean;
   isRequired?: boolean;
 }
@@ -12,7 +13,7 @@ const MAX_FILE_SIZE_MB = 10;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 const MAX_FILE_COUNT = 5;
 
-export const FileUploadSection = ({ files, setFiles, title, multiple = true, isRequired = true }: FileUploadSectionProps) => {
+export const FileUploadSection = ({ files, setFiles, title, errors, multiple = true, isRequired = true }: FileUploadSectionProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleFileButtonClick = () => {
@@ -103,6 +104,9 @@ export const FileUploadSection = ({ files, setFiles, title, multiple = true, isR
           JPG, PNG, PDF 파일 (각 최대 {MAX_FILE_SIZE_MB}MB{multiple ? `, 최대 ${MAX_FILE_COUNT}개` : ''})
         </div>
       </div>
+      {errors && files.length === 0 && (
+        <p className="text-red-500 text-xs">{errors}</p>
+      )}
     </div>
   );
 };
