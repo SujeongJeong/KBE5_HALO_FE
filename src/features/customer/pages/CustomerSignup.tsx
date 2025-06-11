@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { signupCustomer } from '@/features/customer/api/customerAuth';
 import { useNavigate } from 'react-router-dom';
 import { isValidPhone, isValidPassword } from '@/shared/utils/validation';
@@ -6,6 +6,7 @@ import { formatPhoneNumber } from '@/shared/utils/format';
 import { Eye, EyeOff } from 'lucide-react';
 import { useAddressStore } from '@/store/useAddressStore';
 import type { CustomerSignupReq } from '../types/CustomerSignupType';
+import AddressSearch from '@/shared/components/AddressSearch';
 
 export const CustomerSignup: React.FC = () => {
   const [form, setForm] = useState<Omit<CustomerSignupReq, 'roadAddress' | 'detailAddress' | 'latitude' | 'longitude'>>({
@@ -16,15 +17,16 @@ export const CustomerSignup: React.FC = () => {
     gender: 'MALE',
     phone: '',
   });
-
-  const roadAddress = useAddressStore((state) => state.roadAddress);
-  const detailAddress = useAddressStore((state) => state.detailAddress);
-  const latitude = useAddressStore((state) => state.latitude);
-  const longitude = useAddressStore((state) => state.longitude);
-
+  
+  const { roadAddress, latitude, longitude, detailAddress, setAddress } = useAddressStore(); // 주소 정보 상태 (Zustand에서 관리)
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const navigate = useNavigate();
+
+  useEffect(() => {
+    useAddressStore.getState().setAddress("", 0, 0, "");
+  }, []);
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -50,15 +52,6 @@ export const CustomerSignup: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
-    // 콘솔로 현재 입력된 값 확인
-    console.log('폼 입력값 확인:', {
-      ...form,
-      roadAddress,
-      detailAddress,
-      latitude,
-      longitude,
-    });
-  
     if (!validate()) return;
     if (!latitude || !longitude) return;
   
@@ -73,7 +66,8 @@ export const CustomerSignup: React.FC = () => {
     try {
       await signupCustomer(payload);
       alert('회원가입 성공!');
-      navigate('/customer/login');
+      setAddress("", 0, 0, ""); // 주소 정보 초기화
+      navigate('/auth/login');
     } catch (error) {
       alert('회원가입에 실패했습니다.');
     }
@@ -164,7 +158,12 @@ export const CustomerSignup: React.FC = () => {
         </div>
 
         {/* 주소 */}
-        {/*<AddressSearch />*/}
+        <AddressSearch
+          roadAddress={roadAddress}
+          detailAddress={detailAddress}
+          setRoadAddress={(val) => setAddress(val, latitude ?? 0, longitude ?? 0, detailAddress)}
+          setDetailAddress={(val) => setAddress(roadAddress, latitude ?? 0, longitude ?? 0, val)}
+        />
         {errors.roadAddress && <p className="text-red-500 text-xs mt-1">{errors.roadAddress}</p>}
         {errors.detailAddress && <p className="text-red-500 text-xs mt-1">{errors.detailAddress}</p>}
 
