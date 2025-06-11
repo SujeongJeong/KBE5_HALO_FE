@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState, useRef } from "react";
 import { useNavigate, useParams, Link, useLocation } from "react-router-dom";
-import { getAdminInquiry, deleteAdminInquiry, answerAdminInquiry, updateAdminInquiryAnswer } from "@/features/admin/api/adminInquiry";
+import { getAdminInquiry, deleteAdminInquiry, answerAdminInquiry } from "@/features/admin/api/adminInquiry";
 
 export const AdminInquiryDetail = ({ activeTab }: { activeTab: 'manager' | 'customer' }) => {
   const { inquiryId } = useParams();
