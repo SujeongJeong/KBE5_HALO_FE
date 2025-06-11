@@ -59,7 +59,7 @@ export const ManagerInquiryForm = () => {
 
   return (
     <Fragment>
-      <form onSubmit={handleSubmit} className="flex-1 self-stretch h-[968px] inline-flex flex-col justify-start items-start">
+      <form onSubmit={handleSubmit} className="flex-1 w-full min-w-0 flex flex-col justify-start items-start">
         {/* 상단 헤더 */}
         <div className="self-stretch h-16 px-6 bg-white border-b border-gray-200 inline-flex justify-between items-center">
           <div className="text-gray-900 text-xl font-bold font-['Inter'] leading-normal">
