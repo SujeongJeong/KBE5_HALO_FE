@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-//수요자
+// 수요자
 import { CustomerLogin } from '@/features/customer/pages/CustomerLogin';
 import { CustomerLayout } from '@/features/customer/layouts/CustomerLayout';
 import { CustomerMain } from '@/features/customer/pages/CustomerMain';
@@ -37,67 +37,25 @@ import { AdminManagers } from '@/features/admin/pages/AdminManager/AdminManagers
 import { AdminCustomers } from '@/features/admin/pages/AdminCustomer/AdminCustomers';
 import { AdminBoards } from '@/features/admin/pages/AdminBoard/AdminBoards';
 import { AdminBanners } from '@/features/admin/pages/AdminBanner/AdminBanners';
-import { GuardLayout } from '@/shared/components/GuardLayout';
 import { AdminBannerDetail } from '@/features/admin/pages/AdminBanner/AdminBannerDetail';
 import { AdminBannerForm } from '@/features/admin/pages/AdminBanner/AdminBanneerForm';
 import { AdminInquiries }from '@/features/admin/pages/AdminInquiry/AdminInquiries';
 import { AdminInquiryDetail } from '@/features/admin/pages/AdminInquiry/AdminInquiryDetail';
 
 
+// 공통
+import { GuardLayout } from '@/shared/components/GuardLayout';
+import CustomerNotFound from '@/features/customer/pages/CustomerNotFound';
+import ManagerNotFound from '@/features/manager/pages/ManagerNotFound';
+import AdminNotFound from '@/features/admin/pages/AdminNotFound';
+
 export const router = createBrowserRouter([
 
-  /** 로그인 경로 (가드 제외) */
+  /** 수요자 로그인 (가드 제외) */
+  
   { path: '/auth/login', element: <CustomerLogin /> },
-  /** 수요자 *************************************************************/
-  {
-    path: '/',
-    element: <CustomerLayout />,
-    children: [
-      // 메인페이지
-      { index: true, element: <CustomerMain /> },
-      // 회원가입
-      { path: 'auth/signup', element: <CustomerSignup /> },
-      // 마이페이지
-      {
-        path: 'my',
-        children: [
-          {
-            path: 'inquiries',
-            children: [
-              { index: true, element: <CustomerInquiryPage /> },
-              { path: ':inquiryId', element: <CustomerInquiryDetail /> },
-              { path: ':inquiryId/edit', element: <CustomerInquiryForm /> },
-              { path: 'new', element: <CustomerInquiryForm /> }
-            ]
-          },
-        
-        ]
-      },
-      // 서비스 소개
-      // { path: 'services', element: <CustomerService /> },
-      // // 후기
-      // { path: 'reviews', element: <CustomerReviews /> },
-      // // 고객센터
-      // { path: 'support', element: <CustomerSupport /> },
-      // 예약 
-      {
-        path: 'reservations',
-          children: [
-            { path: 'new', element: <ReservationStepOne /> },
-            { path: ':reservationId/step-2', element: <ReservationRouteGuard /> },
-            { path: ':reservationId/final', element: <ReservationStepFinalGuard /> } // Guard 적용
-          ] 
-      },
-    ],
-  },
 
-  /** 수요자 로그인 */
-  {
-    path: 'auth/login',
-    element: <CustomerLogin />,
-  },
-
-  /** 매니저 *************************************************************/
+  /** 매니저 로그인/회원가입 */
   {
     path: '/managers/auth',
     children: [
@@ -105,6 +63,8 @@ export const router = createBrowserRouter([
       { path: 'signup', element: <ManagerSignup /> },
     ]
   },
+
+  /** 관리자 로그인 */
   {
     path: '/admin/auth/login',
     children: [
@@ -112,12 +72,12 @@ export const router = createBrowserRouter([
     ]
   },
 
-  /** 공통 가드 적용 구역 */
+  /** 공통 가드 레이아웃 내부 라우팅 *******************************************/
   {
     path: '/',
     element: <GuardLayout />,
     children: [
-      /** 수요자 *******************************************/
+      /** 수요자 페이지 */
       {
         path: '/',
         element: <CustomerLayout />,
@@ -125,17 +85,31 @@ export const router = createBrowserRouter([
           { index: true, element: <CustomerMain /> },
           { path: 'auth/signup', element: <CustomerSignup /> },
           {
+            path: 'my',
+            children: [
+              {
+                path: 'inquiries',
+                children: [
+                  { index: true, element: <CustomerInquiryPage /> },
+                  { path: ':inquiryId', element: <CustomerInquiryDetail /> },
+                  { path: ':inquiryId/edit', element: <CustomerInquiryForm /> },
+                  { path: 'new', element: <CustomerInquiryForm /> }
+                ]
+              },
+            ]
+          },
+          {
             path: 'reservations',
             children: [
               { path: 'new', element: <ReservationStepOne /> },
               { path: ':reservationId/step-2', element: <ReservationRouteGuard /> },
               { path: ':reservationId/final', element: <ReservationStepFinalGuard /> }
             ]
-          }
+          },
         ]
       },
 
-      /** 매니저 *******************************************/
+      /** 매니저 페이지 (사이드바 있음) */
       {
         path: '/managers',
         element: <ManagerLayout />,
@@ -169,7 +143,7 @@ export const router = createBrowserRouter([
         ]
       },
 
-      //** 관리자 *************************************************************/
+      /** 관리자 페이지 (사이드바 있음) */
       {
         path: '/admin',
         element: <AdminLayout />,
@@ -257,12 +231,26 @@ export const router = createBrowserRouter([
               // 등록
               { path: 'new', element: <AdminBannerForm /> },
               // 수정
-              // { path: ':bannerId/edit', element: <AdminBannerForm /> },
+              { path: ':bannerId/edit', element: <AdminBannerForm /> },
             ]
           },
         ],
       },
     ],
   },
+
+  /** ❗️사이드바 없는 NotFound 페이지들 (최상단 분기) ***************/
+  {
+    path: '/managers/*',
+    element: <ManagerNotFound />
+  },
+  {
+    path: '/admin/*',
+    element: <AdminNotFound />
+  },
+  {
+    path: '*',
+    element: <CustomerNotFound />
+  }
 ]);
 
