@@ -26,12 +26,16 @@ export const CustomerHeader = () => {
     <Fragment>
       <div className="self-stretch h-20 px-28 bg-white border-b border-zinc-100 inline-flex justify-between items-center">
         {/* 좌측 로고 */}
-        <div className="flex justify-start items-center gap-2">
+        <button
+          onClick={() => navigate("/")}
+          className="flex justify-start items-center gap-2 cursor-pointer bg-transparent border-none p-0"
+          type="button"
+        >
           <div className="w-8 h-8 bg-indigo-600 rounded-lg inline-flex flex-col justify-center items-center">
             <div className="justify-start text-white text-base font-bold font-['Inter'] leading-tight">H</div>
           </div>
           <div className="justify-start text-zinc-800 text-xl font-bold font-['Inter'] leading-normal">HaloCare</div>
-        </div>
+        </button>
 
         {/* 중간 메뉴 */}
         <div className="flex justify-center items-center gap-10">

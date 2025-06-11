@@ -1,6 +1,10 @@
 import { Fragment } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export const CustomerMain = () => {
+  const navigate = useNavigate();
+  const { accessToken } = useAuthStore();
 
   return (
     <Fragment>    
@@ -8,7 +12,16 @@ export const CustomerMain = () => {
         <div className="w-[600px] flex flex-col justify-start items-start gap-6">
           <div className="self-stretch justify-start text-white text-5xl font-bold font-['Inter'] leading-[57.60px]">전문 매니저와 깔끔한 생활, 지금 시작하세요!</div>
           <div className="self-stretch justify-start text-white text-lg font-normal font-['Inter'] leading-relaxed">HaloCare와 함께라면 청소와 가사 걱정은 끝! 전문 매니저가 당신의 일상을 더 편안하게 만들어 드립니다.</div>
-          <div className="w-48 h-14 bg-white rounded-lg flex flex-col justify-center items-center">
+          <div
+            onClick={() => {
+              if (accessToken) {
+                navigate("/reservations/new");
+              } else {
+                navigate("/auth/login");
+              }
+            }}
+            className="w-48 h-14 bg-white rounded-lg flex flex-col justify-center items-center cursor-pointer"
+          >
             <div className="justify-start text-indigo-600 text-base font-semibold font-['Inter'] leading-tight">지금 예약하기</div>
           </div>
         </div>
