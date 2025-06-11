@@ -36,7 +36,13 @@ export const logoutCustomer = async () => {
     throw new Error(res.data.message || "로그아웃에 실패했습니다.");
   }
 
-  return res.data.message;
+  return res;
+};
+
+// 수요자 정보 조회
+export const getCustomerInfo = async () => {
+  const res = await api.get("/customers/auth/my");
+  return res.data;
 };
 
 

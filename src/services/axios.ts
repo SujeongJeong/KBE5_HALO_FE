@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { useAuthStore } from '@/store/useAuthStore';
+import { reissueToken } from '@/shared/utils/reissueToken';
+import { logout } from '@/shared/utils/logout';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL, // Vite 프록시 적용 전제
@@ -31,8 +33,7 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        /* TODO: reissueToken 로직 작성 필요
-        const { accessToken } = await reissueToken();
+        const accessToken = await reissueToken();
 
         // 상태 업데이트
         const store = useAuthStore.getState();
@@ -41,22 +42,22 @@ api.interceptors.response.use(
         // 헤더 갱신 후 재요청
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return api(originalRequest);
-        */
       } catch (err) {
         // 재발급 실패 → 로그아웃
         const { clearTokens, role } = useAuthStore.getState();
         clearTokens();
+        await logout();
 
         // 역할에 따라 로그인 페이지 분기
         switch (role) {
           case "CUSTOMER":
-            window.location.href = "/";
+            window.location.href = "/auth/login";
             break;
           case "MANAGER":
-            window.location.href = "/managers/login";
+            window.location.href = "/managers/auth/login";
             break;
           case "ADMIN":
-            window.location.href = "/admin/login";
+            window.location.href = "/admin/auth/login";
             break;
           default:
             window.location.href = "/";

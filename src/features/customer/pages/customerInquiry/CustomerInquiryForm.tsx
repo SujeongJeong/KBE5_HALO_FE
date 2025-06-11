@@ -1,27 +1,44 @@
 import { Fragment, useEffect, useState } from "react";
+import { getCustomerInquiryCategories } from "@/features/customer/api/CustomerInquiries";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FileUploadSection } from "@/shared/components/FileUploadSection";
 import { isValidLength } from "@/shared/utils/validation";
-import { createManagerInquiry, updateManagerInquiry } from "@/features/manager/api/managerInquiry";
-import type { ManagerInquiryDetail as ManagerInquiryType } from "@/features/manager/types/ManagerInquirylType";
+import { createCustomerInquiry, updateCustomerInquiry } from "@/features/customer/api/CustomerInquiries";
+import type { CustomerInquiryDetail as CustomerInquiryType } from "@/features/customer/types/CustomerInquiryType";
 
-export const ManagerInquiryForm = () => {
+export const CustomerInquiryForm = () => {
   const location = useLocation();
-  const existingData = location.state?.inquiry as ManagerInquiryType | undefined;
+  const existingData = location.state?.inquiry as CustomerInquiryType | undefined;
   const isEditMode = !!existingData;
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [fileId, setFileId] = useState<number | undefined>();
   const [files, setFiles] = useState<File[]>([]);
+  const [categoryId, setCategoryId] = useState<number | "">("");
+  const [categories, setCategories] = useState<{ categoryId: number; categoryName: string }[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await getCustomerInquiryCategories();
+        if (res?.body) {
+          setCategories(res.body);
+        }
+      } catch (error) {
+        console.error("카테고리 조회 실패:", error);
+      }
+    };
+
+    fetchCategories();
+
     if (isEditMode && existingData) {
+      setCategoryId(existingData.categoryId);
       setTitle(existingData.title);
       setContent(existingData.content);
       setFileId(existingData.fileId ?? undefined);
-      setFiles([]); // 실제 File 객체로 복원 불가, 이후 참고용 UI 필요 시 fileName 사용
+      setFiles([]);
     }
   }, [isEditMode, existingData]);
 
@@ -44,39 +61,63 @@ export const ManagerInquiryForm = () => {
 
     try {
       if (isEditMode && existingData) {
-        await updateManagerInquiry(existingData.inquiryId, { title, content, fileId, fileUrls });
+        await updateCustomerInquiry(existingData.inquiryId, { 
+          categoryId: Number(categoryId), 
+          title,
+          content, 
+          fileId, 
+          fileUrls 
+        });
         alert("문의가 수정되었습니다.");
-        navigate(`/managers/inquiries/${existingData.inquiryId}`);
+        navigate(`/my/inquiries/${existingData.inquiryId}`);
       } else {
-        const result = await createManagerInquiry({ title, content, fileId, fileUrls });
+        const result = await createCustomerInquiry({ 
+          categoryId: Number(categoryId),
+          title, 
+          content, 
+          fileId, 
+          fileUrls 
+        });
         alert("문의가 등록되었습니다.");
-        navigate(`/managers/inquiries/${result.inquiryId}`);
+        navigate(`/my/inquiries/${result.inquiryId}`);
       }
     } catch (error) {
+      console.error(error);
       alert(isEditMode ? "수정 중 오류가 발생했습니다." : "등록 중 오류가 발생했습니다.");
     }
   };
 
   return (
     <Fragment>
-      <form onSubmit={handleSubmit} className="flex-1 w-full min-w-0 flex flex-col justify-start items-start">
+      <form onSubmit={handleSubmit} className="w-full max-w-4xl mx-auto mt-6 p-6 bg-white rounded-xl shadow flex flex-col gap-6">
         {/* 상단 헤더 */}
         <div className="self-stretch h-16 px-6 bg-white border-b border-gray-200 inline-flex justify-between items-center">
           <div className="text-gray-900 text-xl font-bold font-['Inter'] leading-normal">
             {isEditMode ? "문의사항 수정" : "문의사항 등록"}
           </div>
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="h-10 px-4 bg-white rounded-md outline outline-1 outline-offset-[-1px] outline-gray-200 inline-flex justify-center items-center cursor-pointer hover:bg-gray-100 transition"
-          >
-            <span className="text-gray-500 text-sm font-semibold font-['Inter'] leading-none">취소</span>
-          </button>
         </div>
 
         {/* 본문 */}
         <div className="self-stretch p-6 inline-flex flex-col justify-start items-start gap-6">
           <div className="self-stretch p-8 bg-white rounded-xl shadow-[0px_2px_12px_0px_rgba(0,0,0,0.04)] flex flex-col justify-start items-start gap-6">
+
+            {/* 문의유형 */}
+            <div className="self-stretch flex flex-col gap-2">
+              <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-none">문의유형 *</label>
+              <select
+                value={categoryId}
+                onChange={(e) => setCategoryId(Number(e.target.value))}
+                className="self-stretch h-12 px-4 bg-slate-50 rounded-lg outline outline-1 outline-offset-[-1px] outline-slate-200 text-slate-700 text-sm"
+                required
+              >
+                <option value="">문의유형을 선택하세요</option>
+                {categories.map((cat) => (
+                  <option key={cat.categoryId} value={cat.categoryId}>
+                    {cat.categoryName}
+                  </option>
+                ))}
+              </select>
+            </div>
 
             {/* 제목 */}
             <div className="self-stretch flex flex-col gap-2">
@@ -122,16 +163,25 @@ export const ManagerInquiryForm = () => {
               <div className="text-slate-500 text-sm">• 욕설, 비방, 광고 등의 내용이 포함된 문의는 답변이 제한될 수 있습니다.</div>
             </div>
 
-            {/* 등록/수정 버튼 */}
-            <button
-              type="submit"
-              className="self-stretch h-12 bg-indigo-600 rounded-lg inline-flex justify-center items-center gap-2 cursor-pointer"
-            >
-              <span className="material-symbols-outlined text-white">{isEditMode ? "edit" : "add"}</span>
-              <span className="text-white text-base font-semibold font-['Inter'] leading-tight">
-                {isEditMode ? "문의사항 수정하기" : "문의사항 등록하기"}
-              </span>
-            </button>
+            {/* 등록/수정/취소 버튼 그룹 */}
+            <div className="self-stretch flex gap-4">
+              <button
+                type="button"
+                onClick={() => navigate(-1)}
+                className="w-[25%] h-12 border border-gray-300 bg-white rounded-lg text-gray-600 text-sm font-semibold hover:bg-gray-100"
+              >
+                취소
+              </button>
+              <button
+                type="submit"
+                className="w-[75%] h-12 bg-indigo-600 rounded-lg inline-flex justify-center items-center gap-2 cursor-pointer hover:bg-indigo-700"
+              >
+                <span className="material-symbols-outlined text-white">{isEditMode ? "edit" : "add"}</span>
+                <span className="text-white text-base font-semibold font-['Inter'] leading-tight">
+                  {isEditMode ? "수정하기" : "등록하기"}
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </form>

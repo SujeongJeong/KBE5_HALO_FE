@@ -38,9 +38,6 @@ export const ManagerReviews = () => {
         setReviews(res.content);
         setTotal(res.page.totalElements);
         setFadeKey((prev) => prev + 1);
-      })
-      .catch((err) => {
-        console.error("매니저 리뷰 목록 조회 실패:", err);
       });
   };
 
@@ -87,7 +84,7 @@ export const ManagerReviews = () => {
 
   return (
     <Fragment>
-      <div className="flex-1 self-stretch inline-flex flex-col justify-start items-start">
+      <div className="flex-1 flex flex-col justify-start items-start w-full min-w-0">
         <div className="self-stretch h-16 px-6 bg-white border-b border-gray-200 inline-flex justify-between items-center">
           <div className="justify-start text-gray-900 text-xl font-bold font-['Inter'] leading-normal">리뷰 관리</div>
         </div>
