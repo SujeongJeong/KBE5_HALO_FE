@@ -1,4 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
+
+//수요자
 import { CustomerLogin } from '@/features/customer/pages/CustomerLogin';
 import { CustomerLayout } from '@/features/customer/layouts/CustomerLayout';
 import { CustomerMain } from '@/features/customer/pages/CustomerMain';
@@ -9,9 +11,8 @@ import ReservationStepFinalGuard from '@/features/customer/pages/reservation/Res
 import { CustomerInquiryPage } from '@/features/customer/pages/customerInquiry/CustomerInquiryPage';
 import { CustomerInquiryForm } from '@/features/customer/pages/customerInquiry/CustomerInquiryForm';
 import { CustomerInquiryDetail } from '@/features/customer/pages/customerInquiry/CustomerInquiryDetail';
-import { CustomerMyReservationPage } from '@/features/customer/pages/reservation/CustomerMyReservationPage';
-import { CustomerMyReservationDetail } from '@/features/customer/pages/reservation/CustomerMyReservationDetail';
 
+// 매니저
 import { ManagerLayout } from '@/features/manager/layouts/ManagerLayout';
 import { ManagerMain } from '@/features/manager/pages/ManagerMain';
 import { ManagerLogin } from '@/features/manager/pages/ManagerLogin';
@@ -26,6 +27,7 @@ import { ManagerContractCancel } from '@/features/manager/pages/ManagerMy/Manage
 import { ManagerMyForm } from '@/features/manager/pages/ManagerMy/ManagerMyForm';
 import { ManagerReservationDetail } from '@/features/manager/pages/ManagerReservation/ManagerReservationDetail';
 
+// 관리자
 import { AdminLogin } from '@/features/admin/pages/AdminLogin';
 import { AdminLayout } from '@/features/admin/layouts/AdminLayout';
 import { AdminMain } from '@/features/admin/pages/AdminMain';
@@ -65,13 +67,7 @@ export const router = createBrowserRouter([
               { path: 'new', element: <CustomerInquiryForm /> }
             ]
           },
-          {
-            path: 'reservations',
-            children: [
-              { index: true, element: <CustomerMyReservationPage /> },
-              { path: ':reservationId', element: <CustomerMyReservationDetail /> }
-            ]
-          }
+        
         ]
       },
       // 서비스 소개
