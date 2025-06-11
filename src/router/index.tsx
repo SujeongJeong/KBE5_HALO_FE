@@ -8,9 +8,9 @@ import ReservationRouteGuard from '@/features/customer/pages/reservation/Reserva
 import ReservationStepFinalGuard from '@/features/customer/pages/reservation/ReservationStepFinalGuard';
 import { CustomerInquiryPage } from '@/features/customer/pages/customerInquiry/CustomerInquiryPage';
 import { CustomerInquiryForm } from '@/features/customer/pages/customerInquiry/CustomerInquiryForm';
-import { CustomerReviews } from '@/features/customer/pages/customerReview/CustomerReviews';
 import { CustomerInquiryDetail } from '@/features/customer/pages/customerInquiry/CustomerInquiryDetail';
-
+import { CustomerMyReservationPage } from '@/features/customer/pages/reservation/CustomerMyReservationPage';
+import { CustomerMyReservationDetail } from '@/features/customer/pages/reservation/CustomerMyReservationDetail';
 
 import { ManagerLayout } from '@/features/manager/layouts/ManagerLayout';
 import { ManagerMain } from '@/features/manager/pages/ManagerMain';
@@ -66,9 +66,10 @@ export const router = createBrowserRouter([
             ]
           },
           {
-            path: 'reviews',
+            path: 'reservations',
             children: [
-              { index: true, element: <CustomerReviews /> }
+              { index: true, element: <CustomerMyReservationPage /> },
+              { path: ':reservationId', element: <CustomerMyReservationDetail /> }
             ]
           }
         ]
