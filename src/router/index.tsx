@@ -5,6 +5,8 @@ import { CustomerLogin } from '@/features/customer/pages/CustomerLogin';
 import { CustomerLayout } from '@/features/customer/layouts/CustomerLayout';
 import { CustomerMain } from '@/features/customer/pages/CustomerMain';
 import { CustomerSignup } from '@/features/customer/pages/CustomerSignup';
+import { CustomerMyReservationDetail } from '@/features/customer/pages/reservation/CustomerMyReservationDetail';
+import { CustomerMyReservationPage } from '@/features/customer/pages/reservation/CustomerMyReservationPage';
 import { ReservationStepOne } from '@/features/customer/pages/reservation/ReservationStepOne';
 import ReservationRouteGuard from '@/features/customer/pages/reservation/ReservationRouteGuard';
 import ReservationStepFinalGuard from '@/features/customer/pages/reservation/ReservationStepFinalGuard';
@@ -96,6 +98,13 @@ export const router = createBrowserRouter([
                   { path: 'new', element: <CustomerInquiryForm /> }
                 ]
               },
+              {
+                path: 'reservations',
+                children: [
+                  { index: true, element: <CustomerMyReservationPage /> },
+                  { path: ':reservationId', element: <CustomerMyReservationDetail /> }
+                ]
+              }
             ]
           },
           {
@@ -103,7 +112,7 @@ export const router = createBrowserRouter([
             children: [
               { path: 'new', element: <ReservationStepOne /> },
               { path: ':reservationId/step-2', element: <ReservationRouteGuard /> },
-              { path: ':reservationId/final', element: <ReservationStepFinalGuard /> }
+              { path: ':reservationId/final', element: <ReservationStepFinalGuard /> },
             ]
           },
         ]
@@ -221,23 +230,23 @@ export const router = createBrowserRouter([
               // },
             ]
           },
-          // 배너 관리 목록
-          { path: 'banners',
-            children: [
-              // 목록
-              { index: true, element: <AdminBanners /> },
-              // 상세
-              { path: ':bannerId', element: <AdminBannerDetail /> },
-              // 등록
-              { path: 'new', element: <AdminBannerForm /> },
-              // 수정
-              { path: ':bannerId/edit', element: <AdminBannerForm /> },
-            ]
-          },
-        ],
-      },
-    ],
-  },
+         // 배너 관리 목록
+         { path: 'banners',
+          children: [
+            // 목록
+            { index: true, element: <AdminBanners /> },
+            // 상세
+            { path: ':bannerId', element: <AdminBannerDetail /> },
+            // 등록
+            { path: 'new', element: <AdminBannerForm /> },
+            // 수정
+            { path: ':bannerId/edit', element: <AdminBannerForm /> },
+          ]
+        },
+      ],
+    },
+  ],
+},
 
   /** ❗️사이드바 없는 NotFound 페이지들 (최상단 분기) ***************/
   {
@@ -253,4 +262,3 @@ export const router = createBrowserRouter([
     element: <CustomerNotFound />
   }
 ]);
-
