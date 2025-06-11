@@ -93,36 +93,7 @@ export const AdminInquiryDetail = ({ activeTab }: { activeTab: 'manager' | 'cust
     try {
       await answerAdminInquiry(activeTab, Number(inquiryId), { replyContent: answer });
       alert("답변이 등록되었습니다.");
-      // 최신 데이터 반영
-      const data: any = await getAdminInquiry(activeTab, Number(inquiryId), authorId);
-      setInquiry(data);
-      if (data.replyStatus === true) {
-        setAnswer(data.reply || "");
-      } else {
-        setAnswer(data.replyContent || "");
-      }
-    } catch (error) {
-      alert("답변 처리 중 오류가 발생했습니다.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 답변 수정
-  const handleUpdateAnswer = async () => {
-    if (!inquiryId || !answer.trim()) return;
-    setLoading(true);
-    try {
-      await updateAdminInquiryAnswer(activeTab, inquiry.answerId, inquiry.inquiryId, { replyContent: answer });
-      alert("답변이 수정되었습니다.");
-      // 최신 데이터 반영
-      const data: any = await getAdminInquiry(activeTab, Number(inquiryId), authorId);
-      setInquiry(data);
-      if (data.replyStatus === true) {
-        setAnswer(data.reply || "");
-      } else {
-        setAnswer(data.replyContent || "");
-      }
+      window.location.reload();
     } catch (error) {
       alert("답변 처리 중 오류가 발생했습니다.");
     } finally {
@@ -229,45 +200,50 @@ export const AdminInquiryDetail = ({ activeTab }: { activeTab: 'manager' | 'cust
           <div className="self-stretch p-6 flex flex-col justify-start items-start gap-4">
             <div className="self-stretch justify-start text-gray-900 text-base font-bold font-['Inter'] leading-tight">관리자 답변</div>
             <div className="self-stretch h-48 flex flex-col justify-start items-start gap-3">
-              <div className="self-stretch h-40 bg-white rounded-lg outline outline-1 outline-offset-[-1px] outline-gray-300 flex flex-col justify-start items-start">
-                <div className="self-stretch h-11 px-3 bg-gray-50 border-b border-gray-200 flex flex-row justify-start items-center gap-2">
-                  {/* HTML Formatting Toolbar */}
-                  <button type="button" title="Bold" className="px-2 py-1 text-gray-700 hover:bg-gray-200 rounded" onClick={() => formatText('b')}><b>B</b></button>
-                  <button type="button" title="Italic" className="px-2 py-1 text-gray-700 hover:bg-gray-200 rounded" onClick={() => formatText('i')}><i>I</i></button>
-                  <button type="button" title="Bullet List" className="px-2 py-1 text-gray-700 hover:bg-gray-200 rounded" onClick={() => formatText('ul')}>• List</button>
+              {isAnswered ? (
+                // 답변이 있을 때: 카드 형태로 답변 내용만 표시
+                <div className="self-stretch h-40 bg-white rounded-lg outline outline-1 outline-offset-[-1px] outline-gray-300 flex flex-col justify-start items-start">
+                  <div className="self-stretch h-11 px-3 bg-gray-50 border-b border-gray-200 flex flex-row justify-start items-center gap-2">
+                    <span className="text-gray-700 text-sm">답변 내용</span>
+                  </div>
+                  <div className="self-stretch flex-1 p-3 flex flex-col justify-start items-start">
+                    <div className="self-stretch w-full h-full text-gray-900 text-sm font-normal font-['Inter'] leading-none" style={{ whiteSpace: 'pre-line' }}>
+                      {answer}
+                    </div>
+                  </div>
                 </div>
-                <div className="self-stretch flex-1 p-3 flex flex-col justify-start items-start">
-                  <textarea
-                    ref={answerTextareaRef}
-                    className="self-stretch w-full h-full resize-none bg-transparent text-gray-900 text-sm font-normal font-['Inter'] leading-none focus:outline-none"
-                    placeholder="답변을 입력해주세요..."
-                    value={answer}
-                    onChange={e => setAnswer(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="self-stretch inline-flex justify-end items-center gap-3">
-                {!isAnswered && (
-                  <button
-                    type="button"
-                    className={`w-28 h-10 px-4 rounded-lg flex justify-center items-center text-white text-sm font-semibold font-['Inter'] leading-none ${answer.trim() ? 'bg-indigo-600 hover:bg-indigo-800' : 'bg-gray-300 cursor-not-allowed'}`}
-                    disabled={!answer.trim() || loading}
-                    onClick={handleAnswer}
-                  >
-                    답변하기
-                  </button>
-                )}
-                {isAnswered && (
-                  <button
-                    type="button"
-                    className={`w-28 h-10 px-4 rounded-lg flex justify-center items-center text-white text-sm font-semibold font-['Inter'] leading-none ${answer.trim() ? 'bg-indigo-600 hover:bg-indigo-800' : 'bg-gray-300 cursor-not-allowed'}`}
-                    disabled={!answer.trim() || loading}
-                    onClick={handleUpdateAnswer}
-                  >
-                    답변 수정
-                  </button>
-                )}
-              </div>
+              ) : (
+                // 답변이 없을 때: 입력폼과 툴바, 답변하기 버튼 표시
+                <>
+                  <div className="self-stretch h-40 bg-white rounded-lg outline outline-1 outline-offset-[-1px] outline-gray-300 flex flex-col justify-start items-start">
+                    <div className="self-stretch h-11 px-3 bg-gray-50 border-b border-gray-200 flex flex-row justify-start items-center gap-2">
+                      {/* HTML Formatting Toolbar */}
+                      <button type="button" title="Bold" className="px-2 py-1 text-gray-700 hover:bg-gray-200 rounded" onClick={() => formatText('b')}><b>B</b></button>
+                      <button type="button" title="Italic" className="px-2 py-1 text-gray-700 hover:bg-gray-200 rounded" onClick={() => formatText('i')}><i>I</i></button>
+                      <button type="button" title="Bullet List" className="px-2 py-1 text-gray-700 hover:bg-gray-200 rounded" onClick={() => formatText('ul')}>• List</button>
+                    </div>
+                    <div className="self-stretch flex-1 p-3 flex flex-col justify-start items-start">
+                      <textarea
+                        ref={answerTextareaRef}
+                        className="self-stretch w-full h-full resize-none bg-transparent text-gray-900 text-sm font-normal font-['Inter'] leading-none focus:outline-none"
+                        placeholder="답변을 입력해주세요..."
+                        value={answer}
+                        onChange={e => setAnswer(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div className="self-stretch inline-flex justify-end items-center gap-3">
+                    <button
+                      type="button"
+                      className={`w-28 h-10 px-4 rounded-lg flex justify-center items-center text-white text-sm font-semibold font-['Inter'] leading-none ${answer.trim() ? 'bg-indigo-600 hover:bg-indigo-800' : 'bg-gray-300 cursor-not-allowed'}`}
+                      disabled={!answer.trim() || loading}
+                      onClick={handleAnswer}
+                    >
+                      답변하기
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
