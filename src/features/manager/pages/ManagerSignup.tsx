@@ -28,10 +28,10 @@ export const ManagerSignup = () => {
   const [selectedTimes, setSelectedTimes] = useState<Record<string, Set<string>>>({});
 
   // 주소 정보 상태 (Zustand에서 관리)
-  const { roadAddress, latitude, longitude, detailAddress } = useAddressStore();
+  const { roadAddress, latitude, longitude, detailAddress, setAddress } = useAddressStore();
 
-  // form 입력 상태 초기값
-  const [form, setForm] = useState<ManagerSignupForm>({
+  // form 입력 상태 초기값 (주소 관련 필드 제거)
+  const [form, setForm] = useState<Omit<ManagerSignupForm, 'roadAddress' | 'detailAddress' | 'latitude' | 'longitude'>>({
     phone: "",
     email: "",
     password: "",
@@ -39,10 +39,6 @@ export const ManagerSignup = () => {
     userName: "",
     birthDate: "",
     gender: "",
-    latitude: 0,
-    longitude: 0,
-    roadAddress: "",
-    detailAddress: "",
     bio: "",
     profileImageId: null,
     fileId: null,
@@ -50,22 +46,10 @@ export const ManagerSignup = () => {
     termsAgreed: false,
   });
 
+  // 주소 상태 초기화
   useEffect(() => {
-    useAddressStore.getState().setAddress("", 0, 0, "");
-  }, []);
-
-  // 주소 정보가 바뀔 때 form에도 자동 반영
-  useEffect(() => {
-    if (latitude !== null && longitude !== null) {
-      setForm((prev) => ({
-        ...prev,
-        latitude,
-        longitude,
-        roadAddress: roadAddress,
-        detailAddress: detailAddress,
-      }));
-    }
-  }, [roadAddress, latitude, longitude, detailAddress]);
+    setAddress("", 0, 0, "");
+  }, [setAddress]);
 
   // 공통 입력값 변경 핸들러 (checkbox 포함)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -131,7 +115,7 @@ export const ManagerSignup = () => {
     }));
   }, [selectedTimes]);
 
-  // 필수 입력 필드
+  // 필수 입력 필드 (주소 관련 필드 제거)
   const requiredFields = [
     { name: "phone", label: "연락처"},
     { name: "email", label: "이메일"},
@@ -146,7 +130,7 @@ export const ManagerSignup = () => {
   // 필수 입력 validate
   const validateRequiredFields = () => {
     for (const field of requiredFields) {
-      const key = field.name as keyof ManagerSignupForm;
+      const key = field.name as keyof typeof form;
       const value = form[key];
 
       // 문자열인 경우: 공백 제거하고 비어있으면 invalid
@@ -164,19 +148,17 @@ export const ManagerSignup = () => {
     return true;
   };
 
-  // 추가 필수 입력 validate
+  // 추가 필수 입력 validate (주소 관련 필드는 store 값 사용)
   const validateExtraFields = () => {
-    if (!form.roadAddress.trim()) {
+    if (!roadAddress.trim()) {
       alert("도로명 주소를 입력해주세요.");
       return;
     }
-    if (!form.detailAddress.trim()) {
+    if (!detailAddress.trim()) {
       alert("상세 주소를 입력해주세요.");
       return;
     }
-    if (  form.latitude == null || isNaN(form.latitude) ||
-          form.longitude == null || isNaN(form.longitude) ) 
-    {
+    if (latitude == null || isNaN(latitude) || longitude == null || isNaN(longitude)) {
       alert("잘못된 주소입니다. 다시 입력해주세요.");
       return;
     }
@@ -241,12 +223,17 @@ export const ManagerSignup = () => {
 
     const requestBody: createManagerSignup = {
       ...filteredForm,
+      roadAddress,
+      detailAddress,
+      latitude: latitude ?? 0,
+      longitude: longitude ?? 0,
       availableTimes,
     };
 
     try {
       await signupManager(requestBody);
       alert("매니저 지원이 완료되었습니다.");
+      setAddress("", 0, 0, ""); // 주소 정보 초기화
       navigate("/managers/auth/login");
     } catch (err: any) {
       alert(err.message || "매니저 지원 실패");
@@ -399,8 +386,8 @@ export const ManagerSignup = () => {
           <AddressSearch
             roadAddress={roadAddress}
             detailAddress={detailAddress}
-            setRoadAddress={(val) => setForm((prev) => prev ? { ...prev, roadAddress: val } : prev)}
-            setDetailAddress={(val) => setForm((prev) => prev ? { ...prev, detailAddress: val } : prev)}
+            setRoadAddress={(val) => setAddress(val, latitude ?? 0, longitude ?? 0, detailAddress)}
+            setDetailAddress={(val) => setAddress(roadAddress, latitude ?? 0, longitude ?? 0, val)}
           />
         </div>
 
