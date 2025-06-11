@@ -52,6 +52,7 @@ export const login = async (
   const accessToken = rawHeader?.replace("Bearer ", "").trim();
   const userName = res.data.body.userName;
   const status = res.data.body.status;
+  console.log();
 
   if (!accessToken || !userName) {
     throw new Error("로그인 응답이 올바르지 않습니다.");

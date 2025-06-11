@@ -15,17 +15,17 @@ import { CustomerInquiryDetail } from '@/features/customer/pages/customerInquiry
 // 매니저
 import { ManagerLayout } from '@/features/manager/layouts/ManagerLayout';
 import { ManagerMain } from '@/features/manager/pages/ManagerMain';
-import { ManagerLogin } from '@/features/manager/pages/ManagerLogin';
 import { ManagerSignup } from '@/features/manager/pages/ManagerSignup';
+import { ManagerLogin } from '@/features/manager/pages/ManagerLogin';
+import { ManagerMy } from '@/features/manager/pages/ManagerMy/ManagerMy';
+import { ManagerContractCancel } from '@/features/manager/pages/ManagerMy/ManagerContractCancel';
+import { ManagerMyForm } from '@/features/manager/pages/ManagerMy/ManagerMyForm';
 import { ManagerReservations } from '@/features/manager/pages/ManagerReservation/ManagerReservations';
+import { ManagerReservationDetail } from '@/features/manager/pages/ManagerReservation/ManagerReservationDetail';
 import { ManagerInquiries } from '@/features/manager/pages/ManagerInquiry/ManagerInquiries';
 import { ManagerInquiryDetail } from '@/features/manager/pages/ManagerInquiry/ManagerInquiryDetail';
 import { ManagerInquiryForm } from '@/features/manager/pages/ManagerInquiry/ManagerInquiryForm';
 import { ManagerReviews } from '@/features/manager/pages/ManagerReview/ManagerReviews';
-import { ManagerMy } from '@/features/manager/pages/ManagerMy/ManagerMy';
-import { ManagerContractCancel } from '@/features/manager/pages/ManagerMy/ManagerContractCancel';
-import { ManagerMyForm } from '@/features/manager/pages/ManagerMy/ManagerMyForm';
-import { ManagerReservationDetail } from '@/features/manager/pages/ManagerReservation/ManagerReservationDetail';
 
 // 관리자
 import { AdminLogin } from '@/features/admin/pages/AdminLogin';
@@ -37,11 +37,12 @@ import { AdminManagers } from '@/features/admin/pages/AdminManager/AdminManagers
 import { AdminCustomers } from '@/features/admin/pages/AdminCustomer/AdminCustomers';
 import { AdminBoards } from '@/features/admin/pages/AdminBoard/AdminBoards';
 import { AdminBanners } from '@/features/admin/pages/AdminBanner/AdminBanners';
-
-
 import { GuardLayout } from '@/shared/components/GuardLayout';
 import { AdminBannerDetail } from '@/features/admin/pages/AdminBanner/AdminBannerDetail';
 import { AdminBannerForm } from '@/features/admin/pages/AdminBanner/AdminBanneerForm';
+import { AdminInquiries }from '@/features/admin/pages/AdminInquiry/AdminInquiries';
+import { AdminInquiryDetail } from '@/features/admin/pages/AdminInquiry/AdminInquiryDetail';
+
 
 export const router = createBrowserRouter([
 
@@ -168,49 +169,100 @@ export const router = createBrowserRouter([
         ]
       },
 
-      /** 관리자 *******************************************/
+      //** 관리자 *************************************************************/
       {
         path: '/admin',
         element: <AdminLayout />,
         children: [
-          { index: true, element: <AdminMain /> },
-          {
-            path: 'accounts',
+          // 메인페이지 (= 대시보드)
+          { index: true, element: <AdminMain /> }, 
+          // 관리자 계정 목록
+          { path: 'accounts',
             children: [
+              // 목록
               { index: true, element: <AdminAccounts /> },
+              // 등록
               { path: 'new', element: <AdminAccountForm /> },
+              // 수정
               { path: ':adminId/edit', element: <AdminAccountForm /> },
             ]
           },
-          {
-            path: 'customers',
+          // 고객 정보 목록
+          { path: 'customers',
             children: [
+              // 목록
               { index: true, element: <AdminCustomers /> },
+              // 수정
+              // { path: ':customerId/edit', element: <AdminCustomerForm /> },
             ]
           },
-          {
-            path: 'managers',
+          // 매니저 정보 목록
+          { path: 'managers',
             children: [
+              // 목록
               { index: true, element: <AdminManagers /> },
+              // 수정
+              // { path: ':managerId/edit', element: <AdminManagerForm /> },
             ]
           },
-          {
-            path: 'boards',
+          // // 문의 내역 목록
+          { path: 'inquiries', 
             children: [
+              // 목록
+              { index: true, element: <AdminInquiries /> },
+
+              // 상세
+              { path: 'customer/:inquiryId', element: <AdminInquiryDetail activeTab="customer" /> },
+              { path: 'manager/:inquiryId', element: <AdminInquiryDetail activeTab="manager" /> },
+
+              // 삭제
+
+              // 답변 등록
+
+              // 답변 수정
+
+
+            ]
+          },
+          // // 공지/이벤트 목록
+          { path: 'boards',
+            children: [
+              // 목록
               { index: true, element: <AdminBoards /> },
+              // { path: 'notices',
+              //   children: [
+              //     // 등록
+              //     { path: 'new', element: <AdminNoticeForm /> },
+              //     // 수정
+              //     { path: ':noticeId/edit', element: <AdminNoticeForm /> },
+              //   ]
+              // },
+              // { path: 'events',
+              //   children: [
+              //     // 등록
+              //     { path: 'new', element: <AdminEventForm /> },
+              //     // 수정
+              //     { path: ':eventId/edit', element: <AdminEventForm /> },
+              //   ]
+              // },
             ]
           },
-          {
-            path: 'banners',
+          // 배너 관리 목록
+          { path: 'banners',
             children: [
+              // 목록
               { index: true, element: <AdminBanners /> },
+              // 상세
               { path: ':bannerId', element: <AdminBannerDetail /> },
+              // 등록
               { path: 'new', element: <AdminBannerForm /> },
-              { path: ':bannerId/edit', element: <AdminBannerForm /> },
+              // 수정
+              // { path: ':bannerId/edit', element: <AdminBannerForm /> },
             ]
           },
-        ]
+        ],
       },
-    ]
+    ],
   },
 ]);
+
