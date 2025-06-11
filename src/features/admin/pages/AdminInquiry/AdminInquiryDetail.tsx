@@ -135,12 +135,14 @@ export const AdminInquiryDetail = ({ activeTab }: { activeTab: 'manager' | 'cust
                   접수일: {formatDate(inquiry.createdAt)}
                 </div>
               </div>
-              <div className="flex justify-start items-center gap-2">
-                <div className="justify-start text-gray-500 text-sm font-medium font-['Inter'] leading-none">분류:</div>
-                <div className="h-7 px-3 bg-blue-100 rounded-2xl flex justify-center items-center">
-                  <div className="justify-start text-blue-700 text-xs font-semibold font-['Inter'] leading-none">기술 문의</div>
+              {activeTab === 'customer' && (
+                <div className="flex justify-start items-center gap-2">
+                  <div className="justify-start text-gray-500 text-sm font-medium font-['Inter'] leading-none">분류:</div>
+                  <div className="h-7 px-3 bg-blue-100 rounded-2xl flex justify-center items-center">
+                    <div className="justify-start text-blue-700 text-xs font-semibold font-['Inter'] leading-none">{inquiry.categoryName || '-'}</div>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
             <div className="self-stretch flex flex-col justify-start items-start gap-3 mt-6">
               <div className="self-stretch justify-start text-gray-900 text-base font-bold font-['Inter'] leading-tight">문의자 정보</div>
@@ -148,17 +150,17 @@ export const AdminInquiryDetail = ({ activeTab }: { activeTab: 'manager' | 'cust
                 <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
                   <div className="self-stretch inline-flex justify-start items-center gap-3">
                     <div className="w-20 justify-start text-gray-500 text-sm font-medium font-['Inter'] leading-none">이름</div>
-                    <div className="justify-start text-gray-900 text-sm font-normal font-['Inter'] leading-none">{inquiry.author?.userName || '-'}</div>
+                    <div className="justify-start text-gray-900 text-sm font-normal font-['Inter'] leading-none">{inquiry.userName || '-'}</div>
                   </div>
                   <div className="self-stretch inline-flex justify-start items-center gap-3">
                     <div className="w-20 justify-start text-gray-500 text-sm font-medium font-['Inter'] leading-none">이메일</div>
-                    <div className="justify-start text-gray-900 text-sm font-normal font-['Inter'] leading-none">{inquiry.author?.email || '-'}</div>
+                    <div className="justify-start text-gray-900 text-sm font-normal font-['Inter'] leading-none">{inquiry.email || '-'}</div>
                   </div>
                 </div>
                 <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
                   <div className="self-stretch inline-flex justify-start items-center gap-3">
                     <div className="w-20 justify-start text-gray-500 text-sm font-medium font-['Inter'] leading-none">연락처</div>
-                    <div className="justify-start text-gray-900 text-sm font-normal font-['Inter'] leading-none">{inquiry.author?.phone || '-'}</div>
+                    <div className="justify-start text-gray-900 text-sm font-normal font-['Inter'] leading-none">{inquiry.phone || '-'}</div>
                   </div>
                 </div>
               </div>
