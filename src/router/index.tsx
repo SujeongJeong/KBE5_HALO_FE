@@ -36,6 +36,7 @@ import { AdminMain } from '@/features/admin/pages/AdminMain';
 import { AdminAccounts } from '@/features/admin/pages/AdminAccount/AdminAccounts';
 import { AdminAccountForm } from '@/features/admin/pages/AdminAccount/AdminAccountForm';
 import { AdminManagers } from '@/features/admin/pages/AdminManager/AdminManagers';
+import { AdminManagerDetail } from '@/features/admin/pages/AdminManager/AdminManagerDetail';
 import { AdminCustomers } from '@/features/admin/pages/AdminCustomer/AdminCustomers';
 import { AdminBoards } from '@/features/admin/pages/AdminBoard/AdminBoards';
 import { AdminBanners } from '@/features/admin/pages/AdminBanner/AdminBanners';
@@ -184,6 +185,8 @@ export const router = createBrowserRouter([
             children: [
               // 목록
               { index: true, element: <AdminManagers /> },
+              // 상세
+              { path: ':managerId', element: <AdminManagerDetail /> },
               // 수정
               // { path: ':managerId/edit', element: <AdminManagerForm /> },
             ]
