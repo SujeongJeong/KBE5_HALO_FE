@@ -9,6 +9,7 @@ export type Notice = {
 };
 
 export type NoticeSearchParams = {
+  type?: string;
   title?: string;
   author?: string;
   startDate?: string;

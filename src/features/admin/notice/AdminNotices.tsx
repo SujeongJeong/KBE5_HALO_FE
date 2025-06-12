@@ -22,8 +22,8 @@ function AdminNotices() {
     const fetchData = async () => {
       try {
         const data = activeTab === 'notice'
-          ? await fetchNotices(params)
-          : await fetchEvents(params);
+          ? await fetchNotices({ ...params, type: 'NOTICE' })
+          : await fetchEvents({ ...params, type: 'EVENT' });
         setNotices(data.items || []);
         setTotalPages(data.totalPages || 1);
       } catch (e: any) {
