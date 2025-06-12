@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { searchCustomerReviews } from "@/features/customer/api/CustomerReview";
 import type { CustomerReviewRspType } from "../../types/CustomerReviewType";
-import { getFormattedDate, formatTimeRange } from "@/shared/utils/dateUtils";
+import { getFormattedDate, formatTimeRange, formatDateWithDay } from "@/shared/utils/dateUtils";
 import { Star, Pencil } from "lucide-react";
 import { REVIEW_PAGE_SIZE } from "@/shared/constants/constants";
 import { useNavigate } from "react-router-dom";
@@ -182,7 +182,7 @@ const ReviewCard: React.FC<CustomerReviewRspType> = ({
             </div>
             <div className="text-sm">
               <p className="text-gray-500">
-                {getFormattedDate(new Date(requestDate))} {formatTimeRange(startTime, turnaround)}
+                {formatDateWithDay(requestDate)} {formatTimeRange(startTime, turnaround)}
               </p>
               <p className="text-gray-400">{serviceCategoryName}</p>
               <p className="font-medium text-gray-800">{managerName}</p>
