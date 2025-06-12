@@ -1,11 +1,12 @@
 import { useUserStore } from "@/store/useUserStore";
 import { Fragment } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { logout } from "@/shared/utils/logout";
 
 export const AdminSidebar = () => {
   const navigate = useNavigate();
   const { userName } = useUserStore();
+  const location = useLocation();
 
   const menuItems = [
     { name: "대시보드", path: "/admin" },
@@ -46,14 +47,21 @@ export const AdminSidebar = () => {
               <NavLink
                 key={path}
                 to={path}
-                end
-                className={({ isActive }) =>
-                  `h-11 px-6 flex items-center gap-3 w-full ${
-                    isActive
+                className={({ isActive }) => {
+                  let active;
+                  if (path === "/admin") {
+                    // 대시보드는 정확히 /admin일 때만 활성화
+                    active = location.pathname === "/admin";
+                  } else {
+                    // 나머지는 하위 경로까지 활성화
+                    active = location.pathname === path || location.pathname.startsWith(path + "/");
+                  }
+                  return `h-11 px-6 flex items-center gap-3 w-full ${
+                    active
                       ? "bg-violet-50 border-l-[3px] border-indigo-600 text-indigo-600 font-semibold"
-                      : "text-gray-500 font-medium"
-                  }`
-                }
+                      : "text-gray-500 font-medium hover:bg-violet-50 hover:text-indigo-600 hover:font-semibold hover:border-l-[3px] hover:border-indigo-200"
+                  }`;
+                }}
               >
                 {name}
               </NavLink>
