@@ -384,7 +384,7 @@ export const ManagerMyForm = () => {
                   }
                 />
               </div>
-              <div className="self-stretch h-[1270px] flex flex-col justify-start items-start gap-4">
+              <div className="self-stretch flex flex-col justify-start items-start gap-4">
                 <div className="self-stretch justify-start text-slate-800 text-lg font-semibold font-['Inter'] leading-snug">프로필 정보</div>
                 <div className="self-stretch inline-flex justify-start items-start gap-4">
                   <div className="w-28 h-28 bg-slate-100 rounded-[60px] flex justify-center items-center">
@@ -402,6 +402,7 @@ export const ManagerMyForm = () => {
                 </div>
                 {/* 주소 입력 */}
                 <FileUploadSection files={files} setFiles={setFiles} multiple={true} isRequired={true}/>
+
                 {/* 한줄소개 */}
                 <div className="self-stretch flex flex-col gap-2">
                   <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-none">
@@ -481,18 +482,29 @@ export const ManagerMyForm = () => {
                     </div>
                   )}
                 </div>
+{/*                 
+                <button
+                  onClick={handleSubmit}
+                  className="self-stretch h-12 mt-6 bg-indigo-600 rounded-lg inline-flex justify-center items-center gap-2 cursor-pointer"
+                >
+                  <span className="material-symbols-outlined text-white">edit</span>
+                  <span className="text-white text-base font-semibold font-['Inter'] leading-tight">
+                    수정하기
+                  </span>
+                </button> */}
+
               </div>
             </div>
 
              <button
                 onClick={handleSubmit}
-                className="self-stretch h-12 bg-indigo-600 rounded-lg inline-flex justify-center items-center gap-2 cursor-pointer"
-            >
-              <span className="material-symbols-outlined text-white">edit</span>
-              <span className="text-white text-base font-semibold font-['Inter'] leading-tight">
-                수정하기
-              </span>
-            </button>
+                className="self-stretch h-12 mt-6 bg-indigo-600 rounded-lg inline-flex justify-center items-center gap-2 cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-white">edit</span>
+                <span className="text-white text-base font-semibold font-['Inter'] leading-tight">
+                  수정하기
+                </span>
+              </button>
           </div>
         </div>
       </div>
