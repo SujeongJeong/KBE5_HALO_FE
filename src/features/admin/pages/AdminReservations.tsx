@@ -32,7 +32,7 @@ const AdminReservations = () => {
   useEffect(() => {
     const fetchReservations = async () => {
       try {
-        const res = await api.get('/api/admin/reservations', {
+        const res = await api.get('/admin/reservations', {
           params: {
             customer: search.customer,
             address: search.address,
@@ -93,7 +93,7 @@ const AdminReservations = () => {
   const handleDelete = async (id: string) => {
     if (!window.confirm('정말 삭제하시겠습니까?')) return;
     try {
-      await api.delete(`/api/admin/reservations/${id}`);
+      await api.delete(`/admin/reservations/${id}`);
       setReservations((prev) => prev.filter((r) => r.id !== id));
     } catch (e) {
       alert('삭제에 실패했습니다.');

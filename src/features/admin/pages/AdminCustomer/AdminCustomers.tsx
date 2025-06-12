@@ -36,7 +36,7 @@ export const AdminCustomers = () => {
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const res = await api.get('/api/admin/customers', {
+        const res = await api.get('/admin/customers', {
           params: {
             tab: activeTab,
             name: nameKeyword,
@@ -75,7 +75,7 @@ export const AdminCustomers = () => {
   const handleDelete = async (id: string) => {
     if (!window.confirm('정말 삭제하시겠습니까?')) return;
     try {
-      await api.delete(`/api/admin/customers/${id}`);
+      await api.delete(`admin/customers/${id}`);
       setCustomers((prev: any) => prev.filter((c: any) => c.id !== id));
     } catch (e) {
       alert('삭제에 실패했습니다.');
@@ -87,7 +87,7 @@ export const AdminCustomers = () => {
   // 상세 조회
   const handleDetail = async (id: string) => {
     try {
-      const res = await api.get(`/api/admin/customers/${id}`);
+      const res = await api.get(`/admin/customers/${id}`);
       setSelectedCustomer({
         id: res.data.customerId,
         name: res.data.userName,
@@ -114,7 +114,7 @@ export const AdminCustomers = () => {
   // 수정 모드 진입
   const handleEdit = async (id: string) => {
     try {
-      const res = await api.get(`/api/admin/customers/${id}`);
+      const res = await api.get(`/admin/customers/${id}`);
       setEditCustomer({
         id: res.data.customerId,
         name: res.data.userName,
@@ -142,7 +142,7 @@ export const AdminCustomers = () => {
   const handleEditSave = async () => {
     if (!editCustomer) return;
     try {
-      await api.put(`/api/admin/customers/${editCustomer.id}`, {
+      await api.put(`/admin/customers/${editCustomer.id}`, {
         userName: editCustomer.name,
         phone: editCustomer.phone,
         email: editCustomer.email,

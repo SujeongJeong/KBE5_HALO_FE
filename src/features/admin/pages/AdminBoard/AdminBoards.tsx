@@ -64,10 +64,10 @@ export const AdminBoards = () => {
     if (!window.confirm('정말 삭제하시겠습니까?')) return;
     try {
       if (activeTab === "notice") {
-        await api.delete(`/api/admin/notices/${id}`);
+        await api.delete(`/admin/notices/${id}`);
         setNotices((prev) => prev.filter((n) => n.id !== id));
       } else {
-        await api.delete(`/api/admin/events/${id}`);
+        await api.delete(`/admin/events/${id}`);
         setEvents((prev) => prev.filter((n) => n.id !== id));
       }
     } catch (e) {
@@ -92,7 +92,7 @@ export const AdminBoards = () => {
     const fetchData = async () => {
       try {
         if (activeTab === 'notice') {
-          const res = await api.get('/api/admin/notices', {
+          const res = await api.get('/admin/notices', {
             params: {
               title: searchState.title,
               content: searchState.content,
@@ -114,7 +114,7 @@ export const AdminBoards = () => {
           }));
           setNotices(mapped);
         } else {
-          const res = await api.get('/api/admin/events', {
+          const res = await api.get('/admin/events', {
             params: {
               title: searchState.title,
               content: searchState.content,
