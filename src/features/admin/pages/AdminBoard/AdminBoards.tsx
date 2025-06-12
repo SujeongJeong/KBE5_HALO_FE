@@ -92,6 +92,65 @@ export const AdminBoards = () => {
     setPage(0);
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        if (activeTab === 'notice') {
+          const res = await api.get('/api/admin/notices', {
+            params: {
+              title: searchState.title,
+              content: searchState.content,
+              startDate: searchState.startDate,
+              endDate: searchState.endDate,
+              status: searchState.status,
+              page: page + 1,
+              size: 10,
+            },
+          });
+          const mapped = (res.data.items || []).map((item: any) => ({
+            id: item.noticeId,
+            title: item.title,
+            status: item.noticeType === 'NOTICE' ? '게시중' : '임시저장',
+            date: item.createdAt,
+            deleted: item.isDeleted,
+            views: item.views,
+            author: item.createdBy,
+          }));
+          setNotices(mapped);
+        } else {
+          const res = await api.get('/api/admin/events', {
+            params: {
+              title: searchState.title,
+              content: searchState.content,
+              startDate: searchState.startDate,
+              endDate: searchState.endDate,
+              status: searchState.status,
+              page: page + 1,
+              size: 10,
+            },
+          });
+          const mapped = (res.data.items || []).map((item: any) => ({
+            id: item.noticeId,
+            title: item.title,
+            status: item.noticeType === 'EVENT' ? '게시중' : '임시저장',
+            date: item.createdAt,
+            deleted: item.isDeleted,
+            views: item.views,
+            author: item.createdBy,
+          }));
+          setEvents(mapped);
+        }
+      } catch (e: any) {
+        setError('목록을 불러오지 못했습니다.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [activeTab, searchState, page]);
+
   return (
     <Fragment>
       <div className="w-full self-stretch inline-flex flex-col justify-start items-start">
