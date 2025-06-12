@@ -214,7 +214,7 @@ export const CustomerMyReservationPage: React.FC = () => {
                       onWriteReview={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        navigate(`/my/reservations/${reservation.reservationId}/review`, {
+                        navigate(`/my/reviews/${reservation.reservationId}`, {
                           state: { 
                             fromReservation: true,
                             serviceName: reservation.serviceName,

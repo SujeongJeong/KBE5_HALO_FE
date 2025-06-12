@@ -103,7 +103,7 @@ export const CustomerMyReservationDetail = () => {
     e.preventDefault();
     e.stopPropagation();
     if (!reservationId || !reservation) return;
-    navigate(`/my/reservations/${reservationId}/review`, {
+    navigate(`/my/reviews/${reservationId}`, {
       state: { 
         fromReservation: true,
         serviceName: reservation.serviceName,
