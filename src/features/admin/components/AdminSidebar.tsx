@@ -47,13 +47,11 @@ export const AdminSidebar = () => {
               <NavLink
                 key={path}
                 to={path}
-                className={({ isActive }) => {
+                className={() => {
                   let active;
                   if (path === "/admin") {
-                    // 대시보드는 정확히 /admin일 때만 활성화
                     active = location.pathname === "/admin";
                   } else {
-                    // 나머지는 하위 경로까지 활성화
                     active = location.pathname === path || location.pathname.startsWith(path + "/");
                   }
                   return `h-11 px-6 flex items-center gap-3 w-full ${
