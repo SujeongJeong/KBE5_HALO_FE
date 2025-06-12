@@ -43,7 +43,7 @@ export const cancelBeforeConfirmReservation = async (reservationId: number,paylo
 
 // 나의 예약 조회
 export const getCustomerReservations = async (params: {
-  reservationStatus?: ReservationStatus;
+  status?: ReservationStatus;
   page?: number;
   
 }) => {

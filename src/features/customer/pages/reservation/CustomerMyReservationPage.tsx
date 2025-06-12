@@ -41,7 +41,7 @@ export const CustomerMyReservationPage: React.FC = () => {
       setLoading(true);
       try {
         const res = await getCustomerReservations({
-          reservationStatus: searchParams.reservationStatus || undefined,
+          status: searchParams.reservationStatus || undefined,
           page: searchParams.page
         });
 
@@ -74,7 +74,7 @@ export const CustomerMyReservationPage: React.FC = () => {
     setLoading(true);
     try {
       const res = await getCustomerReservations({
-        reservationStatus: paramsToSearch.reservationStatus || undefined,
+        status: paramsToSearch.reservationStatus || undefined,
         page: paramsToSearch.page
       });
 
@@ -167,7 +167,6 @@ export const CustomerMyReservationPage: React.FC = () => {
                       className="h-10 pr-10 pl-4 text-sm rounded-md border border-slate-200 text-slate-700 bg-white appearance-none"
                     >
                       <option value="">전체</option>
-                      <option value="REQUESTED">예약 요청</option>
                       <option value="CONFIRMED">예약 완료</option>
                       <option value="IN_PROGRESS">서비스 진행 중</option>
                       <option value="COMPLETED">방문 완료</option>
