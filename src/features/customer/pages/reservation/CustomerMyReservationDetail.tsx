@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import HalfStar from "@/shared/components/HalfStar";
-import { Star } from "lucide-react";
+import { Star, Pencil } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getCustomerReservationDetail, cancelReservationByCustomer } from "@/features/customer/api/CustomerReservation";
 import type { CustomerReservationDetailRspType, CustomerReservationCancelReqType, ReservationStatus } from "@/features/customer/types/CustomerReservationType";
@@ -141,13 +141,23 @@ export const CustomerMyReservationDetail = () => {
         <span>예약 상세 정보</span>
         <div className="flex items-center gap-4">
           {reservation.reservationStatus === 'COMPLETED' && (
-            <button
-              onClick={handleWriteReview}
-              className="flex items-center gap-1 px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-700 text-sm transition-colors duration-200 cursor-pointer"
-            >
-              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-              {reservation.reviewId ? '리뷰 수정' : '리뷰 작성'}
-            </button>
+            reservation.reviewId ? (
+              <button
+                onClick={handleWriteReview}
+                className="flex items-center gap-1 px-4 py-2 bg-white border border-indigo-500 text-indigo-600 rounded-md hover:bg-indigo-50 text-sm transition-colors duration-200 cursor-pointer"
+              >
+                <Pencil className="w-4 h-4" />
+                리뷰 수정
+              </button>
+            ) : (
+              <button
+                onClick={handleWriteReview}
+                className="flex items-center gap-1 px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-700 text-sm transition-colors duration-200 cursor-pointer"
+              >
+                <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                리뷰 작성
+              </button>
+            )
           )}
           <span className={getStatusBadgeClasses(reservation.reservationStatus)}>
             {getKoreanStatus(reservation.reservationStatus)}
