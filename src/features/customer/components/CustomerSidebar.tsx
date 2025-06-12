@@ -12,7 +12,7 @@ const CustomerSidebar: React.FC = () => {
     { name: '예약 내역', path: '/my/reservations' },
     { name: '리뷰 내역', path: '/my/reviews' },
     { name: '1:1 문의 내역', path: '/my/inquiries' },
-    { name: '좋아요/아쉬워요 매니저 목록', path: '/my/likes' }, // restored
+    //{ name: '좋아요/아쉬워요 매니저 목록', path: '/my/likes' }, 
   ];
 
   const baseClasses = 'w-full px-6 py-4 flex items-center';
