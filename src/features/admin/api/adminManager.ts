@@ -1,4 +1,5 @@
 import api from '@/services/axios';
+import qs from 'qs';
 
 // 전체 매니저 목록 조회
 export const fetchAdminManagers = async (params?: {
@@ -10,11 +11,15 @@ export const fetchAdminManagers = async (params?: {
   maxRating?: number;
   page?: number;
   size?: number;
+  excludeStatus?: string[];
 }) => {
   const cleanedParams = Object.fromEntries(
     Object.entries(params || {}).filter(([, value]) => value !== undefined && value !== "")
   );
-  const res = await api.get('/admin/managers', { params: cleanedParams });
+  const res = await api.get('/admin/managers', {
+    params: cleanedParams,
+    paramsSerializer: params => qs.stringify(params, { arrayFormat: 'repeat' }),
+  });
   console.log(res.data.body);
   if (!res.data.success) throw new Error(res.data.message || '매니저 목록 조회에 실패했습니다.');
   return res.data.body;
@@ -28,16 +33,16 @@ export const fetchAdminManagerById = async (managerId: string | number) => {
   return res.data.body;
 };
 
-// 신고된 매니저 목록 조회
-export const fetchSuspendedManagers = async () => {
-  const res = await api.get('/admin/managers/suspended');
-  if (!res.data.success) throw new Error(res.data.message || '신고된 매니저 목록 조회에 실패했습니다.');
+// 매니저 승인
+export const approveManager = async (managerId: number) => {
+  const res = await api.patch(`/admin/managers/applies/${managerId}`, { status: "ACTIVE" });
+  if (!res.data.success) throw new Error(res.data.message || '매니저 승인에 실패했습니다.');
   return res.data.body;
 };
 
-// 매니저 신청 내역 조회
-export const fetchAppliedManagers = async () => {
-  const res = await api.get('/admin/managers/applies');
-  if (!res.data.success) throw new Error(res.data.message || '매니저 신청 내역 조회에 실패했습니다.');
+// 매니저 거절
+export const rejectManager = async (managerId: number) => {
+  const res = await api.patch(`/admin/managers/applies/${managerId}`, { status: "REJECTED" });
+  if (!res.data.success) throw new Error(res.data.message || '매니저 거절에 실패했습니다.');
   return res.data.body;
 }; 
