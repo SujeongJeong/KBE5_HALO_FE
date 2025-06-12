@@ -87,8 +87,19 @@ export const router = createBrowserRouter([
         path: '/',
         element: <CustomerLayout />,
         children: [
+          // 메인
           { index: true, element: <CustomerMain /> },
+          // 수요자 회원가입
           { path: 'auth/signup', element: <CustomerSignup /> },
+          {
+            // 예약 요청
+            path: 'reservations',
+            children: [
+              { path: 'new', element: <ReservationStepOne /> },
+              { path: ':reservationId/step-2', element: <ReservationRouteGuard /> },
+              { path: ':reservationId/final', element: <ReservationStepFinalGuard /> },
+            ]
+          },
           {
             path: 'my',
             children: [
@@ -115,14 +126,6 @@ export const router = createBrowserRouter([
                   { path: ':reservationId', element: <CustomerReviewForm /> }
                 ]
               }
-            ]
-          },
-          {
-            path: 'reservations',
-            children: [
-              { path: 'new', element: <ReservationStepOne /> },
-              { path: ':reservationId/step-2', element: <ReservationRouteGuard /> },
-              { path: ':reservationId/final', element: <ReservationStepFinalGuard /> },
             ]
           },
         ]
