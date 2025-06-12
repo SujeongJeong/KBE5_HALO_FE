@@ -6,7 +6,7 @@ import { Star, Pencil } from "lucide-react";
 import { REVIEW_PAGE_SIZE } from "@/shared/constants/constants";
 import { useNavigate } from "react-router-dom";
 
-
+const pageSize = REVIEW_PAGE_SIZE;
 
 export const CustomerReviewsPage = () => {
   const [reviews, setReviews] = useState<CustomerReviewRspType[]>([]);
@@ -28,17 +28,41 @@ export const CustomerReviewsPage = () => {
     fetchReviews();
   }, [currentPage]);
 
+  // 별점 졍렬 필터
   const filteredReviews = reviews.filter((r) => {
-    if (selectedRating === null) return true;
-    if (selectedRating === -1) return !r.reviewId || r.rating === 0;
-    if (selectedRating === 3) return r.rating >= 1 && r.rating <= 3;
-    return r.rating === selectedRating;
+    const numericRating = typeof r.rating === "number" ? r.rating : Number(r.rating);
+    
+    if (selectedRating === null) return true; // 전체
+    if (selectedRating === -1) return !r.reviewId || numericRating === 0; // 리뷰 작성 필요
+    if (selectedRating === 5) return numericRating === 5; // 5점
+    if (selectedRating === 4) return numericRating === 4; // 4점
+    if (selectedRating === 3) return numericRating >= 1 && numericRating <= 3; // 3점 이하
+    
+    return false;
   });
 
-  const pageSize = REVIEW_PAGE_SIZE;
 
   const handleFilterClick = (idx: number) => {
-    const rating = idx === 0 ? null : idx === 1 ? -1 : idx === 3 ? 3 : 6 - idx;
+    let rating: number | null;
+    switch (idx) {
+      case 0: // 전체
+        rating = null;
+        break;
+      case 1: // 리뷰 작성 필요
+        rating = -1;
+        break;
+      case 2: // 5점
+        rating = 5;
+        break;
+      case 3: // 4점
+        rating = 4;
+        break;
+      case 4: // 3점 이하
+        rating = 3;
+        break;
+      default:
+        rating = null;
+    }
     setSelectedRating(rating);
     setCurrentPage(0);
   };
@@ -50,19 +74,40 @@ export const CustomerReviewsPage = () => {
         작성하신 리뷰 내역을 확인하고 관리할 수 있습니다.
       </p>
       <div className="flex gap-2 mb-4">
-        {["전체", "리뷰 작성 필요", "5점", "4점", "3점 이하"].map((label, idx) => (
-          <button
-            key={label}
-            onClick={() => handleFilterClick(idx)}
-            className={`px-4 py-1 rounded-full border ${
-              selectedRating === (idx === 0 ? null : idx === 3 ? 3 : 6 - idx)
-                ? "bg-indigo-100 border-indigo-500 text-indigo-700"
-                : "border-gray-300 text-gray-600"
-            }`}
-          >
-            {label}
-          </button>
-        ))}
+        {["전체", "리뷰 작성 필요", "5점", "4점", "3점 이하"].map((label, idx) => {
+          let isActive = false;
+          switch (idx) {
+            case 0:
+              isActive = selectedRating === null;
+              break;
+            case 1:
+              isActive = selectedRating === -1;
+              break;
+            case 2:
+              isActive = selectedRating === 5;
+              break;
+            case 3:
+              isActive = selectedRating === 4;
+              break;
+            case 4:
+              isActive = selectedRating === 3;
+              break;
+          }
+          
+          return (
+            <button
+              key={label}
+              onClick={() => handleFilterClick(idx)}
+              className={`px-4 py-1 rounded-full border ${
+                isActive
+                  ? "bg-indigo-100 border-indigo-500 text-indigo-700"
+                  : "border-gray-300 text-gray-600"
+              }`}
+            >
+              {label}
+            </button>
+          );
+        })}
       </div>
 
       {/* 리뷰 카드 */}
@@ -164,7 +209,7 @@ const ReviewCard: React.FC<CustomerReviewRspType> = ({
                 />
               ))}
               <span className="text-lg font-bold text-gray-800">
-                {typeof rating === "number" ? rating.toFixed(1) : "0"}
+                {typeof rating === "number" ? Math.floor(rating) : "0"}
               </span>
             </div>
             <span className="text-sm text-gray-500">작성일: {getFormattedDate(new Date(createdAt))}</span>
