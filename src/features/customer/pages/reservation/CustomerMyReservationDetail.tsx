@@ -99,8 +99,17 @@ export const CustomerMyReservationDetail = () => {
     }
   };
 
-  const handleWriteReview = () => {
-    navigate(`/reviews/write/${reservationId}`);
+  const handleWriteReview = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!reservationId || !reservation) return;
+    navigate(`/my/reservations/${reservationId}/review`, {
+      state: { 
+        fromReservation: true,
+        serviceName: reservation.serviceName,
+        managerName: reservation.managerName
+      }
+    });
   };
 
   if (error) {
@@ -131,18 +140,18 @@ export const CustomerMyReservationDetail = () => {
       <div className="text-xl font-bold text-gray-900 flex items-center justify-between">
         <span>예약 상세 정보</span>
         <div className="flex items-center gap-4">
+          {reservation.reservationStatus === 'COMPLETED' && (
+            <button
+              onClick={handleWriteReview}
+              className="flex items-center gap-1 px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-700 text-sm transition-colors duration-200 cursor-pointer"
+            >
+              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+              {reservation.reviewId ? '리뷰 수정' : '리뷰 작성'}
+            </button>
+          )}
           <span className={getStatusBadgeClasses(reservation.reservationStatus)}>
             {getKoreanStatus(reservation.reservationStatus)}
           </span>
-          {reservation.reservationStatus === 'COMPLETED' && !reservation.reviewId && (
-            <button
-            onClick={handleWriteReview}
-            className="flex items-center gap-1 px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-700 text-sm transition-colors duration-200 cursor-pointer"
-          >
-            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-            리뷰 작성
-          </button>
-          )}
         </div>
       </div>
 
@@ -335,16 +344,16 @@ export const CustomerMyReservationDetail = () => {
       </div>
 
       {/* 버튼 영역 */}
-      {['REQUESTED', 'CONFIRMED'].includes(reservation.reservationStatus) && (
-        <div className="flex justify-end">
+      <div className="flex justify-end gap-2">
+        {['REQUESTED', 'CONFIRMED'].includes(reservation.reservationStatus) && (
           <button
             onClick={handleCancelReservation}
             className="px-3 py-2 rounded-2xl bg-red-50 text-red-500 text-sm font-base hover:bg-red-100 transition"
           >
             예약 취소
           </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

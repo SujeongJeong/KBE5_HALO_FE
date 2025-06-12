@@ -9,7 +9,7 @@ import { Star } from "lucide-react";
 interface ReservationCardProps {
   reservation: CustomerReservationListRspType;
   onCancelReservation?: (reservationId: number) => void;
-  onWriteReview?: (reservationId: number) => void;
+  onWriteReview: (e: React.MouseEvent) => void;
 }
 
 const getKoreanStatus = (status: ReservationStatus) => {
@@ -120,7 +120,7 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
         
         {reservation.reservationStatus === 'COMPLETED' && !reservation.reviewId && (
           <button
-            onClick={() => onWriteReview?.(reservation.reservationId)}
+            onClick={onWriteReview}
             className="flex items-center gap-1 px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-700 text-sm transition-colors duration-200 cursor-pointer"
           >
             <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />

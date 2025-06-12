@@ -13,6 +13,7 @@ import ReservationStepFinalGuard from '@/features/customer/pages/reservation/Res
 import { CustomerInquiryPage } from '@/features/customer/pages/customerInquiry/CustomerInquiryPage';
 import { CustomerInquiryForm } from '@/features/customer/pages/customerInquiry/CustomerInquiryForm';
 import { CustomerInquiryDetail } from '@/features/customer/pages/customerInquiry/CustomerInquiryDetail';
+import { CustomerReviewForm } from '@/features/customer/pages/customerReview/CustomerReviewForm';
 
 // 매니저
 import { ManagerLayout } from '@/features/manager/layouts/ManagerLayout';
@@ -102,7 +103,8 @@ export const router = createBrowserRouter([
                 path: 'reservations',
                 children: [
                   { index: true, element: <CustomerMyReservationPage /> },
-                  { path: ':reservationId', element: <CustomerMyReservationDetail /> }
+                  { path: ':reservationId', element: <CustomerMyReservationDetail /> },
+                  { path: ':reservationId/review', element: <CustomerReviewForm /> }
                 ]
               }
             ]
@@ -164,6 +166,7 @@ export const router = createBrowserRouter([
             children: [
               // 목록
               { index: true, element: <AdminAccounts /> },
+              
               // 등록
               { path: 'new', element: <AdminAccountForm /> },
               // 수정

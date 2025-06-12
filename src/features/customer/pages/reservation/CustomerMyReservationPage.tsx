@@ -144,8 +144,12 @@ export const CustomerMyReservationPage: React.FC = () => {
     return pages;
   };
 
-  const handleWriteReview = (reservationId: number) => {
-    navigate(`/my/reservations/${reservationId}`)
+  const handleWriteReview = (e: React.MouseEvent, reservationId: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigate(`/my/reservations/${reservationId}/review`, {
+      state: { fromReservation: true }
+    });
   };
 
   return (
@@ -207,7 +211,17 @@ export const CustomerMyReservationPage: React.FC = () => {
                     <ReservationCard
                       key={reservation.reservationId}
                       reservation={reservation}
-                      onWriteReview={handleWriteReview}
+                      onWriteReview={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        navigate(`/my/reservations/${reservation.reservationId}/review`, {
+                          state: { 
+                            fromReservation: true,
+                            serviceName: reservation.serviceName,
+                            managerName: reservation.managerName
+                          }
+                        });
+                      }}
                     />
                   ))
                 )}
