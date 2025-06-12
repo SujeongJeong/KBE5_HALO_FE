@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DEFAULT_PAGE_SIZE } from "@/shared/constants/constants";
-import { fetchAdminManagers, fetchSuspendedManagers, fetchAppliedManagers } from "@/features/admin/api/adminManager";
+import { fetchAdminManagers } from "@/features/admin/api/adminManager";
 import type { AdminManager } from "@/features/admin/types/AdminManagerType";
 
 export const AdminManagers = () => {
@@ -17,6 +17,14 @@ export const AdminManagers = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [searchParams, setSearchParams] = useState({
+    nameKeyword: '',
+    phoneKeyword: '',
+    emailKeyword: '',
+    statusKeyword: '',
+    ratingMinKeyword: '',
+    ratingMaxKeyword: '',
+  });
 
   const navigate = useNavigate();
 
@@ -27,25 +35,48 @@ export const AdminManagers = () => {
       let res;
       if (activeTab === 'active') {
         // 신고된 매니저
-        res = await fetchSuspendedManagers();
+        const mappedParams: any = {
+          userName: searchParams.nameKeyword || undefined,
+          phone: searchParams.phoneKeyword || undefined,
+          email: searchParams.emailKeyword || undefined,
+          status: undefined, // 상태 필터는 사용하지 않음
+          minRating: searchParams.ratingMinKeyword ? Number(searchParams.ratingMinKeyword) : undefined,
+          maxRating: searchParams.ratingMaxKeyword ? Number(searchParams.ratingMaxKeyword) : undefined,
+          page: page,
+          size: DEFAULT_PAGE_SIZE,
+          excludeStatus: ['ACTIVE', 'PENDING', 'TERMINATION_PENDING', 'TERMINATED', 'DELETED', 'REJECTED'],
+        };
+        res = await fetchAdminManagers(mappedParams);
         setManagers(res.content || res || []);
         setTotalPages(res.totalPages || 1);
       } else if (activeTab === 'applied') {
         // 매니저 신청 내역
-        res = await fetchAppliedManagers();
+        const mappedParams: any = {
+          userName: searchParams.nameKeyword || undefined,
+          phone: searchParams.phoneKeyword || undefined,
+          email: searchParams.emailKeyword || undefined,
+          status: searchParams.statusKeyword || undefined,
+          minRating: searchParams.ratingMinKeyword ? Number(searchParams.ratingMinKeyword) : undefined,
+          maxRating: searchParams.ratingMaxKeyword ? Number(searchParams.ratingMaxKeyword) : undefined,
+          page: page,
+          size: DEFAULT_PAGE_SIZE,
+          excludeStatus: ['ACTIVE', 'SUSPENDED', 'TERMINATION_PENDING', 'TERMINATED', 'DELETED'],
+        };
+        res = await fetchAdminManagers(mappedParams);
         setManagers(res.content || res || []);
         setTotalPages(res.totalPages || 1);
       } else {
         // 전체 매니저
         const mappedParams: any = {
-          userName: nameKeyword || undefined,
-          phone: phoneKeyword || undefined,
-          email: emailKeyword || undefined,
-          status: statusKeyword || undefined,
-          minRating: ratingMinKeyword ? Number(ratingMinKeyword) : undefined,
-          maxRating: ratingMaxKeyword ? Number(ratingMaxKeyword) : undefined,
+          userName: searchParams.nameKeyword || undefined,
+          phone: searchParams.phoneKeyword || undefined,
+          email: searchParams.emailKeyword || undefined,
+          status: searchParams.statusKeyword || undefined,
+          minRating: searchParams.ratingMinKeyword ? Number(searchParams.ratingMinKeyword) : undefined,
+          maxRating: searchParams.ratingMaxKeyword ? Number(searchParams.ratingMaxKeyword) : undefined,
           page: page,
           size: DEFAULT_PAGE_SIZE,
+          excludeStatus: ['SUSPENDED', 'PENDING', 'REJECTED'],
         };
         res = await fetchAdminManagers(mappedParams);
         setManagers(res.content || res || []);
@@ -60,7 +91,26 @@ export const AdminManagers = () => {
 
   useEffect(() => {
     fetchData();
-  }, [activeTab, page]);
+  }, [activeTab, page, searchParams]);
+
+  // 탭 변경 시 검색 조건 및 searchParams 초기화
+  useEffect(() => {
+    setNameKeyword("");
+    setPhoneKeyword("");
+    setEmailKeyword("");
+    setStatusKeyword("");
+    setRatingMinKeyword("");
+    setRatingMaxKeyword("");
+    setPage(0);
+    setSearchParams({
+      nameKeyword: '',
+      phoneKeyword: '',
+      emailKeyword: '',
+      statusKeyword: '',
+      ratingMinKeyword: '',
+      ratingMaxKeyword: '',
+    });
+  }, [activeTab]);
 
   return (
     <Fragment>
@@ -101,7 +151,15 @@ export const AdminManagers = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              fetchData();
+              setSearchParams({
+                nameKeyword,
+                phoneKeyword,
+                emailKeyword,
+                statusKeyword,
+                ratingMinKeyword,
+                ratingMaxKeyword,
+              });
+              setPage(0);
             }}
             className="w-full p-6 bg-white rounded-xl shadow flex flex-col gap-4"
           >
@@ -186,7 +244,7 @@ export const AdminManagers = () => {
                 <div className="flex-1 flex flex-col gap-2">
                   {activeTab === 'all' && (
                     <>
-                      <label className="text-slate-700 text-sm font-medium">상태</label>
+                      <label className="text-slate-700 text-sm font-medium">계약 상태</label>
                       <div className="h-12 px-4 bg-slate-50 rounded-lg outline outline-1 outline-slate-200 flex items-center">
                         <select
                           value={statusKeyword}
@@ -204,7 +262,7 @@ export const AdminManagers = () => {
                   )}
                   {activeTab === 'applied' && (
                     <>
-                      <label className="text-slate-700 text-sm font-medium">상태</label>
+                      <label className="text-slate-700 text-sm font-medium">계약 상태</label>
                       <div className="h-12 px-4 bg-slate-50 rounded-lg outline outline-1 outline-slate-200 flex items-center">
                         <select
                           value={statusKeyword}
@@ -235,6 +293,14 @@ export const AdminManagers = () => {
                   setRatingMinKeyword("");
                   setRatingMaxKeyword("");
                   setPage(0);
+                  setSearchParams({
+                    nameKeyword: '',
+                    phoneKeyword: '',
+                    emailKeyword: '',
+                    statusKeyword: '',
+                    ratingMinKeyword: '',
+                    ratingMaxKeyword: '',
+                  });
                 }}
               >
                 초기화
@@ -256,7 +322,7 @@ export const AdminManagers = () => {
               <div className="w-[20%] flex justify-center items-center">연락처</div>
               <div className="w-[20%] flex justify-center items-center">이메일</div>
               <div className="w-[20%] flex justify-center items-center">평점</div>
-              <div className="w-[20%] flex justify-center items-center">상태</div>
+              <div className="w-[20%] flex justify-center items-center">계약 상태</div>
             </div>
 
             {/* 리스트 */}

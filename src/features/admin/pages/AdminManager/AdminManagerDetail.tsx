@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchAdminManagerById } from "@/features/admin/api/adminManager";
+import { fetchAdminManagerById, approveManager, rejectManager } from "@/features/admin/api/adminManager";
 import type { AdminManagerDetail as AdminManagerDetailType } from "@/features/admin/types/AdminManagerType";
 
 export const AdminManagerDetail = () => {
@@ -29,6 +29,28 @@ export const AdminManagerDetail = () => {
   if (loading) return <div className="p-8">로딩 중...</div>;
   if (error) return <div className="p-8 text-red-500">{error}</div>;
   if (!manager) return null;
+
+  // 승인/거절 핸들러
+  const handleApprove = async () => {
+    if (!manager) return;
+    try {
+      await approveManager(manager.managerId);
+      alert('승인되었습니다.');
+      window.location.reload();
+    } catch (err: any) {
+      alert(err.message || '승인 실패');
+    }
+  };
+  const handleReject = async () => {
+    if (!manager) return;
+    try {
+      await rejectManager(manager.managerId);
+      alert('거절되었습니다.');
+      window.location.reload();
+    } catch (err: any) {
+      alert(err.message || '거절 실패');
+    }
+  };
 
   return (
     <div className="w-full flex flex-col">
@@ -115,13 +137,6 @@ export const AdminManagerDetail = () => {
             <div className="p-4 bg-slate-50 rounded-lg flex flex-col gap-1">
               <div className="text-slate-700 text-sm font-medium">주소: {manager.roadAddress}</div>
               <div className="text-slate-700 text-sm font-medium">상세주소: {manager.detailAddress}</div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-2">
-            <div className="text-slate-500 text-base font-medium">경력</div>
-            <div className="p-4 bg-slate-50 rounded-lg flex flex-col gap-1">
-              <div className="text-slate-700 text-sm font-medium">- 클린하우스 전문 청소사 (2018-2023)</div>
-              <div className="text-slate-700 text-sm font-medium">- 홈클리닝 서비스 매니저 (2016-2018)</div>
             </div>
           </div>
           <div className="flex flex-col gap-2">
@@ -216,6 +231,22 @@ export const AdminManagerDetail = () => {
                 <div className="flex-1 text-slate-700 text-sm font-medium">{manager.terminationReason}</div>
               </div>
             </>
+          )}
+          {manager.status === 'PENDING' && (
+            <div className="flex gap-2 mt-4 justify-end">
+              <button
+                className="px-4 py-2 border border-indigo-600 text-indigo-600 rounded bg-white hover:bg-indigo-600 hover:text-white transition-colors"
+                onClick={handleApprove}
+              >
+                승인
+              </button>
+              <button
+                className="px-4 py-2 border border-red-500 text-red-500 rounded bg-white hover:bg-red-500 hover:text-white transition-colors"
+                onClick={handleReject}
+              >
+                거절
+              </button>
+            </div>
           )}
         </div>
       </div>
