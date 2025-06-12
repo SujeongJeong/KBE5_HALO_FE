@@ -113,7 +113,6 @@ export const ManagerSignup = () => {
 
   // 유효성 검사
   const validate = () => {
-    console.log("유효성 검사사");
     const newErrors: Record<string, string> = {};
 
     if (!form.phone.trim()) newErrors.phone = "연락처를 입력해주세요.";
@@ -129,18 +128,16 @@ export const ManagerSignup = () => {
     if (!roadAddress.trim() || !detailAddress.trim() || !latitude || !longitude) {
       newErrors.address = '주소를 다시 입력해주세요.';
     }
-    if (form.profileImageId === null) newErrors.profileImageId = "프로필 사진을 업로드해주세요.";
-    if (form.fileId === null) newErrors.fileId = "첨부파일을 업로드해주세요.";
+    // if (form.profileImageId === null) newErrors.profileImageId = "프로필 사진을 업로드해주세요.";
+    // if (form.fileId === null) newErrors.fileId = "첨부파일을 업로드해주세요.";
     if (form.availableTimes.length === 0) newErrors.availableTimes = "업무 가능 시간을 1개 이상 선택해주세요.";
 
     setErrors(newErrors);
-    console.log("유효성 검사 확인");
     return Object.keys(newErrors).length === 0;
   };
 
   // 회원가입 제출 처리
   const handleSubmit = async () => {
-    console.log("회원가입");
     if (!validate()) return;
     if (!form.termsAgreed) { alert("이용약관에 동의해주세요."); return false; }
 
