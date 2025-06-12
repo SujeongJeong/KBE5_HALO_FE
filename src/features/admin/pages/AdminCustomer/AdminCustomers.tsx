@@ -1,11 +1,78 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Fragment } from "react/jsx-runtime";
+import api from '@/services/axios';
+
+type Customer = {
+  id: string;
+  name: string;
+  phone: string;
+  email: string;
+  status: string;
+  count: number;
+};
 
 export const AdminCustomers = () => {
+  const [activeTab, setActiveTab] = useState<'all' | 'active' | 'reported'>('all');
   const [nameKeyword, setNameKeyword] = useState('');
   const [phoneKeyword, setPhoneKeyword] = useState('');
   const [page, setPage] = useState(0);
+  const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  // Spring API에서 고객 목록 불러오기
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const res = await api.get('/api/admin/customers', {
+          params: {
+            tab: activeTab,
+            name: nameKeyword,
+            phone: phoneKeyword,
+            page: page + 1,
+            size: 10,
+            sort: sortOrder,
+          },
+        });
+        setCustomers(res.data.items || []);
+      } catch (e: any) {
+        setError('고객 목록을 불러오지 못했습니다.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCustomers();
+  }, [activeTab, nameKeyword, phoneKeyword, page, sortOrder]);
+
+  // 삭제
+  const handleDelete = async (id: string) => {
+    if (!window.confirm('정말 삭제하시겠습니까?')) return;
+    try {
+      await api.delete(`/api/admin/customers/${id}`);
+      setCustomers((prev: any) => prev.filter((c: any) => c.id !== id));
+    } catch (e) {
+      alert('삭제에 실패했습니다.');
+    }
+  };
+
+  const reportedCount = customers.filter(c => c.status === '신고됨').length;
+
+  const filteredCustomers = customers.filter((c) => {
+    const matchTab = activeTab === 'all' ? true : (activeTab === 'active' ? c.status === '활성' : c.status === '신고됨');
+    const matchName = c.name.includes(nameKeyword);
+    const matchPhone = c.phone.includes(phoneKeyword);
+    return matchTab && matchName && matchPhone;
+  });
+
+  // 정렬 적용
+  const sortedCustomers = [...filteredCustomers].sort((a, b) => {
+    if (sortOrder === 'desc') return b.count - a.count;
+    else return a.count - b.count;
+  });
 
   return (
     <Fragment>
@@ -16,18 +83,41 @@ export const AdminCustomers = () => {
         <div className="self-stretch flex-1 p-6 flex flex-col justify-start items-start gap-6">
           {/* 통계 카드 */}
           <div className="self-stretch inline-flex justify-start items-start gap-4">
-            {/* 카드 1 */}
+            {/* 카드 1: 총 고객 수 */}
             <div className="flex-1 h-24 p-4 bg-white rounded-lg shadow-[0px_2px_8px_0px_rgba(0,0,0,0.04)] inline-flex flex-col justify-center gap-2">
               <div className="text-gray-500 text-sm font-medium">총 고객 수</div>
-              <div className="text-gray-900 text-2xl font-bold">3,842</div>
+              <div className="text-gray-900 text-2xl font-bold">{customers.length}</div>
               <div className="text-emerald-500 text-xs font-medium">▲12% 증가</div>
             </div>
-            {/* 카드 2 */}
+            {/* 카드 2: 이번주 신규 고객 수 */}
             <div className="flex-1 h-24 p-4 bg-white rounded-lg shadow-[0px_2px_8px_0px_rgba(0,0,0,0.04)] inline-flex flex-col justify-center gap-2">
               <div className="text-gray-500 text-sm font-medium">이번주 신규 고객 수</div>
               <div className="text-emerald-500 text-2xl font-bold">24</div>
               <div className="text-emerald-500 text-xs font-medium">▲12% 증가</div>
             </div>
+            {/* 카드 3: 신고된 고객 수 */}
+            <div className="flex-1 h-24 p-4 bg-white rounded-lg shadow-[0px_2px_8px_0px_rgba(0,0,0,0.04)] inline-flex flex-col justify-center gap-2">
+              <div className="text-gray-500 text-sm font-medium">신고된 고객 수</div>
+              <div className="text-red-500 text-2xl font-bold">{reportedCount}</div>
+              <div className="text-red-500 text-xs font-medium">▼</div>
+            </div>
+          </div>
+
+          {/* 탭 필터 */}
+          <div className="w-full border-b border-gray-200 mb-2 flex">
+            {[
+              { key: 'all', label: '전체 고객' },
+              { key: 'active', label: '활성된 고객' },
+              { key: 'reported', label: '신고된 고객' },
+            ].map((tab) => (
+              <div
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key as typeof activeTab)}
+                className={`w-40 h-10 px-4 flex justify-center items-center cursor-pointer ${activeTab === tab.key ? 'border-b-2 border-indigo-600' : ''}`}
+              >
+                <span className={`text-sm ${activeTab === tab.key ? 'text-indigo-600 font-semibold' : 'text-gray-500 font-medium'}`}>{tab.label}</span>
+              </div>
+            ))}
           </div>
 
           {/* 검색 폼 */}
@@ -85,30 +175,28 @@ export const AdminCustomers = () => {
               <div className="w-[20%] flex justify-center">연락처</div>
               <div className="w-[20%] flex justify-center">이메일</div>
               <div className="w-[15%] flex justify-center">상태</div>
-              <div className="w-[10%] flex justify-center">예약 건수</div>
+              <div className="w-[10%] flex justify-center cursor-pointer select-none" onClick={() => setSortOrder(o => o === 'desc' ? 'asc' : 'desc')}>
+                예약 건수
+                <span className="ml-1">{sortOrder === 'desc' ? '▼' : '▲'}</span>
+              </div>
               <div className="w-[20%] flex justify-center">관리</div>
             </div>
-            {["김민지", "박준호", "이하은", "최서진"].map((name, idx) => (
-              <div key={idx} className="h-16 px-6 border-b border-gray-200 flex items-center text-sm text-center space-x-4">
-                <div className="w-[15%] flex justify-center items-center text-gray-900 font-medium">{name}</div>
-                <div className="w-[20%] flex justify-center items-center text-gray-500">010-0000-000{idx}</div>
-                <div className="w-[20%] flex justify-center items-center text-gray-500">example{idx}@mail.com</div>
+            {customers.map((c: any, idx: number) => (
+              <div key={c.id || idx} className="h-16 px-6 border-b border-gray-200 flex items-center text-sm text-center space-x-4">
+                <div className="w-[15%] flex justify-center items-center text-gray-900 font-medium">{c.name}</div>
+                <div className="w-[20%] flex justify-center items-center text-gray-500">{c.phone}</div>
+                <div className="w-[20%] flex justify-center items-center text-gray-500">{c.email}</div>
                 <div className="w-[15%] flex justify-center items-center">
-                  <div className={`px-2 py-0.5 rounded-xl text-xs font-medium flex justify-center items-center ${idx % 2 === 1 ? 'bg-red-50 text-red-500' : 'bg-emerald-50 text-emerald-500'}`}>
-                    {idx % 2 === 1 ? '신고됨' : '활성'}
-                  </div>
+                  <div className={`px-2 py-0.5 rounded-xl text-xs font-medium flex justify-center items-center ${c.status === '신고됨' ? 'bg-red-50 text-red-500' : 'bg-emerald-50 text-emerald-500'}`}>{c.status}</div>
                 </div>
-                <div className="w-[10%] flex justify-center items-center text-gray-900 font-medium">{12 - idx * 2}</div>
+                <div className="w-[10%] flex justify-center items-center text-gray-900 font-medium">{c.count}</div>
                 <div className="w-[20%] flex justify-center items-center gap-2">
                   <Link 
-                    // key={admin.adminId}
-                    // to={`/admin/accounts/${admin.adminId}`}
-                    key={idx}
-                    to={`/admin/customers/${idx}/edit`}
-                    className="px-2 py-1 rounded border border-indigo-600 text-indigo-600 text-sm font-medium hover:bg-indigo-50 cursor-pointer">
+                    to={`/admin/customers/${c.id}/edit`}
+                    className="px-2 py-1 rounded border border-yellow-500 text-yellow-500 text-sm font-medium hover:bg-yellow-50 cursor-pointer">
                     수정
                   </Link>
-                  <button className="px-2 py-1 rounded border border-red-500 text-red-500 text-sm font-medium hover:bg-red-50 cursor-pointer">
+                  <button className="px-2 py-1 rounded border border-red-500 text-red-500 text-sm font-medium hover:bg-red-50 cursor-pointer" onClick={() => handleDelete(c.id)}>
                     삭제
                   </button>
                 </div>
@@ -116,19 +204,31 @@ export const AdminCustomers = () => {
             ))}
           </div>
 
-          {/* 페이지네이션 - ManagerInquiries에 있는거 가져다가 쓰기... 묘하게 다르네요... */}
+          {/* 페이지네이션 - 공지/이벤트, 예약 관리와 동일하게 */}
           <div className="self-stretch py-4 flex justify-center items-center gap-1">
-            <button className="w-9 h-9 bg-white rounded-md outline outline-1 outline-gray-200 flex justify-center items-center">◀</button>
-            {[1, 2, 3].map((num) => (
+            <button
+              className="w-9 h-9 rounded-md flex justify-center items-center bg-white outline outline-1 outline-gray-200 text-gray-500 disabled:opacity-50"
+              onClick={() => setPage((p) => Math.max(0, p - 1))}
+              disabled={page === 0}
+            >
+              &lt;
+            </button>
+            {Array.from({ length: 5 }, (_, i) => (
               <button
-                key={num}
-                className={`w-9 h-9 rounded-md flex justify-center items-center ${page === num - 1 ? 'bg-indigo-600 text-white' : 'bg-white outline outline-1 outline-gray-200 text-gray-500'}`}
-                onClick={() => setPage(num - 1)}
+                key={i}
+                className={`w-9 h-9 rounded-md flex justify-center items-center ${page === i ? "bg-indigo-600 text-white" : "bg-white outline outline-1 outline-gray-200 text-gray-500"}`}
+                onClick={() => setPage(i)}
               >
-                {num}
+                {i + 1}
               </button>
             ))}
-            <button className="w-9 h-9 bg-white rounded-md outline outline-1 outline-gray-200 flex justify-center items-center">▶</button>
+            <button
+              className="w-9 h-9 rounded-md flex justify-center items-center bg-white outline outline-1 outline-gray-200 text-gray-500 disabled:opacity-50"
+              onClick={() => setPage((p) => Math.min(4, p + 1))}
+              disabled={page === 4}
+            >
+              &gt;
+            </button>
           </div>
         </div>
       </div>
