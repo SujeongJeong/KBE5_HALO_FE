@@ -15,6 +15,7 @@ import { CustomerInquiryForm } from '@/features/customer/pages/customerInquiry/C
 import { CustomerInquiryDetail } from '@/features/customer/pages/customerInquiry/CustomerInquiryDetail';
 import { CustomerReviewForm } from '@/features/customer/pages/customerReview/CustomerReviewForm';
 import { CustomerReviewsPage } from '@/features/customer/pages/customerReview/CustomerReviewsPage';
+import { CustomerMyInfo } from '@/features/customer/pages/\bCustomerMyInfo';
 
 // 매니저
 import { ManagerLayout } from '@/features/manager/layouts/ManagerLayout';
@@ -102,6 +103,8 @@ export const router = createBrowserRouter([
           {
             path: 'my',
             children: [
+              // 수요자 정보
+              { index: true, element: <CustomerMyInfo /> },
               { // 문의 내역
                 path: 'inquiries',
                 children: [
