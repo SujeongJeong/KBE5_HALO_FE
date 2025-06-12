@@ -47,7 +47,7 @@ export const CustomerMain = () => {
         <div className="self-stretch inline-flex justify-center items-start gap-6">
           <div className="w-96 h-96 p-8 bg-white rounded-2xl shadow-[0px_4px_6px_-4px_rgba(0,0,0,0.10)] shadow-[0px_10px_28px_4px_rgba(0,0,0,0.10)] outline outline-1 outline-offset-[-1px] outline-zinc-100 inline-flex flex-col justify-start items-center gap-6">
             <img
-              src="http://design.junesoft.net/2025/antwork/20250507/antwork/assets/images/main/home.svg"
+              src="src/assets/home.svg"
               alt="청소 아이콘"
               className="w-20 h-20 object-contain"
             />
@@ -59,7 +59,7 @@ export const CustomerMain = () => {
           </div>
           <div className="w-96 h-96 p-8 bg-white rounded-2xl shadow-[0px_4px_6px_0px_rgba(0,0,0,0.10)] shadow-[0px_10px_28px_20px_rgba(0,0,0,0.10)] outline outline-1 outline-offset-[-1px] outline-zinc-100 inline-flex flex-col justify-start items-center gap-6">
             <img
-              src="http://design.junesoft.net/2025/antwork/20250507/antwork/assets/images/main/aircon.svg"
+              src="src/assets/aircon.svg"
               alt="에어컨 청소 아이콘"
               className="w-20 h-20 object-contain"
             />
@@ -71,7 +71,7 @@ export const CustomerMain = () => {
           </div>
           <div className="w-96 h-96 p-8 bg-white rounded-2xl shadow-[0px_4px_6px_0px_rgba(0,0,0,0.10)] shadow-[0px_10px_28px_20px_rgba(0,0,0,0.10)] outline outline-1 outline-offset-[-1px] outline-zinc-100 inline-flex flex-col justify-start items-center gap-6">
             <img
-              src="http://design.junesoft.net/2025/antwork/20250507/antwork/assets/images/main/stroller.svg"
+              src="src/assets/stroller.svg"
               alt="돌봄 아이콘"
               className="w-20 h-20 object-contain"
             />
