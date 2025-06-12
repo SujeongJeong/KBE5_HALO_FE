@@ -144,14 +144,6 @@ export const CustomerMyReservationPage: React.FC = () => {
     return pages;
   };
 
-  const handleWriteReview = (e: React.MouseEvent, reservationId: number) => {
-    e.preventDefault();
-    e.stopPropagation();
-    navigate(`/my/reservations/${reservationId}/review`, {
-      state: { fromReservation: true }
-    });
-  };
-
   return (
     <Fragment>
       <div className="flex self-stretch">
