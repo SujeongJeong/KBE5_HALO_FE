@@ -1,28 +1,31 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Fragment } from "react/jsx-runtime";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import api from '@/services/axios';
 
 
 export const AdminBoards = () => {
   const [activeTab, setActiveTab] = useState<"notice" | "event">("notice");
-  const [titleKeyword, setTitleKeyword] = useState("");
-  const [contentKeyword, setContentKeyword] = useState("");
   const [page, setPage] = useState(0);
   const navigate = useNavigate();
+  const [editId, setEditId] = useState<string | null>(null);
+  const [editRow, setEditRow] = useState<any>(null);
+  const [notices, setNotices] = useState<any[]>([]);
+  const [events, setEvents] = useState<any[]>([]);
+  const [searchState, setSearchState] = useState({
+    title: '',
+    content: '',
+    startDate: '',
+    endDate: '',
+    status: '',
+  });
 
-  const noticeData = [
-    { id: "NT001", title: "[공지] 서비스 이용 가이드라인 안내", status: "게시중", date: "2023-06-01" },
-    { id: "NT002", title: "[공지] 5월 휴무 안내", status: "게시중", date: "2023-04-28" },
-    { id: "NT003", title: "[공지] 서비스 이용약관 개정 안내", status: "게시중", date: "2023-04-15" },
-    { id: "NT004", title: "[공지] 앱 업데이트 안내", status: "임시저장", date: "2023-04-10" },
-  ];
+  const boardData = activeTab === "notice" ? notices : events;
+  const pageSize = 5;
+  const pageCount = Math.ceil(boardData.length / pageSize);
+  const pagedData = boardData.slice(page * pageSize, (page + 1) * pageSize);
 
-  const eventData = [
-    { id: "EV001", title: "[이벤트] 신규 가입 이벤트", status: "게시중", date: "2023-05-01" },
-    { id: "EV002", title: "[이벤트] 친구 초대 이벤트", status: "임시저장", date: "2023-04-20" },
-  ];
-
-  const boardData = activeTab === "notice" ? noticeData : eventData;
+  const statusOptions = ["게시중", "임시저장"];
 
   const handleCreate = () => {
     if (activeTab === "notice") {
@@ -31,6 +34,114 @@ export const AdminBoards = () => {
       navigate("/boards/events/new");
     }
   };
+
+  const handleEdit = (item: any) => {
+    setEditId(item.id);
+    setEditRow({ ...item });
+  };
+
+  const handleEditChange = (field: string, value: string) => {
+    setEditRow((prev: any) => ({ ...prev, [field]: value }));
+  };
+
+  const handleEditSave = () => {
+    if (!editRow) return;
+    if (activeTab === "notice") {
+      // Implement edit save logic for notice
+    } else {
+      // Implement edit save logic for event
+    }
+    setEditId(null);
+    setEditRow(null);
+  };
+
+  const handleEditCancel = () => {
+    setEditId(null);
+    setEditRow(null);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!window.confirm('정말 삭제하시겠습니까?')) return;
+    try {
+      if (activeTab === "notice") {
+        await api.delete(`/admin/notices/${id}`);
+        setNotices((prev) => prev.filter((n) => n.id !== id));
+      } else {
+        await api.delete(`/admin/events/${id}`);
+        setEvents((prev) => prev.filter((n) => n.id !== id));
+      }
+    } catch (e) {
+      alert('삭제에 실패했습니다.');
+    }
+  };
+
+  const handleSearchChange = (field: string, value: string) => {
+    setSearchState(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSearch = () => {
+    setPage(0);
+  };
+
+  const handleReset = () => {
+    setSearchState({ title: '', content: '', startDate: '', endDate: '', status: '' });
+    setPage(0);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (activeTab === 'notice') {
+          const res = await api.get('/admin/notices', {
+            params: {
+              title: searchState.title,
+              content: searchState.content,
+              startDate: searchState.startDate,
+              endDate: searchState.endDate,
+              status: searchState.status,
+              page: page + 1,
+              size: 10,
+            },
+          });
+          const mapped = (res.data.items || []).map((item: any) => ({
+            id: item.noticeId,
+            title: item.title,
+            status: item.noticeType === 'NOTICE' ? '게시중' : '임시저장',
+            date: item.createdAt,
+            deleted: item.isDeleted,
+            views: item.views,
+            author: item.createdBy,
+          }));
+          setNotices(mapped);
+        } else {
+          const res = await api.get('/admin/events', {
+            params: {
+              title: searchState.title,
+              content: searchState.content,
+              startDate: searchState.startDate,
+              endDate: searchState.endDate,
+              status: searchState.status,
+              page: page + 1,
+              size: 10,
+            },
+          });
+          const mapped = (res.data.items || []).map((item: any) => ({
+            id: item.noticeId,
+            title: item.title,
+            status: item.noticeType === 'EVENT' ? '게시중' : '임시저장',
+            date: item.createdAt,
+            deleted: item.isDeleted,
+            views: item.views,
+            author: item.createdBy,
+          }));
+          setEvents(mapped);
+        }
+      } catch (e: any) {
+        console.error('목록을 불러오지 못했습니다.', e);
+      }
+    };
+    fetchData();
+  }, [activeTab, searchState, page]);
 
   return (
     <Fragment>
@@ -73,37 +184,66 @@ export const AdminBoards = () => {
           </div>
 
           {/* 검색 */}
-          <form onSubmit={(e) => e.preventDefault()} className="w-full p-6 bg-white rounded-xl shadow flex flex-col gap-4">
-            <div className="text-slate-800 text-lg font-semibold">검색 조건</div>
-            <div className="flex gap-4">
-              <div className="flex-1 flex flex-col gap-2">
-                <label className="text-slate-700 text-sm font-medium">제목</label>
-                <div className="h-12 px-4 bg-slate-50 rounded-lg outline outline-1 outline-slate-200 flex items-center">
+          <form onSubmit={e => { e.preventDefault(); handleSearch(); }} className="self-stretch p-6 bg-white rounded-xl shadow-[0px_2px_12px_0px_rgba(0,0,0,0.04)] flex flex-col justify-start items-start gap-4">
+            <div className="self-stretch justify-start text-slate-800 text-lg font-semibold">검색 조건</div>
+            <div className="self-stretch flex flex-col justify-start items-start gap-4">
+              <div className="self-stretch flex justify-start items-start gap-4">
+                <div className="flex-1 flex flex-col justify-start items-start gap-2">
+                  <div className="self-stretch text-slate-700 text-sm font-medium">제목</div>
                   <input
-                    type="text"
+                    className="self-stretch h-12 px-4 bg-slate-50 rounded-lg outline outline-1 outline-offset-[-1px] outline-slate-200"
                     placeholder="제목 입력"
-                    value={titleKeyword}
-                    onChange={(e) => setTitleKeyword(e.target.value)}
-                    className="w-full bg-transparent outline-none text-sm placeholder:text-slate-400"
+                    value={searchState.title}
+                    onChange={e => handleSearchChange('title', e.target.value)}
                   />
                 </div>
-              </div>
-              <div className="flex-1 flex flex-col gap-2">
-                <label className="text-slate-700 text-sm font-medium">내용</label>
-                <div className="h-12 px-4 bg-slate-50 rounded-lg outline outline-1 outline-slate-200 flex items-center">
+                <div className="flex-1 flex flex-col justify-start items-start gap-2">
+                  <div className="self-stretch text-slate-700 text-sm font-medium">내용</div>
                   <input
-                    type="text"
+                    className="self-stretch h-12 px-4 bg-slate-50 rounded-lg outline outline-1 outline-offset-[-1px] outline-slate-200"
                     placeholder="내용 입력"
-                    value={contentKeyword}
-                    onChange={(e) => setContentKeyword(e.target.value)}
-                    className="w-full bg-transparent outline-none text-sm placeholder:text-slate-400"
+                    value={searchState.content}
+                    onChange={e => handleSearchChange('content', e.target.value)}
                   />
                 </div>
               </div>
-            </div>
-            <div className="flex justify-end gap-2">
-              <button type="button" className="w-28 h-12 bg-slate-100 rounded-lg text-slate-500 text-sm font-medium hover:bg-slate-200 cursor-pointer">초기화</button>
-              <button type="submit" className="w-28 h-12 bg-indigo-600 rounded-lg text-white text-sm font-medium hover:bg-indigo-700 cursor-pointer">검색</button>
+              <div className="self-stretch flex justify-start items-start gap-4">
+                <div className="flex-1 flex flex-col justify-start items-start gap-2">
+                  <div className="self-stretch text-slate-700 text-sm font-medium">등록일</div>
+                  <div className="self-stretch flex justify-start items-center gap-2">
+                    <input
+                      type="date"
+                      className="flex-1 h-12 px-4 bg-slate-50 rounded-lg outline outline-1 outline-offset-[-1px] outline-slate-200"
+                      placeholder="시작일"
+                      value={searchState.startDate}
+                      onChange={e => handleSearchChange('startDate', e.target.value)}
+                    />
+                    <div className="text-slate-500 text-sm">~</div>
+                    <input
+                      type="date"
+                      className="flex-1 h-12 px-4 bg-slate-50 rounded-lg outline outline-1 outline-offset-[-1px] outline-slate-200"
+                      placeholder="종료일"
+                      value={searchState.endDate}
+                      onChange={e => handleSearchChange('endDate', e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="flex-1 flex flex-col justify-start items-start gap-2">
+                  <div className="self-stretch text-slate-700 text-sm font-medium">상태</div>
+                  <select
+                    className="self-stretch h-12 px-4 bg-slate-50 rounded-lg outline outline-1 outline-offset-[-1px] outline-slate-200"
+                    value={searchState.status}
+                    onChange={e => handleSearchChange('status', e.target.value)}
+                  >
+                    <option value="">전체</option>
+                    {statusOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                  </select>
+                </div>
+              </div>
+              <div className="self-stretch flex justify-end items-center gap-2">
+                <button type="button" className="w-28 h-12 bg-slate-100 rounded-lg flex justify-center items-center hover:bg-slate-200 transition-colors text-slate-500 text-sm font-medium" onClick={handleReset}>초기화</button>
+                <button type="submit" className="w-28 h-12 bg-indigo-600 rounded-lg flex justify-center items-center hover:bg-indigo-700 transition-colors text-white text-sm font-medium">검색</button>
+              </div>
             </div>
           </form>
 
@@ -117,50 +257,91 @@ export const AdminBoards = () => {
               <div className="w-[20%] flex justify-center items-center text-gray-700 text-sm font-semibold font-['Inter']">관리</div>
             </div>
 
-            {boardData.map((item) => (
+            {pagedData.map((item) => (
               <div key={item.id} className="self-stretch h-16 px-6 border-b border-gray-200 inline-flex justify-start items-center space-x-4">
                 <div className="w-[10%] flex justify-center items-center text-gray-500 text-sm font-normal font-['Inter']">{item.id}</div>
-                <div className="w-[40%] flex justify-center items-center text-gray-900 text-sm font-medium font-['Inter']">{item.title}</div>
-                <div className="w-[10%] flex justify-center items-center">
-                  <div className={`px-2 py-0.5 rounded-xl flex justify-center items-center text-xs font-medium font-['Inter'] leading-none ${
-                    item.status === "게시중" ? "bg-emerald-50 text-emerald-500" : "bg-amber-100 text-amber-600"
-                  }`}>
-                    {item.status}
-                  </div>
-                </div>
-                <div className="w-[20%] flex justify-center items-center text-gray-500 text-sm font-normal font-['Inter']">{item.date}</div>
-                <div className="w-[20%] flex justify-center items-center gap-2">
-                  <Link 
-                    // key={admin.adminId}
-                    // to={`/admin/accounts/${admin.adminId}`}
-                    key={item.id}
-                    to={`/admin/${activeTab}s/${item.id}/edit`}
-                    className="px-2 py-1 rounded border border-indigo-600 text-indigo-600 text-sm font-medium hover:bg-indigo-50 cursor-pointer">
-                    수정
-                  </Link>
-                  <button className="px-2 py-1 rounded border border-red-500 text-red-500 text-sm font-medium hover:bg-red-50 cursor-pointer">
-                    삭제
-                  </button>
-                </div>
+                {editId === item.id ? (
+                  <>
+                    {/* 제목 */}
+                    <div className="w-[40%] flex justify-center items-center">
+                      <input
+                        type="text"
+                        className="h-8 px-2 rounded border border-gray-200 text-sm w-full"
+                        value={editRow?.title || ''}
+                        onChange={e => handleEditChange('title', e.target.value)}
+                      />
+                    </div>
+                    {/* 상태 */}
+                    <div className="w-[10%] flex justify-center items-center">
+                      <select
+                        className="h-8 px-2 rounded border border-gray-200 text-sm"
+                        value={editRow?.status || ''}
+                        onChange={e => handleEditChange('status', e.target.value)}
+                      >
+                        {statusOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                      </select>
+                    </div>
+                    {/* 등록일 */}
+                    <div className="w-[20%] flex justify-center items-center">
+                      <input
+                        type="date"
+                        className="h-8 px-2 rounded border border-gray-200 text-sm"
+                        value={editRow?.date || ''}
+                        onChange={e => handleEditChange('date', e.target.value)}
+                      />
+                    </div>
+                    {/* 관리: 저장/취소 */}
+                    <div className="w-[20%] flex justify-center items-center gap-2">
+                      <button className="px-2 py-1 rounded border border-indigo-600 text-indigo-600 text-sm font-medium hover:bg-indigo-50 cursor-pointer" onClick={handleEditSave}>저장</button>
+                      <button className="px-2 py-1 rounded border border-gray-400 text-gray-500 text-sm font-medium hover:bg-gray-50 cursor-pointer" onClick={handleEditCancel}>취소</button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="w-[40%] flex justify-center items-center text-gray-900 text-sm font-medium font-['Inter']">{item.title}</div>
+                    <div className="w-[10%] flex justify-center items-center">
+                      <div className={`px-2 py-0.5 rounded-xl flex justify-center items-center text-xs font-medium font-['Inter'] leading-none ${
+                        item.status === "게시중" ? "bg-emerald-50 text-emerald-500" : "bg-amber-100 text-amber-600"
+                      }`}>
+                        {item.status}
+                      </div>
+                    </div>
+                    <div className="w-[20%] flex justify-center items-center text-gray-500 text-sm font-normal font-['Inter']">{item.date}</div>
+                    <div className="w-[20%] flex justify-center items-center gap-2">
+                      <button className="px-2 py-1 rounded border border-yellow-500 text-yellow-500 text-sm font-medium hover:bg-yellow-50 cursor-pointer" onClick={() => handleEdit(item)}>수정</button>
+                      <button className="px-2 py-1 rounded border border-red-500 text-red-500 text-sm font-medium hover:bg-red-50 cursor-pointer" onClick={() => handleDelete(item.id)}>삭제</button>
+                    </div>
+                  </>
+                )}
               </div>
             ))}
           </div>
 
-          {/* 페이지네이션 - ManagerInquiries에 있는거 가져다가 쓰기... 묘하게 다르네요... */}
+          {/* 동적 페이지네이션 (예약 관리와 동일) */}
           <div className="self-stretch py-4 flex justify-center items-center gap-1">
-            {[1, 2, 3].map((num) => (
+            <button
+              className="w-9 h-9 rounded-md flex justify-center items-center bg-white outline outline-1 outline-gray-200 text-gray-500 disabled:opacity-50"
+              onClick={() => setPage((p) => Math.max(0, p - 1))}
+              disabled={page === 0}
+            >
+              &lt;
+            </button>
+            {Array.from({ length: pageCount }, (_, i) => (
               <button
-                key={num}
-                className={`w-9 h-9 rounded-md flex justify-center items-center ${
-                  page === num - 1
-                    ? "bg-indigo-600 text-white"
-                    : "bg-white outline outline-1 outline-gray-200 text-gray-500"
-                }`}
-                onClick={() => setPage(num - 1)}
+                key={i}
+                className={`w-9 h-9 rounded-md flex justify-center items-center ${page === i ? "bg-indigo-600 text-white" : "bg-white outline outline-1 outline-gray-200 text-gray-500"}`}
+                onClick={() => setPage(i)}
               >
-                {num}
+                {i + 1}
               </button>
             ))}
+            <button
+              className="w-9 h-9 rounded-md flex justify-center items-center bg-white outline outline-1 outline-gray-200 text-gray-500 disabled:opacity-50"
+              onClick={() => setPage((p) => Math.min(pageCount - 1, p + 1))}
+              disabled={page === pageCount - 1 || pageCount === 0}
+            >
+              &gt;
+            </button>
           </div>
         </div>
       </div>

@@ -249,22 +249,26 @@ export const ManagerReservations = () => {
                         <div
                           className={`h-7 px-3 rounded-2xl inline-flex justify-center items-center ${
                             reservation.status === "CONFIRMED"
-                              ? "bg-yellow-100"
+                              ? "bg-amber-100"
+                              : reservation.status === "IN_PROGRESS"
+                              ? "bg-sky-100"
                               : reservation.status === "COMPLETED"
                               ? "bg-green-100"
                               : reservation.status === "CANCELED"
-                              ? "bg-red-100"
+                              ? "bg-rose-100"
                               : "bg-gray-100"
                           }`}
                         >
                         <div
                           className={`text-sm font-medium font-['Inter'] leading-none ${
                             reservation.status === "CONFIRMED"
-                              ? "text-yellow-800"
+                              ? "text-amber-800"
+                              : reservation.status === "IN_PROGRESS"
+                              ? "text-sky-800"
                               : reservation.status === "COMPLETED"
                               ? "text-green-800"
                               : reservation.status === "CANCELED"
-                              ? "text-red-800"
+                              ? "text-rose-800"
                               : "text-gray-800"
                           }`}
                         >

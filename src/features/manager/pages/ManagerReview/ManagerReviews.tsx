@@ -186,8 +186,8 @@ export const ManagerReviews = () => {
             </div>
             <div key={fadeKey} className="w-full fade-in">
               {reviews.length === 0 ? (
-                <div className="self-stretch h-16 px-4 border-b border-slate-200 flex items-center text-center">
-                  <div className="w-full text-sm text-slate-500">조회된 리뷰가 없습니다.</div>
+                <div className="self-stretch p-6 bg-slate-50 rounded-lg flex justify-center items-center mb-4 h-28">
+                  <div className="text-sm text-slate-500 text-center">조회된 리뷰가 없습니다.</div>
                 </div>
               ) : (
                 reviews.map((review) => (
