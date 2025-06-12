@@ -94,6 +94,7 @@ export const AdminBoards = () => {
         if (activeTab === 'notice') {
           const res = await api.get('/admin/notices', {
             params: {
+              type: 'NOTICE',
               title: searchState.title,
               content: searchState.content,
               startDate: searchState.startDate,
@@ -116,6 +117,7 @@ export const AdminBoards = () => {
         } else {
           const res = await api.get('/admin/events', {
             params: {
+              type: 'EVENT',
               title: searchState.title,
               content: searchState.content,
               startDate: searchState.startDate,

@@ -45,7 +45,6 @@ import { AdminBannerForm } from '@/features/admin/pages/AdminBanner/AdminBanneer
 import { AdminInquiries }from '@/features/admin/pages/AdminInquiry/AdminInquiries';
 import { AdminInquiryDetail } from '@/features/admin/pages/AdminInquiry/AdminInquiryDetail';
 
-
 // 공통
 import { GuardLayout } from '@/shared/components/GuardLayout';
 import CustomerNotFound from '@/features/customer/pages/CustomerNotFound';
