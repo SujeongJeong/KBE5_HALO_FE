@@ -119,7 +119,7 @@ export const ManagerMy = () => {
                 </div>
                 <div className="self-stretch inline-flex justify-start items-center gap-2">
                   <div className="w-28 justify-start text-slate-500 text-sm font-medium font-['Inter'] leading-none">주소</div>
-                  <div className="flex-1 justify-start text-slate-700 text-sm font-medium font-['Inter'] leading-none">{ manager.roadAddress } { manager.detailAddress }</div>
+                  <div className="flex-1 justify-start text-slate-700 text-sm font-medium font-['Inter'] leading-none">{ manager.roadAddress }, { manager.detailAddress }</div>
                 </div>
               </div>
             </div>
