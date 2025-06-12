@@ -482,17 +482,6 @@ export const ManagerMyForm = () => {
                     </div>
                   )}
                 </div>
-{/*                 
-                <button
-                  onClick={handleSubmit}
-                  className="self-stretch h-12 mt-6 bg-indigo-600 rounded-lg inline-flex justify-center items-center gap-2 cursor-pointer"
-                >
-                  <span className="material-symbols-outlined text-white">edit</span>
-                  <span className="text-white text-base font-semibold font-['Inter'] leading-tight">
-                    수정하기
-                  </span>
-                </button> */}
-
               </div>
             </div>
 
