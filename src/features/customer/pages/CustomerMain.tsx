@@ -2,6 +2,9 @@ import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Star } from "lucide-react";
+import homeIcon from '@/assets/home.svg';
+import airconIcon from '@/assets/aircon.svg';
+import strollerIcon from '@/assets/stroller.svg';
 
 export const CustomerMain = () => {
   const navigate = useNavigate();
@@ -47,8 +50,8 @@ export const CustomerMain = () => {
         <div className="self-stretch inline-flex justify-center items-start gap-6">
           <div className="w-96 h-96 p-8 bg-white rounded-2xl shadow-[0px_4px_6px_-4px_rgba(0,0,0,0.10)] shadow-[0px_10px_28px_4px_rgba(0,0,0,0.10)] outline outline-1 outline-offset-[-1px] outline-zinc-100 inline-flex flex-col justify-start items-center gap-6">
             <img
-              src="src/assets/home.svg"
-              alt="청소 아이콘"
+              src={homeIcon}
+              alt="가사 아이콘"
               className="w-20 h-20 object-contain"
             />
             <div className="self-stretch text-center justify-start text-zinc-800 text-2xl font-bold font-['Inter'] leading-7">가사 서비스</div>
@@ -59,7 +62,7 @@ export const CustomerMain = () => {
           </div>
           <div className="w-96 h-96 p-8 bg-white rounded-2xl shadow-[0px_4px_6px_0px_rgba(0,0,0,0.10)] shadow-[0px_10px_28px_20px_rgba(0,0,0,0.10)] outline outline-1 outline-offset-[-1px] outline-zinc-100 inline-flex flex-col justify-start items-center gap-6">
             <img
-              src="src/assets/aircon.svg"
+              src={airconIcon}
               alt="에어컨 청소 아이콘"
               className="w-20 h-20 object-contain"
             />
@@ -71,7 +74,7 @@ export const CustomerMain = () => {
           </div>
           <div className="w-96 h-96 p-8 bg-white rounded-2xl shadow-[0px_4px_6px_0px_rgba(0,0,0,0.10)] shadow-[0px_10px_28px_20px_rgba(0,0,0,0.10)] outline outline-1 outline-offset-[-1px] outline-zinc-100 inline-flex flex-col justify-start items-center gap-6">
             <img
-              src="src/assets/stroller.svg"
+              src={strollerIcon}
               alt="돌봄 아이콘"
               className="w-20 h-20 object-contain"
             />
