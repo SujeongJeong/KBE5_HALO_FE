@@ -144,10 +144,6 @@ export const CustomerMyReservationPage: React.FC = () => {
     return pages;
   };
 
-  const handleWriteReview = (reservationId: number) => {
-    navigate(`/my/reservations/${reservationId}`)
-  };
-
   return (
     <Fragment>
       <div className="flex self-stretch">
@@ -207,7 +203,17 @@ export const CustomerMyReservationPage: React.FC = () => {
                     <ReservationCard
                       key={reservation.reservationId}
                       reservation={reservation}
-                      onWriteReview={handleWriteReview}
+                      onWriteReview={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        navigate(`/my/reviews/${reservation.reservationId}`, {
+                          state: { 
+                            fromReservation: true,
+                            serviceName: reservation.serviceName,
+                            managerName: reservation.managerName
+                          }
+                        });
+                      }}
                     />
                   ))
                 )}

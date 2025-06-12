@@ -13,6 +13,8 @@ import ReservationStepFinalGuard from '@/features/customer/pages/reservation/Res
 import { CustomerInquiryPage } from '@/features/customer/pages/customerInquiry/CustomerInquiryPage';
 import { CustomerInquiryForm } from '@/features/customer/pages/customerInquiry/CustomerInquiryForm';
 import { CustomerInquiryDetail } from '@/features/customer/pages/customerInquiry/CustomerInquiryDetail';
+import { CustomerReviewForm } from '@/features/customer/pages/customerReview/CustomerReviewForm';
+import { CustomerReviewsPage } from '@/features/customer/pages/customerReview/CustomerReviewsPage';
 
 // 매니저
 import { ManagerLayout } from '@/features/manager/layouts/ManagerLayout';
@@ -84,12 +86,23 @@ export const router = createBrowserRouter([
         path: '/',
         element: <CustomerLayout />,
         children: [
+          // 메인
           { index: true, element: <CustomerMain /> },
+          // 수요자 회원가입
           { path: 'auth/signup', element: <CustomerSignup /> },
+          {
+            // 예약 요청
+            path: 'reservations',
+            children: [
+              { path: 'new', element: <ReservationStepOne /> },
+              { path: ':reservationId/step-2', element: <ReservationRouteGuard /> },
+              { path: ':reservationId/final', element: <ReservationStepFinalGuard /> },
+            ]
+          },
           {
             path: 'my',
             children: [
-              {
+              { // 문의 내역
                 path: 'inquiries',
                 children: [
                   { index: true, element: <CustomerInquiryPage /> },
@@ -98,21 +111,20 @@ export const router = createBrowserRouter([
                   { path: 'new', element: <CustomerInquiryForm /> }
                 ]
               },
-              {
+              { // 예약 내역
                 path: 'reservations',
                 children: [
                   { index: true, element: <CustomerMyReservationPage /> },
-                  { path: ':reservationId', element: <CustomerMyReservationDetail /> }
+                  { path: ':reservationId', element: <CustomerMyReservationDetail /> },
+                ]
+              },
+              { // 리뷰 내역
+                path: 'reviews',
+                children: [
+                  { index: true, element: <CustomerReviewsPage /> },
+                  { path: ':reservationId', element: <CustomerReviewForm /> }
                 ]
               }
-            ]
-          },
-          {
-            path: 'reservations',
-            children: [
-              { path: 'new', element: <ReservationStepOne /> },
-              { path: ':reservationId/step-2', element: <ReservationRouteGuard /> },
-              { path: ':reservationId/final', element: <ReservationStepFinalGuard /> },
             ]
           },
         ]
@@ -164,6 +176,7 @@ export const router = createBrowserRouter([
             children: [
               // 목록
               { index: true, element: <AdminAccounts /> },
+              
               // 등록
               { path: 'new', element: <AdminAccountForm /> },
               // 수정
