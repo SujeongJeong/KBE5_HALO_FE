@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchAdminManagerById, approveManager, rejectManager } from "@/features/admin/api/adminManager";
+import { fetchAdminManagerById, approveManager, rejectManager, approveTerminateManager } from "@/features/admin/api/adminManager";
 import type { AdminManagerDetail as AdminManagerDetailType } from "@/features/admin/types/AdminManagerType";
 
 export const AdminManagerDetail = () => {
@@ -49,6 +49,17 @@ export const AdminManagerDetail = () => {
       window.location.reload();
     } catch (err: any) {
       alert(err.message || '거절 실패');
+    }
+  };
+  // 계약해지대기 승인 핸들러
+  const handleTerminateApprove = async () => {
+    if (!manager) return;
+    try {
+      await approveTerminateManager(manager.managerId);
+      alert('계약해지 승인되었습니다.');
+      window.location.reload();
+    } catch (err: any) {
+      alert(err.message || '계약해지 승인 실패');
     }
   };
 
@@ -245,6 +256,16 @@ export const AdminManagerDetail = () => {
                 onClick={handleReject}
               >
                 거절
+              </button>
+            </div>
+          )}
+          {manager.status === 'TERMINATION_PENDING' && (
+            <div className="flex gap-2 mt-4 justify-end">
+              <button
+                className="px-4 py-2 border border-indigo-600 text-indigo-600 rounded bg-white hover:bg-indigo-600 hover:text-white transition-colors"
+                onClick={handleTerminateApprove}
+              >
+                계약해지 승인
               </button>
             </div>
           )}

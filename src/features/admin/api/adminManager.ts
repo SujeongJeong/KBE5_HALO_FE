@@ -45,4 +45,11 @@ export const rejectManager = async (managerId: number) => {
   const res = await api.patch(`/admin/managers/applies/${managerId}`, { status: "REJECTED" });
   if (!res.data.success) throw new Error(res.data.message || '매니저 거절에 실패했습니다.');
   return res.data.body;
+};
+
+// 계약해지대기 승인
+export const approveTerminateManager = async (managerId: number) => {
+  const res = await api.patch(`/admin/managers/terminate/${managerId}`);
+  if (!res.data.success) throw new Error(res.data.message || '계약해지 승인에 실패했습니다.');
+  return res.data.body;
 }; 
