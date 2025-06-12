@@ -128,8 +128,8 @@ export const ManagerSignup = () => {
     if (!roadAddress.trim() || !detailAddress.trim() || !latitude || !longitude) {
       newErrors.address = '주소를 다시 입력해주세요.';
     }
-    if (form.profileImageId === null) newErrors.profileImageId = "프로필 사진을 업로드해주세요.";
-    if (form.fileId === null) newErrors.fileId = "첨부파일을 업로드해주세요.";
+    // if (form.profileImageId === null) newErrors.profileImageId = "프로필 사진을 업로드해주세요.";
+    // if (form.fileId === null) newErrors.fileId = "첨부파일을 업로드해주세요.";
     if (form.availableTimes.length === 0) newErrors.availableTimes = "업무 가능 시간을 1개 이상 선택해주세요.";
 
     setErrors(newErrors);

@@ -10,6 +10,8 @@ interface AddressSearchProps {
   setDetailAddress: (val: string) => void;
 }
 
+const GOOGLE_MAP_LIBRARIES = ['places'] as ["places"];
+
 const AddressSearch = ({
     roadAddress,
     detailAddress,
@@ -22,7 +24,7 @@ const AddressSearch = ({
     const { setAddress } = useAddressStore();
     const { isLoaded } = useLoadScript({
       googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-      libraries: ['places'] as any,
+      libraries: GOOGLE_MAP_LIBRARIES,
     });
 
   // 도로명주소 자동완성 초기화
