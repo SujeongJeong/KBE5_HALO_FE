@@ -19,6 +19,28 @@ export const ManagerReservations = () => {
   const [customerNameKeyword, setCustomerNameKeyword] = useState("");
   const fromDateRef = useRef<HTMLInputElement>(null);
 
+  const StatusBadge = ({
+    value,
+    trueText,
+    falseText,
+  }: {
+    value: boolean;
+    trueText: string;
+    falseText: string;
+  }) => (
+    <div
+      className={`h-7 px-3 rounded-2xl inline-flex justify-center items-center
+        ${value ? "bg-green-100" : "bg-slate-100"}`}
+    >
+      <div
+        className={`text-sm font-medium font-['Inter'] leading-none
+          ${value ? "text-green-800" : "text-slate-800"}`}
+      >
+        {value ? trueText : falseText}
+      </div>
+    </div>
+  );
+
   const fetchReservations = (paramsOverride?: Partial<ReturnType<typeof getCurrentParams>>) => {
     const params = getCurrentParams();
     const finalParams = { ...params, ...paramsOverride };
@@ -142,8 +164,10 @@ export const ManagerReservations = () => {
                     className="w-full h-12 px-4 bg-slate-50 rounded-lg border border-slate-200 text-slate-700 text-sm focus:outline-indigo-500"
                   >
                     <option value="">전체</option>
-                    <option value="PENDING">답변 대기</option>
-                    <option value="ANSWERED">답변 완료</option>
+                    <option value="CONFIRMED">예약 완료</option>
+                    <option value="IN_PROGRESS">서비스 진행 중</option>
+                    <option value="COMPLETED">방문 완료</option>
+                    <option value="CANCELED">예약 취소</option>
                   </select>
                 </div>
                 <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
@@ -154,8 +178,8 @@ export const ManagerReservations = () => {
                     className="w-full h-12 px-4 bg-slate-50 rounded-lg border border-slate-200 text-slate-700 text-sm focus:outline-indigo-500"
                   >
                     <option value="">전체</option>
-                    <option value="true">Y</option>
-                    <option value="false">N</option>
+                    <option value="true">완료</option>
+                    <option value="false">대기</option>
                   </select>
                 </div>
                 <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
@@ -166,20 +190,20 @@ export const ManagerReservations = () => {
                     className="w-full h-12 px-4 bg-slate-50 rounded-lg border border-slate-200 text-slate-700 text-sm focus:outline-indigo-500"
                   >
                     <option value="">전체</option>
-                    <option value="true">Y</option>
-                    <option value="false">N</option>
+                    <option value="true">완료</option>
+                    <option value="false">대기</option>
                   </select>
                 </div>
                 <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
-                  <div className="self-stretch justify-start text-slate-700 text-sm font-medium font-['Inter'] leading-none">리뷰 여부</div>
+                  <div className="self-stretch justify-start text-slate-700 text-sm font-medium font-['Inter'] leading-none">리뷰작성 여부</div>
                   <select
                     value={isReviewed}
                     onChange={(e) => setIsReviewed(e.target.value)}
                     className="w-full h-12 px-4 bg-slate-50 rounded-lg border border-slate-200 text-slate-700 text-sm focus:outline-indigo-500"
                   >
                     <option value="">전체</option>
-                    <option value="true">Y</option>
-                    <option value="false">N</option>
+                    <option value="true">완료</option>
+                    <option value="false">대기</option>
                   </select>
                 </div>
               </div>
@@ -219,7 +243,7 @@ export const ManagerReservations = () => {
                     <div className="w-[12%] text-center text-sm font-semibold text-slate-700 font-semibold font-['Inter'] leading-none">예약 상태</div>
                     <div className="w-[5%] text-center text-sm font-semibold text-slate-700 font-semibold font-['Inter'] leading-none">체크인</div>
                     <div className="w-[8%] text-center text-sm font-semibold text-slate-700 font-semibold font-['Inter'] leading-none">체크아웃</div>
-                    <div className="w-[5%] text-center text-sm font-semibold text-slate-700 font-semibold font-['Inter'] leading-none">리뷰</div>
+                    <div className="w-[5%] text-center text-sm font-semibold text-slate-700 font-semibold font-['Inter'] leading-none">리뷰작성</div>
                   </div>
                 </div>
               </div>
@@ -276,9 +300,15 @@ export const ManagerReservations = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="w-[5%] text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">{reservation.isCheckedIn ? 'Y' : 'N'}</div>
-                    <div className="w-[8%] text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">{reservation.isCheckedOut ? 'Y' : 'N'}</div>
-                    <div className="w-[5%] text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">{reservation.isReviewed ? 'Y' : 'N'}</div>
+                    <div className="w-[5%] text-center">
+                      <StatusBadge value={reservation.isCheckedIn} trueText="완료" falseText="대기" />
+                    </div>
+                    <div className="w-[8%] text-center">
+                      <StatusBadge value={reservation.isCheckedOut} trueText="완료" falseText="대기" />
+                    </div>
+                    <div className="w-[5%] text-center">
+                      <StatusBadge value={reservation.isReviewed} trueText="완료" falseText="대기" />
+                    </div>
                   </Link>
                 ))
               )}
