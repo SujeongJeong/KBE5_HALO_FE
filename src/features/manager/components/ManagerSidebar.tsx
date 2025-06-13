@@ -69,7 +69,7 @@ export const ManagerSidebar = () => {
                     className={`h-11 px-6 flex items-center gap-3 w-full overflow-hidden ${
                       isActive
                         ? "bg-violet-50 border-l-[3px] border-indigo-600 text-indigo-600 font-semibold"
-                        : "text-gray-500 font-medium"
+                        : "text-gray-500 font-medium hover:text-indigo-600 hover:font-semibold"
                     }`}
                   >
                     <span className="whitespace-nowrap overflow-hidden text-ellipsis">{name}</span>
