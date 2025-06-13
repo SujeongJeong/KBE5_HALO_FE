@@ -28,7 +28,10 @@ export const AdminSidebar = () => {
       <div className="w-60 h-screen pb-6 bg-white border-r border-gray-200 flex flex-col justify-between">
         {/* 상단 영역 */}
         <div className="flex flex-col gap-6">
-          <div className="p-6 flex items-center gap-3">
+          <div
+            className="p-6 flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
+            onClick={() => navigate('/admin')}
+          >
             <div className="w-8 h-8 bg-indigo-600 rounded-md flex justify-center items-center">
               <div className="text-white text-base font-bold">H</div>
             </div>

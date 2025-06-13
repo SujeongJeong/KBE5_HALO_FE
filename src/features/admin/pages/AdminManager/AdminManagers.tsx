@@ -1,11 +1,13 @@
 import { Fragment, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { DEFAULT_PAGE_SIZE } from "@/shared/constants/constants";
 import { fetchAdminManagers } from "@/features/admin/api/adminManager";
 import type { AdminManager } from "@/features/admin/types/AdminManagerType";
 
 export const AdminManagers = () => {
-  const [activeTab, setActiveTab] = useState<'all' | 'active' | 'applied'>('all');
+  const location = useLocation();
+  const initialTab = location.state?.tab === 'applied' ? 'applied' : 'all';
+  const [activeTab, setActiveTab] = useState<'all' | 'active' | 'applied'>(initialTab);
   const [nameKeyword, setNameKeyword] = useState('');
   const [phoneKeyword, setPhoneKeyword] = useState('');
   const [emailKeyword, setEmailKeyword] = useState('');

@@ -6,6 +6,14 @@ import type { SearchCustomerInquiries, SearchManagerInquiries } from "@/features
 import { isValidDateRange } from "@/shared/utils/validation";
 import { DEFAULT_PAGE_SIZE } from "@/shared/constants/constants";
 
+// yyyy-MM-dd 또는 Date 객체를 yyyy-MM-ddTHH:mm:ss 형식으로 변환
+function toLocalDateTimeString(date: string | Date): string {
+  if (!date) return "";
+  const d = typeof date === 'string' ? new Date(date) : date;
+  if (isNaN(d.getTime())) return "";
+  return `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}T00:00:00`;
+}
+
 export const AdminInquiries = () => {
   const [activeTab, setActiveTab] = useState<'customer' | 'manager'>('customer');
   const [fadeKey, setFadeKey] = useState(0);
@@ -29,7 +37,14 @@ export const AdminInquiries = () => {
       return;
     }
 
-    searchAdminInquiries(activeTab, finalParams)
+    // 날짜 파라미터 변환
+    const apiParams = {
+      ...finalParams,
+      fromCreatedAt: finalParams.fromCreatedAt ? toLocalDateTimeString(finalParams.fromCreatedAt) : undefined,
+      toCreatedAt: finalParams.toCreatedAt ? toLocalDateTimeString(finalParams.toCreatedAt) : undefined,
+    };
+
+    searchAdminInquiries(activeTab, apiParams)
       .then((res) => {
         setInquiries(res.content);
         setTotal(res.page.totalElements);
