@@ -346,8 +346,10 @@ return (
         <div className="flex flex-col gap-6">
           <div className="text-slate-800 text-lg font-semibold">프로필 정보</div>
           <div className="flex gap-4">
-            <div className="w-28 h-28 bg-slate-100 rounded-full flex justify-center items-center">
-              <div className="w-14 h-14 bg-slate-300" />
+            <div className="w-28 h-28 bg-slate-100 rounded-[60px] flex justify-center items-center">
+              <span className="material-symbols-outlined text-[64px] text-slate-500 leading-none inline-block">
+                face
+              </span>
             </div>
             <div className="flex flex-col gap-2">
               <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-none">프로필 사진 *</label>

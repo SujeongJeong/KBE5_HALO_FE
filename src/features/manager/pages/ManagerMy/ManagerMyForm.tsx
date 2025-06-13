@@ -388,9 +388,9 @@ export const ManagerMyForm = () => {
                 <div className="self-stretch justify-start text-slate-800 text-lg font-semibold font-['Inter'] leading-snug">프로필 정보</div>
                 <div className="self-stretch inline-flex justify-start items-start gap-4">
                   <div className="w-28 h-28 bg-slate-100 rounded-[60px] flex justify-center items-center">
-                    <div className="w-10 h-10 relative overflow-hidden">
-                      <div className="w-14 h-14 left-[3.40px] top-[2.50px] absolute bg-slate-300" />
-                    </div>
+                    <span className="material-symbols-outlined text-[64px] text-slate-500 leading-none inline-block">
+                      face
+                    </span>
                   </div>
                   <div className="flex-1 inline-flex flex-col justify-center items-start gap-2">
                     <div className="self-stretch justify-start text-slate-700 text-sm font-medium font-['Inter'] leading-none">프로필 사진</div>
