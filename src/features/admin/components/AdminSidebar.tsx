@@ -57,7 +57,7 @@ export const AdminSidebar = () => {
                   return `h-11 px-6 flex items-center gap-3 w-full ${
                     active
                       ? "bg-violet-50 border-l-[3px] border-indigo-600 text-indigo-600 font-semibold"
-                      : "text-gray-500 font-medium hover:bg-violet-50 hover:text-indigo-600 hover:font-semibold hover:border-l-[3px] hover:border-indigo-200"
+                      : "text-gray-500 font-medium hover:text-indigo-600 hover:font-semibold"
                   }`;
                 }}
               >

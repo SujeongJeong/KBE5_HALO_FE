@@ -17,7 +17,7 @@ const CustomerSidebar: React.FC = () => {
 
   const baseClasses = 'w-full px-6 py-4 flex items-center';
   const activeClasses = 'bg-violet-50 text-indigo-600 font-semibold';
-  const inactiveClasses = 'text-stone-500 hover:bg-violet-50 hover:text-indigo-600 border-b border-zinc-100';
+  const inactiveClasses = 'text-stone-500 hover:text-indigo-600 hover:font-semibold border-b border-zinc-100';
 
   return (
     <aside className="max-w-xs w-full flex flex-col space-y-6">
