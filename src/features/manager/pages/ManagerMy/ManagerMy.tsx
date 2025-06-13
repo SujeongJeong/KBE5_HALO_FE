@@ -93,7 +93,7 @@ export const ManagerMy = () => {
         <div className="self-stretch h-[1049px] p-6 flex flex-col justify-start items-start gap-6">
           <div className="self-stretch p-8 bg-white rounded-xl shadow-[0px_2px_12px_0px_rgba(0,0,0,0.04)] inline-flex justify-start items-start gap-8">
             <div className="w-40 h-40 bg-slate-100 rounded-[80px] flex justify-center items-center">
-              <div className="justify-start text-slate-400 text-5xl font-bold font-['Inter'] leading-[57.60px]">홍</div>
+              <div className="justify-start text-slate-400 text-5xl font-bold font-['Inter'] leading-[57.60px]">{manager.userName?.charAt(0)}</div>
             </div>
             <div className="flex-1 inline-flex flex-col justify-start items-start gap-6">
               <div className="self-stretch flex flex-col justify-start items-start gap-4">
