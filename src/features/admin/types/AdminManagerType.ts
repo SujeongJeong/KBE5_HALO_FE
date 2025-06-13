@@ -19,7 +19,7 @@ export interface AdminManagerDetail {
   roadAddress: string;
   detailAddress: string;
   status: string;
-  availableTimes: string[];
+  availableTimes: AvailableTime[];
   averageRating: number | null;
   reservationCount: number;
   reviewCount: number;
@@ -31,5 +31,10 @@ export interface AdminManagerDetail {
   contractAt: string | null;
   terminatedAt: string | null;
   terminationReason: string | null;
+}
 
+export interface AvailableTime {
+  timeId: number | null;
+  dayOfWeek: string;
+  time: string;
 }
