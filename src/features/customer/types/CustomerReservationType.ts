@@ -82,7 +82,7 @@ export interface ManagerMatchingRspType {
 
 // 예약 확정 전 취소 요청 타입
 export interface PreCancelReqType {
-    managerIds: number[];
+   matchedManagers: number[];
   }
 
 // 예약 확정 후 취소 요청 타입
