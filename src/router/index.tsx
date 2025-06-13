@@ -15,7 +15,7 @@ import { CustomerInquiryForm } from '@/features/customer/pages/customerInquiry/C
 import { CustomerInquiryDetail } from '@/features/customer/pages/customerInquiry/CustomerInquiryDetail';
 import { CustomerReviewForm } from '@/features/customer/pages/customerReview/CustomerReviewForm';
 import { CustomerReviewsPage } from '@/features/customer/pages/customerReview/CustomerReviewsPage';
-import { CustomerMyInfo } from '@/features/customer/pages/\bCustomerMyInfo';
+import { CustomerMyInfo } from '@/features/customer/pages/CustomerMyInfo';
 
 // 매니저
 import { ManagerLayout } from '@/features/manager/layouts/ManagerLayout';
