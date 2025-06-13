@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { fetchAdminManagerById, approveManager, rejectManager, approveTerminateManager } from "@/features/admin/api/adminManager";
 import type { AdminManagerDetail as AdminManagerDetailType } from "@/features/admin/types/AdminManagerType";
@@ -8,6 +8,29 @@ export const AdminManagerDetail = () => {
   const [manager, setManager] = useState<AdminManagerDetailType | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const weekDays = [
+    { label: "월요일", key: "MONDAY" },
+    { label: "화요일", key: "TUESDAY" },
+    { label: "수요일", key: "WEDNESDAY" },
+    { label: "목요일", key: "THURSDAY" },
+    { label: "금요일", key: "FRIDAY" },
+    { label: "토요일", key: "SATURDAY" },
+    { label: "일요일", key: "SUNDAY" },
+  ];
+
+  const groupedTimes = useMemo(() => {
+    const map: Record<string, string[]> = {};
+    if (!manager || !manager.availableTimes) return map;
+    for (const { dayOfWeek, time } of manager.availableTimes) {
+      if (!map[dayOfWeek]) map[dayOfWeek] = [];
+      map[dayOfWeek].push(time.slice(0, 5));
+    }
+    for (const key in map) {
+      map[key].sort();
+    }
+    return map;
+  }, [manager]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -159,15 +182,16 @@ export const AdminManagerDetail = () => {
           <div className="flex flex-col gap-2">
             <div className="text-slate-500 text-base font-medium">업무 가능 시간</div>
             <div className="p-4 bg-slate-50 rounded-lg flex flex-col gap-2">
-              {manager.availableTimes && manager.availableTimes.length > 0 ? (
-                manager.availableTimes.map((time, idx) => (
-                  <div key={idx} className="inline-flex justify-start items-center">
-                    <div className="w-28 text-slate-700 text-sm font-medium">{time}</div>
+              {weekDays.map(({ label, key }) => {
+                const times = groupedTimes[key];
+                const displayText = times?.length ? times.join(', ') : '휴무';
+                return (
+                  <div key={key} className="inline-flex justify-start items-center">
+                    <div className="w-28 text-slate-700 text-sm font-medium">{label}</div>
+                    <div className="flex-1 text-slate-700 text-sm font-medium">{displayText}</div>
                   </div>
-                ))
-              ) : (
-                <div className="text-slate-700 text-sm font-medium">-</div>
-              )}
+                );
+              })}
             </div>
           </div>
           <div className="flex flex-col gap-3">
