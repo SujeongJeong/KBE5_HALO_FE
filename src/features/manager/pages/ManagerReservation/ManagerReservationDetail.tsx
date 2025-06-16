@@ -6,6 +6,7 @@ import { CleanignLogModal } from "@/features/manager/components/ManagerCleaningL
 import { createManagerReview } from "@/features/manager/api/managerReview";
 import { isValidLength } from "@/shared/utils/validation";
 import { getReservationStatusStyle } from "@/features/manager/utils/ManagerReservationStauts";
+import { formatTimeRange } from "@/shared/utils/format";
 
 
 
@@ -20,7 +21,6 @@ export const ManagerReservationDetail = () => {
 
   const [rating, setRating] = useState(0);
   const [content, setContent] = useState("");
-
 
   // 문의사항 조회
   useEffect(() => {
@@ -139,6 +139,10 @@ export const ManagerReservationDetail = () => {
                 <div className="self-stretch inline-flex justify-start items-center gap-2">
                   <div className="w-40 justify-start text-slate-500 text-sm font-medium font-['Inter'] leading-none">예약 일시</div>
                   <div className="flex-1 justify-start text-slate-700 text-sm font-medium font-['Inter'] leading-none">{reservation.requestDate}</div>
+                </div>
+                <div className="self-stretch inline-flex justify-start items-center gap-2">
+                  <div className="w-40 justify-start text-slate-500 text-sm font-medium font-['Inter'] leading-none">예약 시간</div>
+                  <div className="flex-1 justify-start text-slate-700 text-sm font-medium font-['Inter'] leading-none">{formatTimeRange(reservation.startTime, reservation.turnaround)}</div>
                 </div>
                 <div className="self-stretch inline-flex justify-start items-center gap-2">
                   <div className="w-40 justify-start text-slate-500 text-sm font-medium font-['Inter'] leading-none">서비스 종류</div>

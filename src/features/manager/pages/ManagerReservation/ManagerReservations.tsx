@@ -5,21 +5,55 @@ import { DEFAULT_PAGE_SIZE } from "@/shared/constants/constants";
 import { searchManagerReservations } from "@/features/manager/api/managerReservation";
 import { Link } from "react-router-dom";
 import { getReservationStatusStyle } from "@/features/manager/utils/ManagerReservationStauts";
+import { formatTimeRange } from "@/shared/utils/format";
 
 export const ManagerReservations = () => {
+  const statuses = [
+    // { value: "PRE_CANCELED", label: "예약 확정 전 취소" },
+    // { value: "REQUESTED", label: "예약 요청" },
+    { value: "CONFIRMED", label: "예약 완료" },
+    { value: "IN_PROGRESS", label: "서비스 진행 중" },
+    { value: "COMPLETED", label: "방문 완료" },
+    // { value: "CANCELED", label: "예약 취소" },
+    { value: "REJECTED", label: "예약 거절" },
+    // { value: "REFUND_PROCESSING", label: "환불 진행중" },
+    // { value: "REFUND_COMPLETED", label: "환불 완료" },
+    // { value: "REFUND_REJECTED", label: "환불 거절" },
+  ];
   const [fadeKey, setFadeKey] = useState(0);
   const [reservations, setReservations] = useState<ManagerReservationType[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(0);
   const [fromRequestDate, setFromRequestDate] = useState<string>("");
   const [toRequestDate, setToRequestDate] = useState<string>(""); 
-  const [reservationStatus, setReservationStatus] = useState("");
+  // const [reservationStatus, setReservationStatus] = useState("");
+  const [selectedStatuses, setSelectedStatuses] = useState<string[]>(
+    statuses.map((s) => s.value) // 전체 선택으로 시작
+  );
   const [isCheckedIn, setIsCheckedIn] = useState<string>("");
   const [isCheckedOut, setIsCheckedOut] = useState<string>("");
   const [isReviewed, setIsReviewed] = useState<string>("");
   const [customerNameKeyword, setCustomerNameKeyword] = useState("");
   const fromDateRef = useRef<HTMLInputElement>(null);
 
+
+  // "전체" 토글 로직
+  const handleToggleAll = () => {
+    if (selectedStatuses.length === statuses.length) {
+      setSelectedStatuses([]);
+    } else {
+      setSelectedStatuses(statuses.map((s) => s.value));
+    }
+  };
+
+  // 개별 상태 토글
+  const handleStatusChange = (value: string) => {
+    setSelectedStatuses((prev) =>
+      prev.includes(value)
+        ? prev.filter((v) => v !== value)
+        : [...prev, value]
+    );
+  };
 
   const StatusBadge = ({
     value,
@@ -64,7 +98,11 @@ export const ManagerReservations = () => {
   const getCurrentParams = () => ({
     fromRequestDate,
     toRequestDate,
-    reservationStatus,
+    // reservationStatus,
+    reservationStatus: 
+      selectedStatuses.length === statuses.length || selectedStatuses.length === 0
+        ? ""
+        : selectedStatuses.join(","),
     isCheckedIn,
     isCheckedOut,
     isReviewed,
@@ -96,7 +134,8 @@ export const ManagerReservations = () => {
 
     setFromRequestDate(resetState.fromRequestDate);
     setToRequestDate(resetState.toRequestDate);
-    setReservationStatus(resetState.reservationStatus);
+    // setReservationStatus(resetState.reservationStatus);
+    setSelectedStatuses(statuses.map((s) => s.value)); // 전체 선택으로 초기화!
     setIsCheckedIn(resetState.isCheckedIn);
     setIsCheckedOut(resetState.isCheckedOut);
     setIsReviewed(resetState.isReviewed);
@@ -127,24 +166,56 @@ export const ManagerReservations = () => {
             <div className="self-stretch flex flex-col justify-start items-start gap-4">
               <div className="self-stretch inline-flex justify-start items-start gap-4">
                 <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
+                  <div className="self-stretch justify-start text-slate-700 text-sm font-medium font-['Inter'] leading-none">예약 상태</div>
+                  <div className="self-stretch h-12 px-4 bg-slate-50 rounded-lg outline outline-1 outline-offset-[-1px] outline-slate-200 inline-flex justify-start items-center">
+                    {/* 체크박스들을 감싸는 가로 flex 영역 */}
+                    <div className="flex flex-wrap gap-4">
+                      {/* 전체 체크박스 */}
+                      <label className="inline-flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          checked={selectedStatuses.length === statuses.length}
+                          onChange={handleToggleAll}
+                        />
+                        <span className="text-sm text-slate-700 font-semibold">전체</span>
+                      </label>
+
+                      {/* 개별 체크박스들 */}
+                      {statuses.map((status) => (
+                        <label key={status.value} className="inline-flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            value={status.value}
+                            checked={selectedStatuses.includes(status.value)}
+                            onChange={() => handleStatusChange(status.value)}
+                          />
+                          <span className="text-sm text-slate-700">{status.label}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
                   <div className="self-stretch justify-start text-slate-700 text-sm font-medium font-['Inter'] leading-none">예약 날짜</div>
                   <div className="self-stretch inline-flex justify-start items-center gap-2">
                     <input
-                        type="date"
-                        ref={fromDateRef}
-                        value={fromRequestDate}
-                        onChange={(e) => setFromRequestDate(e.target.value)}
-                        className="flex-1 h-12 px-4 bg-slate-50 rounded-lg border border-slate-200 text-slate-700 text-sm placeholder:text-slate-400 focus:outline-indigo-500 "
-                      />
-                      <span className="text-slate-500 text-sm">~</span>
-                      <input
-                        type="date"
-                        value={toRequestDate}
-                        onChange={(e) => setToRequestDate(e.target.value)}
-                        className="flex-1 h-12 px-4 bg-slate-50 rounded-lg border border-slate-200 text-slate-700 text-sm placeholder:text-slate-400 focus:outline-indigo-500"
-                      />
-                    </div>
+                      type="date"
+                      ref={fromDateRef}
+                      value={fromRequestDate}
+                      onChange={(e) => setFromRequestDate(e.target.value)}
+                      className="flex-1 h-12 px-4 bg-slate-50 rounded-lg border border-slate-200 text-slate-700 text-sm placeholder:text-slate-400 focus:outline-indigo-500 "
+                    />
+                    <span className="text-slate-500 text-sm">~</span>
+                    <input
+                      type="date"
+                      value={toRequestDate}
+                      onChange={(e) => setToRequestDate(e.target.value)}
+                      className="flex-1 h-12 px-4 bg-slate-50 rounded-lg border border-slate-200 text-slate-700 text-sm placeholder:text-slate-400 focus:outline-indigo-500"
+                    />
                   </div>
+                </div>
+                
                 <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
                   <div className="self-stretch justify-start text-slate-700 text-sm font-medium font-['Inter'] leading-none">고객명</div>
                   <div className="self-stretch h-12 px-4 bg-slate-50 rounded-lg outline outline-1 outline-offset-[-1px] outline-slate-200 inline-flex justify-start items-center">
@@ -157,21 +228,8 @@ export const ManagerReservations = () => {
                   </div>
                 </div>
               </div>
+
               <div className="self-stretch inline-flex justify-start items-start gap-4">
-                <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
-                  <div className="self-stretch justify-start text-slate-700 text-sm font-medium font-['Inter'] leading-none">예약 상태</div>
-                  <select
-                    value={reservationStatus}
-                    onChange={(e) => setReservationStatus(e.target.value)}
-                    className="w-full h-12 px-4 bg-slate-50 rounded-lg border border-slate-200 text-slate-700 text-sm focus:outline-indigo-500"
-                  >
-                    <option value="">전체</option>
-                    <option value="CONFIRMED">예약 완료</option>
-                    <option value="IN_PROGRESS">서비스 진행 중</option>
-                    <option value="COMPLETED">방문 완료</option>
-                    <option value="CANCELED">예약 취소</option>
-                  </select>
-                </div>
                 <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
                   <div className="self-stretch justify-start text-slate-700 text-sm font-medium font-['Inter'] leading-none">체크인 여부</div>
                   <select
@@ -239,8 +297,9 @@ export const ManagerReservations = () => {
                   <div className="flex-1 flex justify-center items-center gap-4">
                     <div className="w-[5%] text-center text-sm font-semibold text-slate-700 font-semibold font-['Inter'] leading-none">번호</div>
                     <div className="w-[15%] text-center text-sm font-semibold text-slate-700 font-semibold font-['Inter'] leading-none">청소 요청 날짜</div>
+                    <div className="w-[15%] text-center text-sm font-semibold text-slate-700 font-semibold font-['Inter'] leading-none">시간</div>
                     <div className="w-[10%] text-center text-sm font-semibold text-slate-700 font-semibold font-['Inter'] leading-none">고객명</div>
-                    <div className="w-[30%] text-center text-sm font-semibold text-slate-700 font-semibold font-['Inter'] leading-none">고객 주소</div>
+                    <div className="w-[20%] text-center text-sm font-semibold text-slate-700 font-semibold font-['Inter'] leading-none">고객 주소</div>
                     <div className="w-[10%] text-center text-sm font-semibold text-slate-700 font-semibold font-['Inter'] leading-none">서비스</div>
                     <div className="w-[12%] text-center text-sm font-semibold text-slate-700 font-semibold font-['Inter'] leading-none">예약 상태</div>
                     <div className="w-[5%] text-center text-sm font-semibold text-slate-700 font-semibold font-['Inter'] leading-none">체크인</div>
@@ -271,10 +330,13 @@ export const ManagerReservations = () => {
                       <div className="w-[15%] text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">
                         {reservation.requestDate}
                       </div>
+                      <div className="w-[15%] text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">
+                        {formatTimeRange(reservation.startTime, reservation.turnaround)}
+                      </div>
                       <div className="w-[10%] text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">
                         {reservation.customerName}
                       </div>
-                      <div className="w-[30%] text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">
+                      <div className="w-[20%] text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">
                         {reservation.customerAddress}
                       </div>
                       <div className="w-[10%] text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">
