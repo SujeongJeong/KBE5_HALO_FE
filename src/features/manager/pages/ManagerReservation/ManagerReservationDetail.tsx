@@ -5,6 +5,7 @@ import { checkIn, checkOut, getManagerReservation } from "@/features/manager/api
 import { CleanignLogModal } from "@/features/manager/components/ManagerCleaningLogModal";
 import { createManagerReview } from "@/features/manager/api/managerReview";
 import { isValidLength } from "@/shared/utils/validation";
+import { getReservationStatusStyle } from "@/features/manager/utils/ManagerReservationStauts";
 
 
 
@@ -144,34 +145,19 @@ export const ManagerReservationDetail = () => {
                   <div className="flex-1 justify-start text-slate-700 text-sm font-medium font-['Inter'] leading-none">{reservation.serviceName}</div>
                 </div>
                 <div className="self-stretch inline-flex justify-start items-center gap-2">
-                  <Fragment>
-                    <div className="w-40 justify-start text-slate-500 text-sm font-medium font-['Inter'] leading-none">예약 상태</div>
-                    <div className={`h-7 px-3 rounded-2xl flex justify-center items-center ${
-                      reservation.status === "CONFIRMED"
-                        ? "bg-amber-100"
-                        : reservation.status === "IN_PROGRESS"
-                        ? "bg-sky-100"
-                        : reservation.status === "COMPLETED"
-                        ? "bg-green-100"
-                        : reservation.status === "CANCELED"
-                        ? "bg-rose-100"
-                        : "bg-gray-100"
-                      }`}
-                    >
-                    <div className={`justify-start text-sm font-medium font-['Inter'] leading-none ${
-                          reservation.status === "CONFIRMED"
-                            ? "text-amber-800"
-                            : reservation.status === "IN_PROGRESS"
-                            ? "text-sky-800"
-                            : reservation.status === "COMPLETED"
-                            ? "text-green-800"
-                            : reservation.status === "CANCELED"
-                            ? "text-rose-800"
-                            : "text-gray-800"
-                        }`}
-                      >{reservation.statusName}</div>
-                    </div>
-                  </Fragment>
+                  {(() => {
+                    const statusInfo = getReservationStatusStyle(reservation.status);
+                    return (
+                      <Fragment>
+                        <div className="w-40 justify-start text-slate-500 text-sm font-medium font-['Inter'] leading-none">예약 상태</div>
+                        <div className={`h-7 px-3 rounded-2xl flex justify-center items-center ${statusInfo.bgColor}`}>
+                          <div className={`text-sm font-medium font-['Inter'] leading-none ${statusInfo.textColor}`}>
+                            {statusInfo.label}
+                          </div>
+                        </div>
+                      </Fragment>
+                    );
+                  })()}
                 </div>
               </div>
             </div>
@@ -199,67 +185,68 @@ export const ManagerReservationDetail = () => {
             <div className="self-stretch flex flex-col justify-start items-start gap-4">
               <div className="self-stretch justify-start text-slate-800 text-lg font-semibold font-['Inter'] leading-snug">서비스 상세</div>
               <div className="self-stretch flex flex-col justify-start items-start gap-3">
-                {/* <div className="self-stretch inline-flex justify-start items-center gap-2">
-                  <div className="w-40 justify-start text-slate-500 text-sm font-medium font-['Inter'] leading-none">서비스 항목</div>
-                  <div className="flex-1 justify-start text-slate-700 text-sm font-medium font-['Inter'] leading-none">일반 청소, 욕실 청소, 주방 청소</div>
-                </div>
                 <div className="self-stretch inline-flex justify-start items-center gap-2">
-                  <div className="w-40 justify-start text-slate-500 text-sm font-medium font-['Inter'] leading-none">서비스 면적</div>
-                  <div className="flex-1 justify-start text-slate-700 text-sm font-medium font-['Inter'] leading-none">30평</div>
-                </div> */}
+                  <div className="w-40 justify-start text-slate-500 text-sm font-medium font-['Inter'] leading-none">서비스 항목</div>
+                  <div className="flex-1 justify-start text-slate-700 text-sm font-medium font-['Inter'] leading-none">{reservation.extraServiceName}</div>
+                </div>
                 <div className="self-stretch inline-flex justify-start items-center gap-2">
                   <div className="w-40 justify-start text-slate-500 text-sm font-medium font-['Inter'] leading-none">요청사항</div>
-                  <div className="flex-1 justify-start text-slate-700 text-sm font-medium font-['Inter'] leading-none">{reservation.memo}</div>
-                </div>
-              </div>
-            </div>
-
-            {/* 체크인/체크아웃 */}
-            <div className="self-stretch flex flex-col justify-start items-start gap-4">
-              <div className="self-stretch justify-start text-slate-800 text-lg font-semibold font-['Inter'] leading-snug">체크인/체크아웃</div>
-              <div className="self-stretch inline-flex justify-start items-center gap-4">
-                <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
-                  <div className="self-stretch inline-flex justify-between items-center">
-                    <div className="justify-start text-slate-700 text-sm font-medium font-['Inter'] leading-none">체크인</div>
-                    <div className="justify-start text-slate-500 text-sm font-normal font-['Inter'] leading-none">{reservation.inTime ? reservation.inTime : "미완료"}</div>
-                  </div>
-                  <button 
-                    onClick={() => {
-                      setCheckType("IN")
-                      setOpenModal(true)
-                    }}
-                    disabled={!!reservation.inTime}
-                    className={`self-stretch h-12 rounded-lg inline-flex justify-center items-center ${
-                      reservation.inTime ? 'bg-gray-300' : 'bg-indigo-600 hover:bg-indigo-700 cursor-pointer'
-                    }`}
-                  >
-                      <div className="justify-start text-white text-base font-medium font-['Inter'] leading-tight">{reservation.inTime ? "체크인 완료" : "체크인 하기"}</div>
-                  </button>
-                </div>
-                <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
-                  <div className="self-stretch inline-flex justify-between items-center">
-                    <div className="justify-start text-slate-700 text-sm font-medium font-['Inter'] leading-none">체크아웃</div>
-                    <div className="justify-start text-slate-500 text-sm font-normal font-['Inter'] leading-none">{reservation.outTime ? reservation.outTime : "미완료"}</div>
-                  </div>
-                  <button 
-                    onClick={() => {
-                      setCheckType("OUT")
-                      setOpenModal(true)
-                    }}
-                    disabled={!reservation.inTime || !!reservation.outTime}
-                    className={`self-stretch h-12 rounded-lg inline-flex justify-center items-center ${
-                      (!reservation.inTime  || reservation.outTime) ? 'bg-gray-300' : 'bg-indigo-600 hover:bg-indigo-700 cursor-pointer'
-                    }`}
-                  >
-                      <div className="justify-start text-white text-base font-medium font-['Inter'] leading-tight">{reservation.outTime ? "체크아웃 완료" : "체크아웃 하기"}</div>
-                  </button>
+                  <div className="flex-1 justify-start text-slate-700 text-sm font-medium font-['Inter'] leading-none">{reservation.memo? reservation.memo : "-"}</div>
                 </div>
               </div>
             </div>
           </div>
 
+          {/* 체크인/체크아웃 */}
+          {['CONFIRMED', 'IN_PROGRESS', 'COMPLETED'].includes(reservation.status) && (
+            <div className="self-stretch p-8 bg-white rounded-xl shadow-[0px_2px_12px_0px_rgba(0,0,0,0.04)] flex flex-col justify-start items-start gap-6">
+              <div className="self-stretch flex flex-col justify-start items-start gap-4">
+                <div className="self-stretch justify-start text-slate-800 text-lg font-semibold font-['Inter'] leading-snug">체크인/체크아웃</div>
+                <div className="self-stretch inline-flex justify-start items-center gap-4">
+                  <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
+                    <div className="self-stretch inline-flex justify-between items-center">
+                      <div className="justify-start text-slate-700 text-sm font-medium font-['Inter'] leading-none">체크인</div>
+                      <div className="justify-start text-slate-500 text-sm font-normal font-['Inter'] leading-none">{reservation.inTime ? reservation.inTime : "미완료"}</div>
+                    </div>
+                    <button 
+                      onClick={() => {
+                        setCheckType("IN")
+                        setOpenModal(true)
+                      }}
+                      disabled={!!reservation.inTime}
+                      className={`self-stretch h-12 rounded-lg inline-flex justify-center items-center ${
+                        reservation.inTime ? 'bg-gray-300' : 'bg-indigo-600 hover:bg-indigo-700 cursor-pointer'
+                      }`}
+                    >
+                        <div className="justify-start text-white text-base font-medium font-['Inter'] leading-tight">{reservation.inTime ? "체크인 완료" : "체크인 하기"}</div>
+                    </button>
+                  </div>
+                  <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
+                    <div className="self-stretch inline-flex justify-between items-center">
+                      <div className="justify-start text-slate-700 text-sm font-medium font-['Inter'] leading-none">체크아웃</div>
+                      <div className="justify-start text-slate-500 text-sm font-normal font-['Inter'] leading-none">{reservation.outTime ? reservation.outTime : "미완료"}</div>
+                    </div>
+                    <button 
+                      onClick={() => {
+                        setCheckType("OUT")
+                        setOpenModal(true)
+                      }}
+                      disabled={!reservation.inTime || !!reservation.outTime}
+                      className={`self-stretch h-12 rounded-lg inline-flex justify-center items-center ${
+                        (!reservation.inTime  || reservation.outTime) ? 'bg-gray-300' : 'bg-indigo-600 hover:bg-indigo-700 cursor-pointer'
+                      }`}
+                    >
+                        <div className="justify-start text-white text-base font-medium font-['Inter'] leading-tight">{reservation.outTime ? "체크아웃 완료" : "체크아웃 하기"}</div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          
+
           {/* 리뷰 */}
-          {reservation.outTime && (
+          {reservation.outTime && reservation.status === 'COMPLETED' && (
             <div className="self-stretch p-8 bg-white rounded-xl shadow-[0px_2px_12px_0px_rgba(0,0,0,0.04)] flex flex-col justify-start items-start gap-2">
               <div className="self-stretch justify-start text-slate-800 text-lg font-semibold font-['Inter'] leading-snug">수요자 리뷰</div>
 

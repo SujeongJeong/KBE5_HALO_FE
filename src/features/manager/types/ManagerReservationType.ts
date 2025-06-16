@@ -32,6 +32,7 @@ export interface ManagerReservationDetail {
   customerAddress: string;
 
   // 서비스 상세
+  extraServiceName?: string; 
   memo?: string;
 
   // 체크인/체크아웃
