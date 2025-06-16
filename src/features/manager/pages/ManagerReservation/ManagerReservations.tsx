@@ -4,6 +4,7 @@ import { isValidDateRange } from "@/shared/utils/validation";
 import { DEFAULT_PAGE_SIZE } from "@/shared/constants/constants";
 import { searchManagerReservations } from "@/features/manager/api/managerReservation";
 import { Link } from "react-router-dom";
+import { getReservationStatusStyle } from "@/features/manager/utils/ManagerReservationStauts";
 
 export const ManagerReservations = () => {
   const [fadeKey, setFadeKey] = useState(0);
@@ -18,6 +19,7 @@ export const ManagerReservations = () => {
   const [isReviewed, setIsReviewed] = useState<string>("");
   const [customerNameKeyword, setCustomerNameKeyword] = useState("");
   const fromDateRef = useRef<HTMLInputElement>(null);
+
 
   const StatusBadge = ({
     value,
@@ -250,67 +252,57 @@ export const ManagerReservations = () => {
             </div>
 
             <div key={fadeKey} className="w-full fade-in">
-              { reservations.length === 0 ? (
+              {reservations.length === 0 ? (
                 <div className="self-stretch h-16 px-4 border-b border-slate-200 flex items-center text-center">
                   <div className="w-full text-sm text-slate-500">조회된 문의사항이 없습니다.</div>
                 </div>
               ) : (
-                reservations.map((reservation) => (
-                  <Link 
-                    key={reservation.reservationId}
-                    to={`/managers/reservations/${reservation.reservationId}`}
-                    className="self-stretch h-16 px-4 border-b border-slate-200 flex items-center text-center gap-4">
-                    <div className="w-[5%] text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">{reservation.reservationId}</div>
-                    <div className="w-[15%] text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">{reservation.requestDate}</div>
-                    <div className="w-[10%] text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">{reservation.customerName}</div>
-                    <div className="w-[30%] text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">{reservation.customerAddress}</div>
+                reservations.map((reservation) => {
+                  const statusInfo = getReservationStatusStyle(reservation.status);
+                  return (
+                    <Link
+                      key={reservation.reservationId}
+                      to={`/managers/reservations/${reservation.reservationId}`}
+                      className="self-stretch h-16 px-4 border-b border-slate-200 flex items-center text-center gap-4"
+                    >
+                      <div className="w-[5%] text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">
+                        {reservation.reservationId}
+                      </div>
+                      <div className="w-[15%] text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">
+                        {reservation.requestDate}
+                      </div>
+                      <div className="w-[10%] text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">
+                        {reservation.customerName}
+                      </div>
+                      <div className="w-[30%] text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">
+                        {reservation.customerAddress}
+                      </div>
                       <div className="w-[10%] text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">
                         <div className="h-7 px-3 bg-sky-100 rounded-2xl inline-flex justify-center items-center">
-                          <div className="justify-start text-sky-900 text-sm font-medium font-['Inter'] leading-none">{reservation.serviceName}</div>
+                          <div className="text-sky-900 text-sm text-slate-700 font-medium font-['Inter'] leading-none">
+                            {reservation.serviceName}
+                          </div>
                         </div>
                       </div>
-                      <div className="w-[12%] text-center text-sm text-slate-700 font-medium font-['Inter'] leading-none">
-                        <div
-                          className={`h-7 px-3 rounded-2xl inline-flex justify-center items-center ${
-                            reservation.status === "CONFIRMED"
-                              ? "bg-amber-100"
-                              : reservation.status === "IN_PROGRESS"
-                              ? "bg-sky-100"
-                              : reservation.status === "COMPLETED"
-                              ? "bg-green-100"
-                              : reservation.status === "CANCELED"
-                              ? "bg-rose-100"
-                              : "bg-gray-100"
-                          }`}
-                        >
-                        <div
-                          className={`text-sm font-medium font-['Inter'] leading-none ${
-                            reservation.status === "CONFIRMED"
-                              ? "text-amber-800"
-                              : reservation.status === "IN_PROGRESS"
-                              ? "text-sky-800"
-                              : reservation.status === "COMPLETED"
-                              ? "text-green-800"
-                              : reservation.status === "CANCELED"
-                              ? "text-rose-800"
-                              : "text-gray-800"
-                          }`}
-                        >
-                          {reservation.statusName}
+                      <div className="w-[12%] text-center text-sm font-medium">
+                        <div className={`h-7 px-3 rounded-2xl inline-flex justify-center items-center ${statusInfo.bgColor}`}>
+                          <div className={`text-sm font-medium font-['Inter'] leading-none ${statusInfo.textColor}`}>
+                            {reservation.statusName}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="w-[5%] text-center">
-                      <StatusBadge value={reservation.isCheckedIn} trueText="완료" falseText="대기" />
-                    </div>
-                    <div className="w-[8%] text-center">
-                      <StatusBadge value={reservation.isCheckedOut} trueText="완료" falseText="대기" />
-                    </div>
-                    <div className="w-[5%] text-center">
-                      <StatusBadge value={reservation.isReviewed} trueText="완료" falseText="대기" />
-                    </div>
-                  </Link>
-                ))
+                      <div className="w-[5%] text-center">
+                        <StatusBadge value={reservation.isCheckedIn} trueText="완료" falseText="대기" />
+                      </div>
+                      <div className="w-[8%] text-center">
+                        <StatusBadge value={reservation.isCheckedOut} trueText="완료" falseText="대기" />
+                      </div>
+                      <div className="w-[5%] text-center">
+                        <StatusBadge value={reservation.isReviewed} trueText="완료" falseText="대기" />
+                      </div>
+                    </Link>
+                  );
+                })
               )}
             </div>
 
