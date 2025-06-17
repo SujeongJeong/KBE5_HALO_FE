@@ -12,7 +12,6 @@ export const AdminBoards = () => {
   const [editRow, setEditRow] = useState<any>(null);
   const [notices, setNotices] = useState<any[]>([]);
   const [events, setEvents] = useState<any[]>([]);
-
   const [searchState, setSearchState] = useState({
     title: '',
     content: '',

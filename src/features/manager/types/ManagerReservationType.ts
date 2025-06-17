@@ -2,6 +2,8 @@
 export interface ManagerReservationSummary {
   reservationId: number;
   requestDate: string;
+  startTime: string;
+  turnaround: number;
   customerName: string;
   customerAddress: string;
   serviceName: string;
@@ -22,6 +24,8 @@ export interface ManagerReservationDetail {
   // 예약 정보
   reservationId: string;
   requestDate: string;
+  startTime: string;
+  turnaround: number;
   serviceName: string;
   status: string;
   statusName: string;

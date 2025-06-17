@@ -21,4 +21,3 @@ export type NoticeSearchParams = {
 
 export type NoticeStatus = '게시중' | '임시저장';
 export type NoticeType = 'notice' | 'event'; 
-
