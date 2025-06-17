@@ -31,6 +31,7 @@ import { ManagerInquiries } from '@/features/manager/pages/ManagerInquiry/Manage
 import { ManagerInquiryDetail } from '@/features/manager/pages/ManagerInquiry/ManagerInquiryDetail';
 import { ManagerInquiryForm } from '@/features/manager/pages/ManagerInquiry/ManagerInquiryForm';
 import { ManagerReviews } from '@/features/manager/pages/ManagerReview/ManagerReviews';
+import { ManagerPayments } from '@/features/manager/pages/ManagerPayment/ManagerPayments';
 
 // 관리자
 import { AdminLogin } from '@/features/admin/pages/AdminLogin';
@@ -164,6 +165,7 @@ export const router = createBrowserRouter([
               { path: ':inquiryId/edit', element: <ManagerInquiryForm /> },
             ]
           },
+          { path: 'payments', element: <ManagerPayments /> },
         ]
       },
 
