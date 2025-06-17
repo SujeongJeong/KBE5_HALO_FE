@@ -14,12 +14,6 @@ jobs:
       - name: Install mustache (to update the date)
         run: apk add ruby && gem install mustache
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build project
-        run: npm run build
-
       - name: creates output
         run: sh ./build.sh
 
