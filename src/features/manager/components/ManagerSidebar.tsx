@@ -14,14 +14,14 @@ export const ManagerSidebar = () => {
     { name: "예약 관리", path: "/managers/reservations" },
     { name: "리뷰 관리", path: "/managers/reviews" },
     { name: "문의 내역", path: "/managers/inquiries" },
-    // { name: "급여 관리", path: "/managers/payments" },
+    { name: "정산 관리", path: "/managers/payments" },
   ];
 
   const allowedMenusByStatus: Record<string, string[]> = {
-    ACTIVE: ["대시보드", "마이페이지", "예약 관리", "리뷰 관리", "문의 내역", "급여 관리"],
+    ACTIVE: ["대시보드", "마이페이지", "예약 관리", "리뷰 관리", "문의 내역", "정산 관리"],
     PENDING: ["마이페이지", "문의 내역"],
     REJECTED: ["마이페이지", "문의 내역"],
-    TERMINATION_PENDING: ["대시보드", "마이페이지", "예약 관리", "리뷰 관리", "문의 내역", "급여 관리"]
+    TERMINATION_PENDING: ["대시보드", "마이페이지", "예약 관리", "리뷰 관리", "문의 내역", "정산 관리"]
   };
 
   const filteredMenuItems = menuItems.filter((item) =>
