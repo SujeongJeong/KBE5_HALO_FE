@@ -10,4 +10,4 @@ rm -rf output        # 이전 output 제거 (선택)
 mkdir output
 
 # 4. 빌드 결과물을 output으로 복사 (build 폴더만!)
-cp -R ./build/* ./output
+cp -R ./dist/* ./output
