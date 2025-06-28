@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+
 import { Fragment } from "react/jsx-runtime";
 import api from '@/services/axios';
 
@@ -37,6 +38,7 @@ export const AdminCustomers = () => {
     const fetchCustomers = async () => {
       try {
         const res = await api.get('/admin/customers', {
+
           params: {
             tab: activeTab,
             name: nameKeyword,
@@ -66,6 +68,7 @@ export const AdminCustomers = () => {
         setCustomers(mapped);
       } catch (e: any) {
         console.error('고객 목록을 불러오지 못했습니다.', e);
+
       }
     };
     fetchCustomers();
@@ -76,6 +79,7 @@ export const AdminCustomers = () => {
     if (!window.confirm('정말 삭제하시겠습니까?')) return;
     try {
       await api.delete(`admin/customers/${id}`);
+
       setCustomers((prev: any) => prev.filter((c: any) => c.id !== id));
     } catch (e) {
       alert('삭제에 실패했습니다.');
@@ -88,6 +92,7 @@ export const AdminCustomers = () => {
   const handleDetail = async (id: string) => {
     try {
       const res = await api.get(`/admin/customers/${id}`);
+
       setSelectedCustomer({
         id: res.data.customerId,
         name: res.data.userName,
@@ -115,6 +120,7 @@ export const AdminCustomers = () => {
   const handleEdit = async (id: string) => {
     try {
       const res = await api.get(`/admin/customers/${id}`);
+
       setEditCustomer({
         id: res.data.customerId,
         name: res.data.userName,
@@ -143,6 +149,7 @@ export const AdminCustomers = () => {
     if (!editCustomer) return;
     try {
       await api.put(`/admin/customers/${editCustomer.id}`, {
+
         userName: editCustomer.name,
         phone: editCustomer.phone,
         email: editCustomer.email,
