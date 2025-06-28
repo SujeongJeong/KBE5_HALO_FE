@@ -2,7 +2,9 @@ name: Deploy
 
 on:
   push:
-    branches: ['dev']
+    branches: ['main']
+  pull_request:
+    branches: ['dev', 'main']
 
 jobs:
   build:
@@ -18,6 +20,7 @@ jobs:
         run: sh ./build.sh
 
       - name: Pushes to another repository
+        if: github.event_name == 'push'
         id: push_directory
         uses: cpina/github-action-push-to-another-repository@main
         env:
@@ -29,6 +32,3 @@ jobs:
           user-email: ${{ secrets.EMAIL }}
           commit-message: ${{ github.event.commits[0].message }}
           target-branch: dev
-
-      - name: Test get variable exported by push-to-another-repository
-        run: echo $DESTINATION_CLONED_DIRECTORY
