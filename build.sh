@@ -1,9 +1,6 @@
 #!/bin/sh
 set -e
 
-# 1. 프론트엔드 폴더로 이동
-cd ./KBE5_HALO_FE
-
 # 2. 의존성 설치 및 빌드
 npm ci
 npm run build
