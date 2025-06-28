@@ -2,22 +2,36 @@ name: Deploy
 
 on:
   push:
-    branches: ['dev']
+    branches: ['main']
+  pull_request:
+    branches: ['dev', 'main']
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: pandoc/latex
+
     steps:
       - uses: actions/checkout@v2
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
       - name: Install mustache (to update the date)
-        run: apk add ruby && gem install mustache
+        run: gem install mustache --user-install
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
 
       - name: creates output
         run: sh ./build.sh
 
       - name: Pushes to another repository
+        if: github.event_name == 'push'
         id: push_directory
         uses: cpina/github-action-push-to-another-repository@main
         env:
@@ -29,6 +43,3 @@ jobs:
           user-email: ${{ secrets.EMAIL }}
           commit-message: ${{ github.event.commits[0].message }}
           target-branch: dev
-
-      - name: Test get variable exported by push-to-another-repository
-        run: echo $DESTINATION_CLONED_DIRECTORY
