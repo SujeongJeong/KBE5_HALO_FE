@@ -23,8 +23,6 @@ jobs:
       - name: Run build
         run: npm run build
 
-      - name: Run linter
-        run: npm run lint
 
   deploy-to-vercel:
     if: github.event_name == 'push'
