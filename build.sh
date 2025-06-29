@@ -1,13 +1,8 @@
 #!/bin/sh
-set -e
-
-# 2. 의존성 설치 및 빌드
-npm ci
-npm run build
-
-# 3. output 디렉토리 준비
-rm -rf output        # 이전 output 제거 (선택)
+rm -rf output
 mkdir output
 
-# 4. 빌드 결과물을 output으로 복사 (build 폴더만!)
-cp -R ./dist/* ./output
+# 2. copy current repo frontend (KBE5_HALO_FE) to output
+# 현재 위치가 루트라고 가정하고 ./KBE5_HALO_FE 안에 frontend 코드 있다고 가정
+cp -R ./KBE5_HALO_FE/* ./output
+

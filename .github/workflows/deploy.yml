@@ -1,25 +1,40 @@
-name: Deploy
+name: git push into another repo to deploy to vercel
 
 on:
   push:
-    branches: ['main']
+    branches: [main]
   pull_request:
-    branches: ['dev', 'main']
+    branches: [dev]
 
 jobs:
-  build:
+  test-build:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
-
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 22
 
-      - name: Install mustache (to update the date)
-        run: gem install mustache --user-install
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Run linter
+        run: npm run lint
+
+  deploy-build:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
 
       - name: Install dependencies
         run: npm ci
@@ -30,9 +45,7 @@ jobs:
       - name: creates output
         run: sh ./build.sh
 
-      - name: Pushes to another repository
-        if: github.event_name == 'push'
-        id: push_directory
+      - name: Push to Vercel repository
         uses: cpina/github-action-push-to-another-repository@main
         env:
           API_TOKEN_GITHUB: ${{ secrets.AUTO_ACTIONS }}
@@ -42,4 +55,8 @@ jobs:
           destination-repository-name: KBE5_HALO_FE
           user-email: ${{ secrets.EMAIL }}
           commit-message: ${{ github.event.commits[0].message }}
-          target-branch: dev
+          target-branch: main
+
+      - name: Test get variable exported by push-to-another-repository
+      run: echo $DESTINATION_CLONED_DIRECTORY
+ 
