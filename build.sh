@@ -1,5 +1,4 @@
 #!/bin/sh
-# cd ../
-mkdir output
-cp -R ../KBE5_HALO_FE/* ./output
-cp -R ./output ../KBE5_HALO_FE/
+npm run build
+mkdir -p output
+cp -R dist/* output/
