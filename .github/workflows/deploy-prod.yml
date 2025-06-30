@@ -1,14 +1,11 @@
-name: Build & Deploy
+name: Build & Deploy main
 
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [dev]
+    branches: main
 
 jobs:
   build-check:
-    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -25,7 +22,6 @@ jobs:
 
 
   deploy-to-vercel:
-    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
