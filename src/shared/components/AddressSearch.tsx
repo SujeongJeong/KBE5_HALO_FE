@@ -1,0 +1,105 @@
+import { useEffect, useRef } from 'react';
+import { useLoadScript } from '@react-google-maps/api';
+import { useAddressStore } from '@/store/useAddressStore';
+
+interface AddressSearchProps {
+  roadAddress: string;
+  detailAddress: string;
+  errors?: string;
+  setRoadAddress: (val: string) => void;
+  setDetailAddress: (val: string) => void;
+}
+
+const GOOGLE_MAP_LIBRARIES = ['places'] as ["places"];
+
+const AddressSearch = ({
+    roadAddress,
+    detailAddress,
+    errors,
+    setRoadAddress,
+    setDetailAddress,
+  }: AddressSearchProps) => {
+    const inputRef = useRef<HTMLInputElement>(null);
+    const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
+    const { setAddress } = useAddressStore();
+    const { isLoaded } = useLoadScript({
+      googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+      libraries: GOOGLE_MAP_LIBRARIES,
+    });
+
+  // 도로명주소 자동완성 초기화
+  useEffect(() => {
+    if (isLoaded && inputRef.current && !autocompleteRef.current) {
+      autocompleteRef.current = new window.google.maps.places.Autocomplete(inputRef.current);
+
+      autocompleteRef.current.addListener('place_changed', () => {
+        const place = autocompleteRef.current!.getPlace();
+
+        if (!place.geometry || !place.formatted_address) {
+          alert('자동완성 목록에서 주소를 선택해주세요.');
+          return;
+        }
+
+        const lat = place.geometry.location?.lat() ?? 0;
+        const lng = place.geometry.location?.lng() ?? 0;
+
+        setRoadAddress(place.formatted_address);
+        setAddress(place.formatted_address, lat, lng, detailAddress);
+      });
+    }
+  }, [isLoaded]);
+
+  // 상세주소 변경 시에도 setAddress 실행
+  useEffect(() => {
+    if (roadAddress) {
+      const { latitude, longitude } = useAddressStore.getState();
+      setAddress(roadAddress, latitude ?? 0, longitude ?? 0, detailAddress);
+    }
+  }, [detailAddress]);
+
+  return isLoaded ? (
+    <div className="self-stretch flex flex-col justify-start items-start gap-2">
+      <div className="self-stretch justify-start text-slate-700 text-sm font-medium font-['Inter'] leading-none">주소 *</div>
+
+      {/* 도로명주소 자동완성 입력창 */}
+      <div className="self-stretch h-12 px-4 bg-slate-50 rounded-lg outline outline-1 outline-offset-[-1px] outline-slate-200 inline-flex justify-start items-center">
+        <input
+          ref={inputRef}
+          type="text"
+          defaultValue={roadAddress}
+          placeholder="도로명주소"
+          className="w-full bg-transparent text-slate-700 text-sm font-normal outline-none"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault(); // Enter로 submit 막기
+              e.stopPropagation();
+            }
+          }}
+        />
+      </div>
+
+      {/* 상세주소 수동입력 */}
+      <div className="self-stretch h-12 px-4 bg-slate-50 rounded-lg outline outline-1 outline-offset-[-1px] outline-slate-200 inline-flex justify-start items-center">
+        <input
+          type="text"
+          placeholder="상세주소"
+          defaultValue={detailAddress}
+          onChange={(e) => {
+            setDetailAddress(e.target.value);
+          }}
+          className="w-full bg-transparent text-slate-700 text-sm font-normal outline-none"
+        />
+      </div>
+
+      {errors && !roadAddress && (
+        <p className="text-red-500 text-xs">{errors}</p>
+      )}
+    </div>
+  ) : (
+    <div className="w-full h-screen flex justify-center items-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-indigo-500"></div>
+    </div>
+  );
+};
+
+export default AddressSearch;
