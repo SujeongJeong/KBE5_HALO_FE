@@ -1,5 +1,5 @@
 #!/bin/sh
 #cd ../
-mkdir dist
-cp -R ../KBE5_HALO_FE/* dist
-cp -R dist ../KBE5_HALO_FE/
+mkdir output
+cp -R ../KBE5_HALO_FE/* output
+cp -R output ../KBE5_HALO_FE/
