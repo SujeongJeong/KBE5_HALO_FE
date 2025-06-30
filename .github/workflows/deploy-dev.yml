@@ -1,14 +1,11 @@
-name: Build & Deploy
+name: Build & Deploy dev
 
 on:
-  push:
-    branches: [main]
   pull_request:
-    branches: [dev]
+    branches: dev
 
 jobs:
   build-check:
-    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -25,7 +22,6 @@ jobs:
 
 
   deploy-to-vercel:
-    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -53,4 +49,4 @@ jobs:
           destination-repository-name: KBE5_HALO_FE
           user-email: ${{ secrets.GIT_EMAIL_SUJEONG }}
           commit-message: ${{ github.event.commits[0].message }}
-          target-branch: main
+          target-branch: dev
