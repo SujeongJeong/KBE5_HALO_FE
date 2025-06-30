@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+
 import api from '@/services/axios';
 
 const serviceOptions = ['청소', '이사', '소독'];
@@ -46,6 +47,7 @@ const AdminReservations = () => {
         setReservations(res.data.items || []);
       } catch (e: any) {
         alert('예약 목록을 불러오지 못했습니다.');
+
       }
     };
     fetchReservations();
@@ -94,6 +96,7 @@ const AdminReservations = () => {
     if (!window.confirm('정말 삭제하시겠습니까?')) return;
     try {
       await api.delete(`/admin/reservations/${id}`);
+
       setReservations((prev) => prev.filter((r) => r.id !== id));
     } catch (e) {
       alert('삭제에 실패했습니다.');

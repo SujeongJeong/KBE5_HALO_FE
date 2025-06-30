@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Fragment } from "react/jsx-runtime";
 import { useNavigate } from "react-router-dom";
+
 import api from '@/services/axios';
 
 
@@ -12,6 +13,7 @@ export const AdminBoards = () => {
   const [editRow, setEditRow] = useState<any>(null);
   const [notices, setNotices] = useState<any[]>([]);
   const [events, setEvents] = useState<any[]>([]);
+
   const [searchState, setSearchState] = useState({
     title: '',
     content: '',
@@ -68,6 +70,7 @@ export const AdminBoards = () => {
         setNotices((prev) => prev.filter((n) => n.id !== id));
       } else {
         await api.delete(`/admin/events/${id}`);
+
         setEvents((prev) => prev.filter((n) => n.id !== id));
       }
     } catch (e) {
@@ -95,6 +98,7 @@ export const AdminBoards = () => {
           const res = await api.get('/admin/notices', {
             params: {
               type: 'NOTICE',
+
               title: searchState.title,
               content: searchState.content,
               startDate: searchState.startDate,
@@ -118,6 +122,7 @@ export const AdminBoards = () => {
           const res = await api.get('/admin/events', {
             params: {
               type: 'EVENT',
+
               title: searchState.title,
               content: searchState.content,
               startDate: searchState.startDate,
@@ -140,6 +145,7 @@ export const AdminBoards = () => {
         }
       } catch (e: any) {
         console.error('목록을 불러오지 못했습니다.', e);
+
       }
     };
     fetchData();
