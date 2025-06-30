@@ -40,7 +40,7 @@ jobs:
         run: sh ./build.sh
 
       - name: Push to Vercel-linked repo
-        uses: cpina/github-action-push-to-another-repository@main
+        uses: cpina/github-action-push-to-another-repository@dev
         env:
           API_TOKEN_GITHUB: ${{ secrets.AUTO_ACTIONS }}
         with:
