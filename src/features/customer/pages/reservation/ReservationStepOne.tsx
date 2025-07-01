@@ -85,25 +85,20 @@ export const ReservationStepOne: React.FC = () => {
   const includedServices = children.filter(item => item.price === 0);
   const additionalItems = children.filter(item => item.price > 0);
 
-  const now = new Date();
-  now.setHours(now.getHours() + 1);
-  const availableDate = new Date().toISOString().split('T')[0];
+
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const yyyy = tomorrow.getFullYear();
+  const mm = String(tomorrow.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작
+  const dd = String(tomorrow.getDate()).padStart(2, '0');
+  const availableDate = `${yyyy}-${mm}-${dd}`;
+
 
   const timeOptions = useMemo(() => {
-    const selectedDate = form.requestDate;
-    const today = new Date().toISOString().split('T')[0];
-
     // Generate hours from 6:00 to 20:00 (8PM) in 1-hour increments (6,7,...,20)
     return Array.from({ length: 15 }, (_, i) => {
       const hour = 6 + i;
       const timeStr = `${String(hour).padStart(2, '0')}:00`;
-
-      if (selectedDate === today) {
-        const current = new Date();
-        current.setHours(current.getHours() + 2);
-        const limitHour = current.getHours();
-        if (hour < limitHour) return null;
-      }
 
       return timeStr;
     }).filter(Boolean) as string[];
