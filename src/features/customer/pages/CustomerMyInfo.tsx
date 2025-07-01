@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import type { CustomerDetailInfoType } from '../types/CustomerInfoType';
 import { getCustomerInfo } from '../api/customerAuth';
-import { User, MapPin, Lock } from 'lucide-react';
+import { User, MapPin } from 'lucide-react';
 
 const genderDisplayMap = {
   MALE: '남',
