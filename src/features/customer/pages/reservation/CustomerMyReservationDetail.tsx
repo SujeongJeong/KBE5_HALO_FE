@@ -120,12 +120,6 @@ export const CustomerMyReservationDetail = () => {
     );
   }
 
-
-  const IconComponent = reservation?.serviceId
-  ? serviceCategoryIcons[reservation.serviceId] || DefaultServiceIcon
-  : DefaultServiceIcon;
-
-  {/* 아이콘 영역 */}
   if (!reservation) {
     return (
       <div className="w-full h-screen flex justify-center items-center">
@@ -134,6 +128,10 @@ export const CustomerMyReservationDetail = () => {
     );
   }
 
+  const IconComponent = reservation.serviceCategoryId
+    ? serviceCategoryIcons[reservation.serviceCategoryId] || DefaultServiceIcon
+    : DefaultServiceIcon;
+
   return (
     <div className="p-6 flex flex-col gap-3">
       {/* 헤더 */}
@@ -141,7 +139,7 @@ export const CustomerMyReservationDetail = () => {
         <span>예약 상세 정보</span>
         <div className="flex items-center gap-4">
           {reservation.reservationStatus === 'COMPLETED' && (
-            reservation.reviewId ? (
+            reservation.review ? (
               <button
                 onClick={handleWriteReview}
                 className="flex items-center gap-1 px-4 py-2 bg-white border border-indigo-500 text-indigo-600 rounded-md hover:bg-indigo-50 text-sm transition-colors duration-200 cursor-pointer"
@@ -237,7 +235,7 @@ export const CustomerMyReservationDetail = () => {
                 <span className="material-symbols-outlined text-3xl text-indigo-500 mt-1">edit_note</span>
                 <div>
                   <div className="text-xs text-gray-500 font-semibold mb-1">메모</div>
-                <div className="text-gray-800">{reservation.memo}</div>
+                <div className="text-gray-800">{reservation.memo || '메모가 없습니다.'}</div>
               </div>
             </div>
           </div>
@@ -259,41 +257,41 @@ export const CustomerMyReservationDetail = () => {
 
           {/* 오른쪽: 평점 */}
           <div className="flex items-center gap-1">
-            {[...Array(Math.floor(reservation.averageRating))].map((_, idx) => (
+            {[...Array(Math.floor(reservation.mangerStatistic.averageRating))].map((_, idx) => (
               <Star key={`full-${idx}`} className="w-4 h-4 text-yellow-400 fill-yellow-400" />
             ))}
-            {reservation.averageRating % 1 >= 0.25 && reservation.averageRating % 1 < 0.75 && (
+            {reservation.mangerStatistic.averageRating % 1 >= 0.25 && reservation.mangerStatistic.averageRating % 1 < 0.75 && (
               <HalfStar key="half" className="w-4 h-4" fillColor="text-yellow-400" emptyColor="text-gray-200" />
             )}
-            {[...Array(5 - Math.ceil(reservation.averageRating))].map((_, idx) => (
+            {[...Array(5 - Math.ceil(reservation.mangerStatistic.averageRating))].map((_, idx) => (
               <Star key={`empty-${idx}`} className="w-4 h-4 text-gray-200" />
             ))}
             <span className="text-sm text-gray-700 font-medium ml-1">
-              {reservation.averageRating.toFixed(1)} ({reservation.reviewCount}{reservation.reviewCount >= 50 ? '+' : ''})
+              {reservation.mangerStatistic.averageRating.toFixed(1)} ({reservation.mangerStatistic.reviewCount}{reservation.mangerStatistic.reviewCount >= 50 ? '+' : ''})
             </span>
           </div>
         </div>
       )}
 
       {/* 리뷰 섹션 */}
-      {reservation.reservationStatus === 'COMPLETED' && reservation.reviewId && (
+      {reservation.reservationStatus === 'COMPLETED' && reservation.review && (
         <div>
           <div className="text-base font-semibold text-gray-900 mb-3">나의 리뷰</div>
           <div className="py-4 px-6 bg-white rounded-xl shadow text-sm text-slate-800">
             <div className="flex justify-between items-start">
-              <div className="text-gray-700 whitespace-pre-wrap">{reservation.reviewContent}</div>
+              <div className="text-gray-700 whitespace-pre-wrap">{reservation.review.reviewContent}</div>
               <div className="flex items-center gap-1 ml-4">
-                {[...Array(Math.floor(reservation.reviewRating ?? 0))].map((_, idx) => (
+                {[...Array(Math.floor(reservation.review.reviewRating))].map((_, idx) => (
                   <Star key={`review-full-${idx}`} className="w-4 h-4 text-yellow-400 fill-yellow-400" />
                 ))}
-                {reservation.reviewRating && reservation.reviewRating % 1 >= 0.25 && reservation.reviewRating % 1 < 0.75 && (
+                {reservation.review.reviewRating % 1 >= 0.25 && reservation.review.reviewRating % 1 < 0.75 && (
                   <HalfStar key="review-half" className="w-4 h-4" fillColor="text-yellow-400" emptyColor="text-gray-200" />
                 )}
-                {[...Array(5 - Math.ceil(reservation.reviewRating ?? 0))].map((_, idx) => (
+                {[...Array(5 - Math.ceil(reservation.review.reviewRating))].map((_, idx) => (
                   <Star key={`review-empty-${idx}`} className="w-4 h-4 text-gray-200" />
                 ))}
                 <span className="ml-1 text-sm text-gray-700 font-medium">
-                  {reservation.reviewRating?.toFixed(1)} 
+                  {reservation.review.reviewRating.toFixed(1)} 
                 </span>
               </div>
             </div>
@@ -311,7 +309,7 @@ export const CustomerMyReservationDetail = () => {
         {/* 기본 서비스 */}
         <div className="mb-4">
           <div className="text-sm text-gray-800 mb-1">기본 서비스</div>
-          <div key={reservation.serviceId} className="flex justify-between text-sm py-1 pl-16">
+          <div key={reservation.serviceCategoryId} className="flex justify-between text-sm py-1 pl-16">
             <span className="text-gray-800">
               {reservation.serviceName}
               {reservation.serviceTime !== 0 && (
@@ -319,7 +317,7 @@ export const CustomerMyReservationDetail = () => {
               )}
             </span>
             <span className="text-gray-900">
-              {(reservation.totalPrice -
+              {(reservation.price -
                 (reservation.extraServices?.reduce((acc, item) => acc + (item.extraServicePrice ?? 0), 0) ?? 0)
               ).toLocaleString()}원
             </span>
@@ -349,7 +347,7 @@ export const CustomerMyReservationDetail = () => {
         {/* 총 결제 금액 */}
         <div className="border-t mt-4 pt-2 flex justify-between font-bold text-indigo-600">
           <span>총 결제 금액</span>
-          <span>{reservation.totalPrice?.toLocaleString()}원</span>
+          <span>{reservation.price?.toLocaleString()}원</span>
         </div>
       </div>
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { UserRound } from 'lucide-react';
-import type { ReservationConfirmRspType } from '@/features/customer/types/reservation/ReservationConfirmRspType';
+import type { ReservationConfirmRspType } from '@/features/customer/types/CustomerReservationType';
 
 // 체크 이모지
 const CheckCircleIcon: React.FC<{ colorClass?: string }> = ({ colorClass = "text-green-100" }) => (

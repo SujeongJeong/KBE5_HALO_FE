@@ -58,7 +58,10 @@ export interface ServiceCategoryTreeType {
   // 예약 확정 요청 타입
 export interface ReservationConfirmReqType {
     selectedManagerId: number;
-    matchedManagerIds: number[];
+    payReqDTO: {
+      paymentMethod: "POINT",
+      amount: number;
+    }
   }
 
 // 예약 매칭 응답 타입
@@ -75,6 +78,7 @@ export interface ManagerMatchingRspType {
     averageRating: number;
     reviewCount: number;
     profileImageId: number;
+    reservationCount : number;
     bio: string;
     feedbackType: 'GOOD' | 'BAD' | null; // enum 값에 맞게 조정
     recentReservationDate: string; // ISO 날짜 문자열
@@ -95,7 +99,7 @@ export interface CustomerReservationCancelReqType{
 export interface CustomerReservationListRspType {
     reservationId: number;
     managerName?: string;
-    reservationStatus: string;
+    status: string;
     serviceCategoryId: number;
     serviceName: string;
     requestDate: string;
@@ -107,21 +111,42 @@ export interface CustomerReservationListRspType {
     reviewId?: number;
 }
 
-// 예약 상세 조회
+// 매니저 통계 정보 타입
+export interface ManagerStatisticType {
+  reviewCount: number;
+  reservationCount: number;
+  averageRating: number;
+}
+
+// 예약 취소 정보 타입
+export interface ReservationCancelType {
+  cancelReason: string;
+  cancelDate: string;
+}
+
+// 리뷰 정보 타입
+export interface ReviewType {
+  reviewId: number;
+  reviewContent: string;
+  reviewRating: number;
+  reviewDate: string;
+}
+
+// 예약 상세 조회 (API 응답 구조에 맞게 수정)
 export interface CustomerReservationDetailRspType {
   reservationId: number;
+  serviceCategoryId: number;
+  price: number;
+  reservationStatus: ReservationStatus;
+  memo: string;
   phone: string;
+  serviceName: string;
+  serviceTime: number;
   roadAddress: string;
   detailAddress: string;
-  reservationStatus: ReservationStatus;
   requestDate: string;
   startTime: string;
   turnaround: number;
-  totalPrice: number;
-  serviceId: number;
-  serviceName: string;
-  memo: string;
-  serviceTime: number;
   extraServices: {
     extraServiceId: number;
     extraServiceName: string;
@@ -130,15 +155,11 @@ export interface CustomerReservationDetailRspType {
   }[];
   managerName: string | null;
   bio: string | null;
-  averageRating: number;
-  reviewCount: number;
-  cancelReason: string | null;
-  cancelDate: string | null;
-  reviewId: number | null;
-  reviewContent: string | null;
-  reviewRating: number | null;
-  reviewDate: string | null;
+  mangerStatistic: ManagerStatisticType; // API 응답의 오타 그대로 유지
+  reservationCancel: ReservationCancelType | null;
+  review: ReviewType | null;
 }
+
 
 // 예약 상태
 export type ReservationStatus = 'PRE_CANCELED' | 'REQUESTED' | 'IN_PROGRESS' | 'COMPLETED' | 'CONFIRMED' | 'CANCELED'| 'REJECTED';

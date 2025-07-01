@@ -1,5 +1,11 @@
 export interface ReservationConfirmReqType {
+    payReqDTO: ReservationPayReqType;
     selectedManagerId: number;
-    matchedManagerIds: number[];
+  }
+
+
+  export interface ReservationPayReqType {
+    paymentMethod: "POINT";
+    amount: number;
   }
   
