@@ -8,6 +8,8 @@ interface AddressSearchProps {
   errors?: string;
   setRoadAddress: (val: string) => void;
   setDetailAddress: (val: string) => void;
+  // 위도/경도 업데이트를 위한 콜백 추가
+  onCoordinatesChange?: (lat: number, lng: number) => void;
 }
 
 const GOOGLE_MAP_LIBRARIES = ['places'] as ["places"];
@@ -18,6 +20,7 @@ const AddressSearch = ({
     errors,
     setRoadAddress,
     setDetailAddress,
+    onCoordinatesChange,
   }: AddressSearchProps) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
@@ -43,19 +46,27 @@ const AddressSearch = ({
         const lat = place.geometry.location?.lat() ?? 0;
         const lng = place.geometry.location?.lng() ?? 0;
 
+        // 도로명주소 업데이트
         setRoadAddress(place.formatted_address);
+        
+        // 부모 컴포넌트에 좌표 정보 전달
+        if (onCoordinatesChange) {
+          onCoordinatesChange(lat, lng);
+        }
+        
+        // 스토어에도 저장
         setAddress(place.formatted_address, lat, lng, detailAddress);
       });
     }
-  }, [isLoaded]);
+  }, [isLoaded, detailAddress, onCoordinatesChange, setRoadAddress, setAddress]);
 
-  // 상세주소 변경 시에도 setAddress 실행
+  // 상세주소 변경 시에도 setAddress 실행 (기존 좌표 유지)
   useEffect(() => {
     if (roadAddress) {
       const { latitude, longitude } = useAddressStore.getState();
       setAddress(roadAddress, latitude ?? 0, longitude ?? 0, detailAddress);
     }
-  }, [detailAddress]);
+  }, [detailAddress, roadAddress, setAddress]);
 
   return isLoaded ? (
     <div className="self-stretch flex flex-col justify-start items-start gap-2">
