@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { formatDateWithDay } from '@/shared/utils/dateUtils';
 import { useLocation, useNavigate, useBlocker } from 'react-router-dom';
-import type { ReservationMatchedRspType } from '@/features/customer/types/reservation/ReservationMatchedRspType';
-import type { ManagerMatchingRspType } from '@/features/customer/types/reservation/ManagerMatchingRspType';
+import type { ReservationMatchedRspType, ManagerMatchingRspType } from '@/features/customer/types/CustomerReservationType';
 import type { ReservationConfirmReqType } from '@/features/customer/types/reservation/ReservationConfirmReqType';
 import { AlertCircle, Check, UserRound } from 'lucide-react';
 import { ReservationStepIndicator } from '@/features/customer/components/ReservationStepIndicator';
@@ -91,7 +90,10 @@ const ReservationStepTwo: React.FC<Props> = () => {
       // 예약 확정 요청 데이터 구성
       const confirmRequest: ReservationConfirmReqType = {
         selectedManagerId: selectedManager.managerId,
-        matchedManagerIds: managers.map(manager => manager.managerId)
+        payReqDTO: {
+          paymentMethod: "POINT",
+          amount: reservationData.reservation?.price ?? 0
+        }
       };
 
       // API 호출
@@ -242,30 +244,29 @@ const ReservationStepTwo: React.FC<Props> = () => {
                         <div className="self-stretch justify-start text-gray-900 text-sm font-normal font-['Inter'] leading-none">{manager.bio}</div>
                     </div>
 
-                    {/* Recent Reviews */}
+                    {/* Recent Reviews 
                     <div className="self-stretch flex flex-col justify-start items-start gap-3">
                         <div className="self-stretch justify-start text-gray-500 text-sm font-medium font-['Inter'] leading-none">최근 후기</div>
-                        {/* 이** 고객님 후기 */}
                         <div className="self-stretch p-3 bg-gray-50 rounded-lg flex flex-col justify-start items-start gap-2">
                             <div className="self-stretch inline-flex justify-between items-center">
                                 <div className="justify-start text-gray-900 text-sm font-medium font-['Inter'] leading-none">이** 고객님</div>
                                 <div className="flex justify-center items-center gap-1">
-                                    {renderStars(5.0)} {/* 예시: 5점 */}
+                                    {renderStars(5.0)} 
                                 </div>
                             </div>
                             <div className="self-stretch justify-start text-gray-700 text-sm font-normal font-['Inter'] leading-none">정말 꼼꼼하게 청소해주셨어요. 특히 욕실 청소가 정말 깔끔했습니다. 다음에도 김청소 매니저님 지정해서 예약할게요!</div>
                         </div>
-                        {/* 박** 고객님 후기 */}
                         <div className="self-stretch p-3 bg-gray-50 rounded-lg flex flex-col justify-start items-start gap-2">
                             <div className="self-stretch inline-flex justify-between items-center">
                                 <div className="justify-start text-gray-900 text-sm font-medium font-['Inter'] leading-none">박** 고객님</div>
                                 <div className="flex justify-center items-center gap-1">
-                                    {renderStars(4.0)} {/* 예시: 4점 */}
+                                    {renderStars(4.0)}
                                 </div>
                             </div>
                             <div className="self-stretch justify-start text-gray-700 text-sm font-normal font-['Inter'] leading-none">친절하고 시간 약속도 잘 지켜주셨어요. 청소도 만족스럽게 잘 해주셨습니다.</div>
                         </div>
                     </div>
+                    */}
                 </div>
               </div>
             ))}

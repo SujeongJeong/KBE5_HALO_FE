@@ -76,8 +76,8 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
         <span className="text-gray-800 text-semibold m-0"> 
           {reservation.requestDate.replace(/-/g, '. ')} ({dayOfWeek}) {displayStartTime}
         </span>
-        <span className={getStatusBadgeClasses(reservation.reservationStatus as ReservationStatus)}>
-          {getKoreanStatus(reservation.reservationStatus as ReservationStatus)}
+        <span className={getStatusBadgeClasses(reservation.status as ReservationStatus)}>
+          {getKoreanStatus(reservation.status as ReservationStatus)}
         </span>
       </div>
 
@@ -118,7 +118,7 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
       {/* 버튼 영역 (이벤트 버블링 방지) */}
       <div className="flex justify-end gap-3 mt-5" onClick={(e) => e.stopPropagation()}>
         
-        {reservation.reservationStatus === 'COMPLETED' && !reservation.reviewId && (
+        {reservation.status === 'COMPLETED' && !reservation.reviewId && (
           <button
             onClick={onWriteReview}
             className="flex items-center gap-1 px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-700 text-sm transition-colors duration-200 cursor-pointer"

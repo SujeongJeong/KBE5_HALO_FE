@@ -41,7 +41,7 @@ export const CustomerMyReservationPage: React.FC = () => {
       setLoading(true);
       try {
         const res = await getCustomerReservations({
-          reservationStatus: searchParams.reservationStatus || undefined,
+          status: searchParams.reservationStatus || undefined,
           page: searchParams.page
         });
 
@@ -74,7 +74,7 @@ export const CustomerMyReservationPage: React.FC = () => {
     setLoading(true);
     try {
       const res = await getCustomerReservations({
-        reservationStatus: paramsToSearch.reservationStatus || undefined,
+        status: paramsToSearch.reservationStatus || undefined,
         page: paramsToSearch.page
       });
 
